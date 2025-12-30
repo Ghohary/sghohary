@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="Browse GHOHARY's exquisite collection of haute couture bridal gowns and evening wear.">
+    <title>Collections | GHOHARY Haute Couture</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Announcement Bar -->
+    <div class="announcement-bar">
+        Book Your Private Consultation — Experience Bespoke Luxury
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-container">
+        <nav class="container">
+            <a href="index.html" class="logo">GHOHARY</a>
+            
+            <ul class="nav-links">
+                <li><a href="collections.html">Collections</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="appointment.html">Book Appointment</a></li>
+                <li><a href="account.html">Account</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+            
+            <button class="mobile-menu-btn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <div class="nav-icons">
+                <a href="account.html" aria-label="Account">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </a>
+                <a href="cart.html" aria-label="Shopping cart" class="cart-link">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-count">0</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html">Home</a>
+                <span>/</span>
+                <span>Collections</span>
+            </div>
+            <h1 class="page-title">Our Collections</h1>
+            <p class="page-description">
+                Discover our curated selection of haute couture gowns, each a masterpiece of artistry and elegance
+            </p>
+        </div>
+    </section>
+
+    <!-- Filters Section -->
+    <section class="filters-section">
+        <div class="container">
+            <div class="filters-bar">
+                <button class="filter-btn active" data-filter="all">All Gowns</button>
+                <button class="filter-btn" data-filter="bridal">Bridal Couture</button>
+                <button class="filter-btn" data-filter="evening">Evening Wear</button>
+                <button class="filter-btn" data-filter="custom">Custom Design</button>
+            </div>
+            
+            <div class="sort-dropdown">
+                <select id="sortSelect" aria-label="Sort products">
+                    <option value="featured">Featured</option>
+                    <option value="newest">Newest First</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Grid -->
+    <section class="products-section">
+        <div class="container">
+            <div class="products-grid">
+                <!-- Product 1 -->
+                <div class="product-card fade-in" data-category="bridal">
+                    <a href="product.html?id=1" class="product-link">
+                        <div class="product-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1594552072238-2d8e16ed7b2c?w=800&h=1200&fit=crop" alt="Ethereal Lace Gown" class="product-image" loading="lazy">
+                            <span class="product-badge">New</span>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">Ethereal Lace</h3>
+                            <p class="product-category">Bridal Couture</p>
+                            <p class="product-price">AED 25,000</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card fade-in" data-category="evening">
+                    <a href="product.html?id=2" class="product-link">
+                        <div class="product-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800&h=1200&fit=crop" alt="Midnight Velvet" class="product-image" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">Midnight Velvet</h3>
+                            <p class="product-category">Evening Wear</p>
+                            <p class="product-price">AED 18,500</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card fade-in" data-category="bridal">
+                    <a href="product.html?id=3" class="product-link">
+                        <div class="product-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=800&h=1200&fit=crop" alt="Royal Silk Train" class="product-image" loading="lazy">
+                            <span class="product-badge bestseller">Bestseller</span>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">Royal Silk Train</h3>
+                            <p class="product-category">Bridal Couture</p>
+                            <p class="product-price">AED 32,000</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="product-card fade-in" data-category="evening">
+                    <a href="product.html?id=4" class="product-link">
+                        <div class="product-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&h=1200&fit=crop" alt="Champagne Elegance" class="product-image" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">Champagne Elegance</h3>
+                            <p class="product-category">Evening Wear</p>
+                            <p class="product-price">AED 16,000</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Product 5 -->
+                <div class="product-card fade-in" data-category="bridal">
+                    <a href="product.html?id=5" class="product-link">
+                        <div class="product-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=1200&fit=crop" alt="Pearl Embellished" class="product-image" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">Pearl Embellished</h3>
+                            <p class="product-category">Bridal Couture</p>
+                            <p class="product-price">AED 28,500</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Product 6 -->
+                <div class="product-card fade-in" data-category="custom">
+                    <a href="product.html?id=6" class="product-link">
+                        <div class="product-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=800&h=1200&fit=crop" alt="Bespoke Creation" class="product-image" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">Bespoke Creation</h3>
+                            <p class="product-category">Custom Design</p>
+                            <p class="product-price">From AED 35,000</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Product 7 -->
+                <div class="product-card fade-in" data-category="evening">
+                    <a href="product.html?id=7" class="product-link">
+                        <div class="product-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1591604021695-0c69b7c05981?w=800&h=1200&fit=crop" alt="Golden Hour" class="product-image" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">Golden Hour</h3>
+                            <p class="product-category">Evening Wear</p>
+                            <p class="product-price">AED 19,500</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Product 8 -->
+                <div class="product-card fade-in" data-category="bridal">
+                    <a href="product.html?id=8" class="product-link">
+                        <div class="product-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1596783074918-c84cb06531ca?w=800&h=1200&fit=crop" alt="Cathedral Dreams" class="product-image" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">Cathedral Dreams</h3>
+                            <p class="product-category">Bridal Couture</p>
+                            <p class="product-price">AED 30,000</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Product 9 -->
+                <div class="product-card fade-in" data-category="custom">
+                    <a href="product.html?id=9" class="product-link">
+                        <div class="product-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1624626699269-7a8a2d0f7d0e?w=800&h=1200&fit=crop" alt="Couture Atelier" class="product-image" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">Couture Atelier</h3>
+                            <p class="product-category">Custom Design</p>
+                            <p class="product-price">From AED 40,000</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Load More Button -->
+            <div class="load-more-container">
+                <button class="btn btn-secondary load-more-btn">
+                    <span>Load More Gowns</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Can't Find Your Perfect Gown?</h2>
+                <p class="cta-description">
+                    Let us create a bespoke masterpiece exclusively for you. Book a private consultation with our design team.
+                </p>
+                <a href="appointment.html" class="btn btn-primary">
+                    <span>Schedule Consultation</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>GHOHARY</h4>
+                    <p style="font-size: 13px; line-height: 1.8; margin-top: 12px;">
+                        Dubai's premier destination for haute couture bridal and evening wear, where timeless elegance meets bespoke craftsmanship.
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="collections.html">Collections</a></li>
+                        <li><a href="appointment.html">Book Appointment</a></li>
+                        <li><a href="account.html">My Account</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="https://instagram.com" target="_blank" aria-label="Instagram">
+                            <svg class="social-icon" viewBox="0 0 24 24">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                        </a>
+                        <a href="https://facebook.com" target="_blank" aria-label="Facebook">
+                            <svg class="social-icon" viewBox="0 0 24 24">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                            </svg>
+                        </a>
+                        <a href="https://pinterest.com" target="_blank" aria-label="Pinterest">
+                            <svg class="social-icon" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M8 12c0 3.3 2.7 6 6 6 1.7 0 3.2-.7 4.2-1.8"></path>
+                                <path d="M12 2v8l4-4"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 GHOHARY Haute Couture. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

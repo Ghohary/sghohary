@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="GHOHARY - Exquisite haute couture bridal gowns and evening wear in Dubai. Timeless elegance crafted for your most precious moments.">
+    <title>GHOHARY | Haute Couture Bridal & Evening Wear Dubai</title>
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Emperor Luxury Color Palette - Universal Responsive */
+            --gold: #D4AF37;
+            --gold-light: #F4E5C2;
+            --gold-dark: #B8942C;
+            --gold-accent: #FFD700;
+            --champagne: #F8F4E6;
+            --nude: #E6DCC8;
+            --beige: #F5F0E8;
+            --ivory: #FFFFF0;
+            --bronze: #CD7F32;
+            --bronze-dark: #8B5A2B;
+            --deep-burgundy: #3B1C1C;
+            --rich-brown: #2C1810;
+            --charcoal: #1C1C1C;
+            --cream: #FFFEF7;
+            --pearl: #F8F6F0;
+            --text-dark: #1C1410;
+            --text-mid: #3C3530;
+            --text-light: #5C5248;
+            --text-muted: #8C8478;
+            --white: #FFFFFF;
+            
+            /* Spacing - Fluid for All Devices (320px - 2560px) */
+            --spacing-xs: clamp(6px, 1.2vw + 2px, 10px);
+            --spacing-sm: clamp(12px, 2vw + 4px, 20px);
+            --spacing-md: clamp(20px, 3vw + 6px, 32px);
+            --spacing-lg: clamp(28px, 4vw + 8px, 48px);
+            --spacing-xl: clamp(40px, 5vw + 12px, 72px);
+            --spacing-2xl: clamp(56px, 7vw + 16px, 96px);
+            
+            /* Container - Optimized for All Screens */
+            --container-mobile: 94%;
+            --container-tablet: 90%;
+            --container-desktop: 86%;
+            --container-wide: 82%;
+            --container-max: 1800px;
+            
+            /* Typography Scale - Universal Fluid (320px - 2560px) */
+            --text-xs: clamp(9px, 1.5vw + 2px, 12px);
+            --text-sm: clamp(11px, 1.8vw + 3px, 14px);
+            --text-base: clamp(13px, 2vw + 4px, 16px);
+            --text-md: clamp(14px, 2.2vw + 5px, 18px);
+            --text-lg: clamp(16px, 2.5vw + 6px, 22px);
+            --text-xl: clamp(18px, 3vw + 8px, 28px);
+            --text-2xl: clamp(24px, 4vw + 12px, 36px);
+            --text-3xl: clamp(32px, 5vw + 16px, 48px);
+            --text-4xl: clamp(42px, 7vw + 20px, 72px);
+            --text-5xl: clamp(48px, 8vw + 24px, 96px);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(180deg, var(--pearl) 0%, var(--cream) 100%);
+            color: var(--text-dark);
+            font-weight: 300;
+            line-height: 1.8;
+            overflow-x: hidden;
+            font-size: var(--text-base);
+            -webkit-tap-highlight-color: rgba(212, 175, 55, 0.1);
+            touch-action: manipulation;
+        }
+
+        /* Typography - Mobile First */
+        h1, h2, h3, h4, h5 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            line-height: 1.2;
+        }
+
+        h1 { font-size: clamp(32px, 8vw, 64px); }
+        h2 { font-size: clamp(28px, 7vw, 48px); }
+        h3 { font-size: clamp(22px, 5vw, 32px); }
+        h4 { font-size: clamp(18px, 4vw, 24px); }
+
+        /* Luxury Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--beige); }
+        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+        /* Utility Classes */
+        .container {
+            width: var(--container-mobile);
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 var(--spacing-sm);
+        }
+
+        @media (min-width: 640px) {
+            .container { 
+                width: var(--container-tablet);
+                padding: 0 var(--spacing-md); 
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container { 
+                width: var(--container-desktop);
+                padding: 0 var(--spacing-lg); 
+            }
+        }
+
+        @media (min-width: 1440px) {
+            .container { 
+                width: var(--container-wide);
+                padding: 0 var(--spacing-xl); 
+            }
+        }
+
+        @media (min-width: 1920px) {
+            .container { 
+                padding: 0 var(--spacing-2xl); 
+            }
+        }
+
+        /* Announcement Bar - Mobile Optimized */
+        .announcement-bar {
+            background: linear-gradient(90deg, var(--deep-burgundy) 0%, var(--rich-brown) 50%, var(--deep-burgundy) 100%);
+            color: var(--gold-accent);
+            text-align: center;
+            padding: clamp(11px, 2.5vh, 14px) var(--spacing-sm);
+            font-size: var(--text-xs);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 1001;
+            box-shadow: 0 2px 8px rgba(212, 175, 55, 0.15);
+            line-height: 1.4;
+        }
+
+        @media (min-width: 640px) {
+            .announcement-bar { padding: clamp(13px, 2.5vh, 16px) var(--spacing-md); }
+        }
+
+        /* Navigation - Mobile First */
+        .nav-container {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 240, 0.97);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            border-bottom: 2px solid transparent;
+            border-image: linear-gradient(90deg, transparent, var(--gold), transparent) 1;
+            box-shadow: 0 4px 24px rgba(212, 175, 55, 0.08), 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: clamp(14px, 3vh, 20px) var(--spacing-sm);
+            position: relative;
+            min-height: 60px;
+        }
+
+        @media (min-width: 640px) {
+            nav { padding: clamp(16px, 3vh, 22px) var(--spacing-md); }
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(20px, 5vw, 36px);
+            font-weight: 400;
+            letter-spacing: 0.45em;
+            background: linear-gradient(135deg, var(--bronze-dark) 0%, var(--gold) 50%, var(--gold-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+            position: relative;
+            z-index: 1001;
+            text-shadow: 0 2px 12px rgba(212, 175, 55, 0.2);
+        }
+
+        .logo::after {
+            content: 'DUBAI';
+            display: block;
+            font-size: clamp(6px, 1.3vw, 9px);
+            letter-spacing: 0.6em;
+            text-align: center;
+            margin-top: clamp(1px, 0.4vh, 3px);
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(4px, 1vh, 6px);
+            background: none;
+            border: none;
+            padding: clamp(10px, 2vh, 12px);
+            cursor: pointer;
+            z-index: 1001;
+            position: relative;
+            min-width: 44px;
+            min-height: 44px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mobile-menu-btn span {
+            width: clamp(24px, 5vw, 28px);
+            height: 2px;
+            background: linear-gradient(90deg, var(--bronze-dark), var(--gold));
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 2px;
+            box-shadow: 0 1px 2px rgba(212, 175, 55, 0.3);
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        /* Mobile Navigation Menu */
+        .nav-links {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--pearl) 0%, var(--ivory) 50%, var(--champagne) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: clamp(28px, 5vh, 40px);
+            list-style: none;
+            transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            box-shadow: -4px 0 24px rgba(0, 0, 0, 0.1);
+            padding: var(--spacing-xl) var(--spacing-md);
+        }
+
+        .nav-links.active {
+            right: 0;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-size: clamp(17px, 4vw, 22px);
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            position: relative;
+            padding: clamp(10px, 2vh, 14px) clamp(16px, 4vw, 24px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 300;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 1px;
+            background: var(--gold);
+            transition: width 0.4s ease;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a:active::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover,
+        .nav-links a:active {
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+
+        @media (min-width: 1024px) {
+            .mobile-menu-btn { display: none; }
+            
+            .nav-links {
+                position: static;
+                flex-direction: row;
+                width: auto;
+                height: auto;
+                background: transparent;
+                gap: 40px;
+            }
+            
+            .nav-links a { font-size: 11px; }
+        }
+
+        .nav-icons {
+            display: none;
+        }
+
+        @media (min-width: 1024px) {
+            .nav-icons {
+                display: flex;
+                gap: 24px;
+                align-items: center;
+            }
+        }
+
+        /* Hero Section - Universal Responsive */
+        .hero {
+            position: relative;
+            min-height: clamp(520px, 82vh, 900px);
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--ivory) 0%, var(--champagne) 50%, var(--pearl) 100%);
+            padding: clamp(48px, 8vh, 96px) 0 clamp(40px, 6vh, 80px);
+            border-bottom: 3px solid transparent;
+            border-image: linear-gradient(90deg, transparent, var(--gold), transparent) 1;
+        }
+
+        @media (min-width: 1920px) {
+            .hero {
+                min-height: clamp(800px, 75vh, 1000px);
+            }
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top right, rgba(212, 175, 55, 0.12), transparent 60%),
+                        radial-gradient(circle at bottom left, rgba(205, 127, 50, 0.1), transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-bg-pattern {
+            position: absolute;
+            inset: 0;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30L30 0z' fill='%23D4AF37' fill-opacity='1'/%3E%3C/svg%3E");
+            background-size: clamp(30px, 6vw, 60px) clamp(30px, 6vw, 60px);
+            background-size: 40px 40px;
+        }
+
+        @media (min-width: 768px) {
+            .hero {
+                min-height: clamp(600px, 90vh, 850px);
+                padding: var(--spacing-2xl) 0;
+            }
+            
+            .hero-bg-pattern { background-size: 60px 60px; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(9px, 1.5vw + 2px, 13px);
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            color: var(--gold-dark);
+            margin-bottom: clamp(18px, 2.5vh, 28px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: clamp(10px, 2vw, 18px);
+            font-weight: 300;
+        }
+
+        .hero-subtitle::before,
+        .hero-subtitle::after {
+            content: '';
+            width: clamp(20px, 4vw + 8px, 60px);
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        .hero-title {
+            font-size: clamp(36px, 6vw + 16px, 110px);
+            font-weight: 300;
+            line-height: 1.1;
+            color: var(--text-dark);
+            margin-bottom: clamp(20px, 3vh, 36px);
+            padding: 0 var(--spacing-sm);
+            letter-spacing: 0.15em;
+            text-shadow: 0 2px 24px rgba(212, 175, 55, 0.15);
+        }
+
+        @media (min-width: 768px) {
+            .hero-title {
+                padding: 0;
+                letter-spacing: 0.2em;
+            }
+        }
+
+        @media (min-width: 1440px) {
+            .hero-title {
+                letter-spacing: 0.25em;
+            }
+        }
+
+        .hero-title em {
+            font-style: italic;
+            background: linear-gradient(135deg, var(--bronze-dark), var(--gold), var(--gold-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+        }
+
+        .hero-description {
+            font-size: clamp(12px, 2vw + 4px, 17px);
+            color: var(--text-light);
+            max-width: 680px;
+            margin: 0 auto clamp(32px, 4vh, 52px);
+            line-height: 1.9;
+            padding: 0 var(--spacing-md);
+            font-weight: 300;
+        }
+
+        @media (min-width: 1440px) {
+            .hero-description {
+                max-width: 750px;
+            }
+        }
+
+        .hero-cta {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(14px, 3vh, 20px);
+            align-items: center;
+            padding: 0 var(--spacing-md);
+        }
+
+        @media (min-width: 768px) {
+            .hero-cta {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: clamp(14px, 2.5vh, 18px) clamp(32px, 6vw, 42px);
+            font-size: clamp(10px, 1.8vw, 11px);
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            max-width: 280px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        @media (min-width: 768px) {
+            .btn {
+                width: auto;
+            }
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--bronze-dark) 0%, var(--rich-brown) 100%);
+            color: var(--gold-light);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--gold);
+            box-shadow: 0 4px 16px rgba(212, 175, 55, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-accent) 100%);
+            transform: translateX(-100%);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-primary span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-primary:hover::before,
+        .btn-primary:active::before {
+            transform: translateX(0);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 24px rgba(212, 175, 55, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--gold-dark);
+            border: 2px solid var(--gold);
+            box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.1);
+        }
+
+        .btn-secondary:hover,
+        .btn-secondary:active {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-accent) 100%);
+            color: var(--rich-brown);
+            border-color: var(--gold-accent);
+            box-shadow: 0 6px 24px rgba(212, 175, 55, 0.35);
+        }
+
+        /* Collections Section - Mobile Optimized */
+        .collections {
+            padding: var(--spacing-xl) 0;
+            background: var(--cream);
+        }
+
+        @media (min-width: 768px) {
+            .collections { padding: var(--spacing-2xl) 0 80px; }
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--spacing-lg);
+            padding: 0 var(--spacing-sm);
+        }
+
+        @media (min-width: 768px) {
+            .section-header { margin-bottom: var(--spacing-xl); }
+        }
+
+        .section-subtitle {
+            font-size: clamp(9px, 1.5vw + 2px, 13px);
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            color: var(--gold-dark);
+            margin-bottom: clamp(10px, 1.5vh, 18px);
+            font-weight: 300;
+        }
+
+        .section-title {
+            font-size: clamp(28px, 5vw + 10px, 64px);
+            color: var(--text-dark);
+            margin-bottom: clamp(14px, 2vh, 24px);
+            letter-spacing: 0.2em;
+            font-weight: 300;
+            text-shadow: 0 1px 12px rgba(212, 175, 55, 0.1);
+        }
+
+        @media (min-width: 1440px) {
+            .section-title {
+                letter-spacing: 0.25em;
+            }
+        }
+
+        .section-description {
+            font-size: clamp(13px, 2.2vw, 15px);
+            color: var(--text-light);
+            max-width: 650px;
+            margin: 0 auto;
+            line-height: 1.9;
+            font-weight: 300;
+        }
+
+        /* Collection Grid - Mobile First */
+        .collection-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-lg);
+        }
+
+        @media (min-width: 768px) {
+            .collection-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--spacing-lg);
+                margin-top: var(--spacing-xl);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .collection-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .collection-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+            cursor: pointer;
+            background: var(--beige);
+            aspect-ratio: 3/4;
+        }
+
+        .collection-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .collection-card:active .collection-image {
+            transform: scale(1.05);
+        }
+
+        @media (min-width: 1024px) {
+            .collection-card:hover .collection-image {
+                transform: scale(1.08);
+            }
+        }
+
+        .collection-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(26, 23, 21, 0.85) 0%, transparent 60%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: var(--spacing-md);
+            opacity: 1;
+            transition: opacity 0.4s ease;
+        }
+
+        .collection-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(22px, 4vw, 30px);
+            color: var(--cream);
+            margin-bottom: clamp(6px, 1.5vh, 10px);
+            letter-spacing: 0.15em;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .collection-description {
+            font-size: clamp(10px, 1.8vw, 12px);
+            color: var(--gold-light);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        /* Features Section - Mobile First */
+        .features {
+            padding: var(--spacing-xl) 0;
+            background: var(--beige);
+        }
+
+        @media (min-width: 768px) {
+            .features { padding: 64px 0; }
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-lg);
+        }
+
+        @media (min-width: 768px) {
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: var(--spacing-xl);
+                margin-top: var(--spacing-xl);
+            }
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: var(--spacing-md);
+        }
+
+        .feature-icon {
+            width: clamp(44px, 8vw, 60px);
+            height: clamp(44px, 8vw, 60px);
+            margin: 0 auto clamp(16px, 3vh, 24px);
+            stroke: var(--gold);
+            stroke-width: 1;
+            fill: none;
+            filter: drop-shadow(0 2px 8px rgba(212, 175, 55, 0.2));
+        }
+
+        .feature-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(19px, 3.5vw, 24px);
+            color: var(--text-dark);
+            margin-bottom: clamp(10px, 2vh, 14px);
+            letter-spacing: 0.12em;
+            font-weight: 300;
+        }
+
+        .feature-description {
+            font-size: clamp(12px, 2.2vw, 14px);
+            color: var(--text-light);
+            line-height: 1.9;
+            font-weight: 300;
+        }
+
+        /* Testimonials Section - Mobile Optimized */
+        .testimonials {
+            padding: var(--spacing-xl) 0;
+            background: var(--cream);
+        }
+
+        @media (min-width: 768px) {
+            .testimonials { padding: 80px 0; }
+        }
+
+        .testimonials-slider {
+            position: relative;
+            overflow: hidden;
+            margin-top: var(--spacing-lg);
+            padding: 0 var(--spacing-sm);
+        }
+
+        @media (min-width: 768px) {
+            .testimonials-slider {
+                margin-top: var(--spacing-xl);
+                padding: 0;
+            }
+        }
+
+        .testimonials-track {
+            display: flex;
+            transition: transform 0.5s ease;
+            touch-action: pan-y;
+        }
+
+        .testimonial-card {
+            min-width: 100%;
+            padding: var(--spacing-lg) var(--spacing-md);
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .testimonial-card {
+                min-width: 50%;
+                padding: var(--spacing-xl) var(--spacing-lg);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .testimonial-card { min-width: 33.333%; }
+        }
+
+        .testimonial-text {
+            font-size: 15px;
+            font-style: italic;
+            color: var(--text-dark);
+            line-height: 1.9;
+            margin-bottom: var(--spacing-md);
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (min-width: 768px) {
+            .testimonial-text { font-size: 16px; }
+        }
+
+        .testimonial-author {
+            font-size: 12px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold-dark);
+        }
+
+        @media (min-width: 768px) {
+            .testimonial-author { font-size: 13px; }
+        }
+
+        .testimonials-dots {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: var(--spacing-lg);
+        }
+
+        .testimonial-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--bronze);
+            opacity: 0.3;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            padding: 0;
+        }
+
+        .testimonial-dot.active {
+            opacity: 1;
+            background: var(--gold);
+            transform: scale(1.2);
+        }
+
+        /* Instagram Section - Mobile First */
+        .instagram {
+            padding: var(--spacing-xl) 0;
+            background: var(--beige);
+        }
+
+        @media (min-width: 768px) {
+            .instagram { padding: 64px 0; }
+        }
+
+        .instagram-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: var(--spacing-lg);
+        }
+
+        @media (min-width: 768px) {
+            .instagram-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 12px;
+                margin-top: var(--spacing-xl);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .instagram-grid {
+                grid-template-columns: repeat(6, 1fr);
+                gap: 16px;
+            }
+        }
+
+        .instagram-item {
+            position: relative;
+            aspect-ratio: 1;
+            overflow: hidden;
+            cursor: pointer;
+            background: var(--champagne);
+        }
+
+        .instagram-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .instagram-item:active .instagram-image {
+            transform: scale(1.1);
+        }
+
+        @media (min-width: 1024px) {
+            .instagram-item:hover .instagram-image {
+                transform: scale(1.1);
+            }
+        }
+
+        /* Contact Section - Mobile First */
+        .contact {
+            padding: var(--spacing-xl) 0;
+            background: var(--cream);
+        }
+
+        @media (min-width: 768px) {
+            .contact { padding: 80px 0; }
+        }
+
+        .contact-content {
+            max-width: 600px;
+            margin: var(--spacing-lg) auto 0;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .contact-content { margin-top: var(--spacing-xl); }
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        @media (min-width: 768px) {
+            .contact-info {
+                flex-direction: row;
+                justify-content: center;
+                gap: var(--spacing-xl);
+                margin-bottom: var(--spacing-xl);
+            }
+        }
+
+        .contact-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .contact-label {
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        @media (min-width: 768px) {
+            .contact-label { font-size: 11px; }
+        }
+
+        .contact-value {
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        @media (min-width: 768px) {
+            .contact-value { font-size: 15px; }
+        }
+
+        .contact-value a {
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-value a:hover,
+        .contact-value a:active {
+            color: var(--gold);
+        }
+
+        /* Footer - Mobile First */
+        footer {
+            background: var(--charcoal);
+            color: var(--champagne);
+            padding: var(--spacing-xl) 0 var(--spacing-md);
+        }
+
+        @media (min-width: 768px) {
+            footer { padding: var(--spacing-2xl) 0 var(--spacing-lg); }
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .footer-content {
+                grid-template-columns: repeat(3, 1fr);
+                gap: var(--spacing-xl);
+                text-align: left;
+            }
+        }
+
+        .footer-section h4 {
+            font-size: 16px;
+            color: var(--gold-light);
+            margin-bottom: 16px;
+            letter-spacing: 0.15em;
+        }
+
+        @media (min-width: 768px) {
+            .footer-section h4 { font-size: 18px; }
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-links a {
+            color: var(--champagne);
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover,
+        .footer-links a:active {
+            color: var(--gold);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        @media (min-width: 768px) {
+            .social-links { justify-content: flex-start; }
+        }
+
+        .social-icon {
+            width: 20px;
+            height: 20px;
+            stroke: var(--champagne);
+            fill: none;
+            transition: stroke 0.3s ease;
+        }
+
+        .social-icon:hover,
+        .social-icon:active {
+            stroke: var(--gold);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: var(--spacing-md);
+            border-top: 1px solid rgba(201, 169, 110, 0.2);
+            font-size: 11px;
+            color: var(--nude);
+        }
+
+        @media (min-width: 768px) {
+            .footer-bottom { font-size: 12px; }
+        }
+
+        /* Loading Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Smooth Touch Interactions */
+        * {
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        button, a {
+            -webkit-touch-callout: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Announcement Bar -->
+    <div class="announcement-bar">
+        Book Your Private Consultation — Experience Bespoke Luxury
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-container">
+        <nav class="container">
+            <a href="#" class="logo">GHOHARY</a>
+            
+            <ul class="nav-links">
+                <li><a href="collections.html">Collections</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="appointment.html">Book Appointment</a></li>
+                <li><a href="account.html">Account</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            
+            <button class="mobile-menu-btn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <div class="nav-icons">
+                <a href="account.html" aria-label="Account">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </a>
+                <a href="cart.html" aria-label="Shopping cart" class="cart-link">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-count">0</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg-pattern"></div>
+        <div class="container hero-content">
+            <div class="hero-text">
+                <div class="hero-subtitle">Haute Couture Dubai</div>
+                <h1 class="hero-title">
+                    Timeless
+                    <em>Elegance</em>
+                </h1>
+                <p class="hero-description">
+                    Exquisite bridal gowns and evening wear, meticulously handcrafted for your most precious moments. Each piece is a masterpiece of artistry, designed to capture your unique beauty.
+                </p>
+                <div class="hero-cta">
+                    <a href="appointment.html" class="btn btn-primary">
+                        <span>Book Consultation</span>
+                    </a>
+                    <a href="collections.html" class="btn btn-secondary">
+                        <span>View Collections</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Collections Section -->
+    <section id="collections" class="collections">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-subtitle">Our Collections</div>
+                <h2 class="section-title">Bespoke Creations</h2>
+                <p class="section-description">
+                    Each gown is a unique expression of luxury, crafted with the finest fabrics and intricate detailing. Discover collections that redefine bridal elegance.
+                </p>
+            </div>
+            
+            <div class="collection-grid">
+                <div class="collection-card fade-in">
+                    <img src="https://images.unsplash.com/photo-1594552072238-2d8e16ed7b2c?w=800&h=1200&fit=crop" alt="Bridal Couture" class="collection-image" loading="lazy">
+                    <div class="collection-overlay">
+                        <h3 class="collection-name">Bridal Couture</h3>
+                        <p class="collection-description">Timeless Wedding Gowns</p>
+                    </div>
+                </div>
+                
+                <div class="collection-card fade-in">
+                    <img src="https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800&h=1200&fit=crop" alt="Evening Elegance" class="collection-image" loading="lazy">
+                    <div class="collection-overlay">
+                        <h3 class="collection-name">Evening Elegance</h3>
+                        <p class="collection-description">Sophisticated Gowns</p>
+                    </div>
+                </div>
+                
+                <div class="collection-card fade-in">
+                    <img src="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=800&h=1200&fit=crop" alt="Custom Atelier" class="collection-image" loading="lazy">
+                    <div class="collection-overlay">
+                        <h3 class="collection-name">Custom Atelier</h3>
+                        <p class="collection-description">Bespoke Designs</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="about" class="features">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-subtitle">The GHOHARY Experience</div>
+                <h2 class="section-title">Unparalleled Craftsmanship</h2>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-item fade-in">
+                    <svg class="feature-icon" viewBox="0 0 24 24">
+                        <path d="M20 7h-4V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v3H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Z"></path>
+                        <path d="M8 7V4h8v3"></path>
+                    </svg>
+                    <h3 class="feature-title">Bespoke Design</h3>
+                    <p class="feature-description">
+                        Every gown is designed exclusively for you, capturing your vision and personal style in exquisite detail.
+                    </p>
+                </div>
+                
+                <div class="feature-item fade-in">
+                    <svg class="feature-icon" viewBox="0 0 24 24">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                    </svg>
+                    <h3 class="feature-title">Finest Materials</h3>
+                    <p class="feature-description">
+                        Sourced from the world's premier ateliers, each fabric and embellishment meets our exacting standards.
+                    </p>
+                </div>
+                
+                <div class="feature-item fade-in">
+                    <svg class="feature-icon" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <h3 class="feature-title">Timeless Artistry</h3>
+                    <p class="feature-description">
+                        Handcrafted by master artisans with decades of expertise in haute couture and bridal design.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-subtitle">Client Stories</div>
+                <h2 class="section-title">Cherished Moments</h2>
+            </div>
+            
+            <div class="testimonials-slider">
+                <div class="testimonials-track">
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">
+                            "GHOHARY created the gown of my dreams. Every detail was perfection, and I felt absolutely radiant on my special day. The craftsmanship is unmatched."
+                        </p>
+                        <p class="testimonial-author">— Layla A., Bride</p>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">
+                            "An unforgettable experience from consultation to final fitting. The attention to detail and personalized service made me feel like royalty."
+                        </p>
+                        <p class="testimonial-author">— Sara M., Bride</p>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">
+                            "The most beautiful evening gown I've ever worn. GHOHARY's artistry and dedication to excellence is evident in every stitch."
+                        </p>
+                        <p class="testimonial-author">— Amira K., Client</p>
+                    </div>
+                </div>
+                
+                <div class="testimonials-dots">
+                    <button class="testimonial-dot active" data-index="0" aria-label="View testimonial 1"></button>
+                    <button class="testimonial-dot" data-index="1" aria-label="View testimonial 2"></button>
+                    <button class="testimonial-dot" data-index="2" aria-label="View testimonial 3"></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Instagram Section -->
+    <section class="instagram">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-subtitle">Follow Our Journey</div>
+                <h2 class="section-title">@ghohary.couture</h2>
+                <p class="section-description">
+                    Discover our latest creations and behind-the-scenes moments on Instagram
+                </p>
+            </div>
+            
+            <div class="instagram-grid">
+                <div class="instagram-item fade-in">
+                    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=400&h=400&fit=crop" alt="Instagram post" class="instagram-image" loading="lazy">
+                </div>
+                <div class="instagram-item fade-in">
+                    <img src="https://images.unsplash.com/photo-1591604021695-0c69b7c05981?w=400&h=400&fit=crop" alt="Instagram post" class="instagram-image" loading="lazy">
+                </div>
+                <div class="instagram-item fade-in">
+                    <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=400&h=400&fit=crop" alt="Instagram post" class="instagram-image" loading="lazy">
+                </div>
+                <div class="instagram-item fade-in">
+                    <img src="https://images.unsplash.com/photo-1596783074918-c84cb06531ca?w=400&h=400&fit=crop" alt="Instagram post" class="instagram-image" loading="lazy">
+                </div>
+                <div class="instagram-item fade-in">
+                    <img src="https://images.unsplash.com/photo-1624626699269-7a8a2d0f7d0e?w=400&h=400&fit=crop" alt="Instagram post" class="instagram-image" loading="lazy">
+                </div>
+                <div class="instagram-item fade-in">
+                    <img src="https://images.unsplash.com/photo-1600008644859-3b530d6b5f3d?w=400&h=400&fit=crop" alt="Instagram post" class="instagram-image" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-subtitle">Get in Touch</div>
+                <h2 class="section-title">Book Your Consultation</h2>
+                <p class="section-description">
+                    Begin your journey to finding the perfect gown. Our atelier welcomes you by appointment.
+                </p>
+            </div>
+            
+            <div class="contact-content fade-in">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-label">Location</div>
+                        <div class="contact-value">Dubai Design District</div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-label">Phone</div>
+                        <div class="contact-value">
+                            <a href="tel:+97145551234">+971 4 555 1234</a>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-label">Email</div>
+                        <div class="contact-value">
+                            <a href="mailto:atelier@ghohary.com">atelier@ghohary.com</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <a href="mailto:atelier@ghohary.com" class="btn btn-primary">
+                    <span>Schedule Appointment</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>GHOHARY</h4>
+                    <p style="font-size: 13px; line-height: 1.8; margin-top: 12px;">
+                        Dubai's premier destination for haute couture bridal and evening wear, where timeless elegance meets bespoke craftsmanship.
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="collections.html">Collections</a></li>
+                        <li><a href="appointment.html">Book Appointment</a></li>
+                        <li><a href="account.html">My Account</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="https://instagram.com" target="_blank" aria-label="Instagram">
+                            <svg class="social-icon" viewBox="0 0 24 24">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                        </a>
+                        <a href="https://facebook.com" target="_blank" aria-label="Facebook">
+                            <svg class="social-icon" viewBox="0 0 24 24">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                            </svg>
+                        </a>
+                        <a href="https://pinterest.com" target="_blank" aria-label="Pinterest">
+                            <svg class="social-icon" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M8 12c0 3.3 2.7 6 6 6 1.7 0 3.2-.7 4.2-1.8"></path>
+                                <path d="M12 2v8l4-4"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 GHOHARY Haute Couture. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
