@@ -1,57 +1,70 @@
-/* GHOHARY Haute Couture - Comprehensive Styles */
-/* Mobile-First Design System - Enhanced Luxury Experience */
+/* GHOHARY Haute Couture - Luxury Tiffany & Co Aesthetic */
+/* Premium Beige, Gold & Brown Color Palette */
 
 :root {
-    /* Emperor Luxury Color Palette */
-    --gold: #D4AF37;
-    --gold-light: #F4E5C2;
-    --gold-dark: #B8942C;
-    --gold-accent: #FFD700;
-    --gold-shimmer: linear-gradient(135deg, #B8942C 0%, #D4AF37 25%, #FFD700 50%, #D4AF37 75%, #B8942C 100%);
-    --champagne: #F8F4E6;
-    --nude: #E6DCC8;
-    --beige: #F5F0E8;
-    --ivory: #FFFFF0;
-    --bronze: #CD7F32;
-    --bronze-dark: #8B5A2B;
-    --deep-burgundy: #3B1C1C;
-    --rich-brown: #2C1810;
-    --charcoal: #1C1C1C;
-    --cream: #FFFEF7;
-    --pearl: #F8F6F0;
-    --text-dark: #1C1410;
-    --text-mid: #3C3530;
-    --text-light: #5C5248;
-    --text-muted: #8C8478;
-    --white: #FFFFFF;
+    /* Primary Luxury Colors - Tiffany Inspired */
+    --gold: #D4AF37;                    /* Luxe gold accent */
+    --gold-light: #F4E5C2;              /* Soft gold highlight */
+    --gold-dark: #B8942C;               /* Deep gold */
+    --beige: #E8DCC8;                   /* Warm beige primary */
+    --beige-light: #F5F0E8;             /* Light beige background */
+    --beige-dark: #D4C4B0;              /* Deep beige accent */
+    --brown: #6B5B4F;                   /* Warm medium brown */
+    --brown-dark: #3D332A;              /* Deep chocolate brown */
+    --brown-light: #9E8B7E;             /* Light taupe brown */
     
-    /* Enhanced shadows */
-    --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.04);
-    --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.08);
-    --shadow-gold: 0 4px 24px rgba(212, 175, 55, 0.15);
-    --shadow-luxury: 0 12px 40px rgba(212, 175, 55, 0.12), 0 4px 16px rgba(0, 0, 0, 0.06);
+    /* Secondary Neutrals */
+    --champagne: #F8F4E6;               /* Warm champagne */
+    --cream: #FFFEF7;                   /* Off-white cream */
+    --ivory: #FFFFF0;                   /* Pure ivory */
+    --pearl: #F8F6F0;                   /* Pearl white */
+    --text-dark: #2F2926;               /* Deep text */
+    --text-mid: #4A4238;                /* Medium text */
+    --text-light: #6B6158;              /* Light text */
+    --text-muted: #8B7E72;              /* Muted text */
+    --white: #FFFFFF;                   /* Pure white */
     
-    /* Spacing - Universal Fluid (320px - 2560px) */
+    /* Accent Colors */
+    --accent-gold: #FFD700;             /* Bright gold */
+    --accent-copper: #B87333;           /* Copper accent */
+    --accent-burgundy: #4A3728;         /* Deep burgundy */
+    
+    /* Premium Shadows */
+    --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.06);
+    --shadow-medium: 0 6px 20px rgba(0, 0, 0, 0.1);
+    --shadow-gold: 0 8px 32px rgba(212, 175, 55, 0.18);
+    --shadow-luxury: 0 16px 48px rgba(212, 175, 55, 0.15), 0 6px 20px rgba(0, 0, 0, 0.08);
+    --shadow-elevation: 0 20px 60px rgba(0, 0, 0, 0.12);
+    
+    /* Spacing System - Fluid Responsive */
     --spacing-xs: clamp(6px, 1.2vw + 2px, 10px);
     --spacing-sm: clamp(12px, 2vw + 4px, 20px);
-    --spacing-md: clamp(20px, 3vw + 6px, 32px);
-    --spacing-lg: clamp(28px, 4vw + 8px, 48px);
-    --spacing-xl: clamp(40px, 5vw + 12px, 72px);
-    --spacing-2xl: clamp(56px, 7vw + 16px, 96px);
+    --spacing-md: clamp(24px, 3vw + 8px, 36px);
+    --spacing-lg: clamp(36px, 4vw + 12px, 56px);
+    --spacing-xl: clamp(48px, 5vw + 16px, 80px);
+    --spacing-2xl: clamp(64px, 7vw + 20px, 120px);
     
-    /* Container - All Devices */
+    /* Container Widths */
     --container-mobile: 94%;
     --container-tablet: 90%;
     --container-desktop: 86%;
-    --container-wide: 82%;
     --container-max: 1800px;
     
-    /* Typography Scale - Universal Fluid */
-    --text-xs: clamp(9px, 1.5vw + 2px, 12px);
-    --text-sm: clamp(11px, 1.8vw + 3px, 14px);
-    --text-base: clamp(13px, 2vw + 4px, 16px);
-    --text-md: clamp(14px, 2.2vw + 5px, 18px);
-    --text-lg: clamp(16px, 2.5vw + 6px, 22px);
+    /* Typography Scale */
+    --text-xs: clamp(10px, 1.5vw + 2px, 13px);
+    --text-sm: clamp(12px, 1.8vw + 3px, 15px);
+    --text-base: clamp(14px, 2vw + 4px, 17px);
+    --text-md: clamp(15px, 2.2vw + 5px, 19px);
+    --text-lg: clamp(17px, 2.5vw + 6px, 22px);
+    --text-xl: clamp(20px, 3vw + 8px, 28px);
+    --text-2xl: clamp(24px, 4vw + 10px, 36px);
+    --text-3xl: clamp(32px, 5vw + 12px, 56px);
+    
+    /* Letter Spacing for Luxury */
+    --ls-tight: 0.04em;
+    --ls-normal: 0.08em;
+    --ls-wide: 0.12em;
+    --ls-extra-wide: 0.16em;
 }
 
 * {
@@ -76,25 +89,54 @@ body {
     font-size: var(--text-base);
 }
 
-/* Typography */
-h1, h2, h3, h4, h5 {
+/* Typography - Luxury */
+h1, h2, h3, h4, h5, h6 {
     font-family: 'Cormorant Garamond', serif;
     font-weight: 300;
-    letter-spacing: 0.1em;
-    line-height: 1.2;
+    letter-spacing: var(--ls-normal);
+    line-height: 1.15;
+    color: var(--text-dark);
 }
 
-h1 { font-size: 36px; }
-h2 { font-size: 32px; }
-h3 { font-size: 24px; }
-h4 { font-size: 20px; }
-
-@media (min-width: 768px) {
-    h1 { font-size: 64px; }
-    h2 { font-size: 48px; }
-    h3 { font-size: 32px; }
-    h4 { font-size: 24px; }
+h1 {
+    font-size: var(--text-3xl);
+    letter-spacing: var(--ls-wide);
+    font-weight: 300;
 }
+
+h2 {
+    font-size: var(--text-2xl);
+    letter-spacing: var(--ls-wide);
+    font-weight: 300;
+}
+
+h3 {
+    font-size: var(--text-xl);
+    letter-spacing: var(--ls-normal);
+    font-weight: 300;
+}
+
+h4 {
+    font-size: var(--text-lg);
+    letter-spacing: var(--ls-normal);
+    font-weight: 400;
+}
+
+p {
+    color: var(--text-mid);
+    line-height: 1.8;
+    letter-spacing: var(--ls-tight);
+}
+
+a {
+    color: var(--brown-dark);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    color: var(--gold);
+}}
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
@@ -565,6 +607,89 @@ nav {
 
 .btn-link.danger::after {
     background: #c94545;
+}
+
+/* Home Hero Section */
+.hero {
+    position: relative;
+    height: 100vh;
+    background: linear-gradient(135deg, var(--beige) 0%, var(--champagne) 50%, var(--pearl) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.1), transparent 70%);
+    animation: heroGlow 6s ease-in-out infinite;
+}
+
+@keyframes heroGlow {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+}
+
+.hero-subtitle {
+    font-size: var(--text-sm);
+    color: var(--gold-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    margin-bottom: var(--spacing-md);
+    opacity: 0.9;
+}
+
+.hero-title {
+    font-size: clamp(48px, 10vw, 96px);
+    color: var(--rich-brown);
+    font-weight: 300;
+    letter-spacing: var(--ls-wide);
+    line-height: 1.1;
+    margin-bottom: var(--spacing-lg);
+    text-shadow: 0 2px 20px rgba(212, 175, 55, 0.1);
+}
+
+.hero-description {
+    font-size: clamp(16px, 3vw, 22px);
+    color: var(--text-light);
+    font-weight: 300;
+    line-height: 1.8;
+    margin-bottom: var(--spacing-2xl);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    letter-spacing: 0.02em;
+}
+
+.hero-cta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    justify-content: center;
+    align-items: center;
+}
+
+@media (min-width: 768px) {
+    .hero-cta {
+        flex-direction: row;
+        gap: var(--spacing-xl);
+    }
+}
+
+.hero-cta .btn {
+    min-width: 240px;
 }
 
 /* Page Hero */
@@ -1248,6 +1373,149 @@ nav {
 .related-products {
     padding: var(--spacing-2xl) 0;
     background: linear-gradient(180deg, var(--beige) 0%, var(--champagne) 100%);
+}
+
+/* Testimonials */
+.testimonials-section {
+    padding: var(--spacing-2xl) 0;
+    background: linear-gradient(180deg, var(--cream) 0%, var(--champagne) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.testimonials-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.08), transparent);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.testimonials-container {
+    position: relative;
+    z-index: 1;
+}
+
+.testimonials-title {
+    text-align: center;
+    color: var(--rich-brown);
+    margin-bottom: var(--spacing-xl);
+    font-size: clamp(28px, 5vw, 44px);
+    letter-spacing: var(--ls-wide);
+}
+
+.testimonials-slider {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0;
+}
+
+.testimonials-wrapper {
+    display: flex;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.testimonial-card {
+    flex: 0 0 100%;
+    min-width: 100%;
+    padding: var(--spacing-xl) var(--spacing-lg);
+    background: var(--white);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+@media (min-width: 768px) {
+    .testimonial-card {
+        padding: var(--spacing-2xl) var(--spacing-xl);
+    }
+}
+
+.testimonial-quote {
+    font-size: clamp(18px, 3vw, 24px);
+    color: var(--rich-brown);
+    margin-bottom: var(--spacing-lg);
+    line-height: 1.8;
+    font-style: italic;
+    letter-spacing: 0.02em;
+    position: relative;
+}
+
+.testimonial-quote::before,
+.testimonial-quote::after {
+    content: '"';
+    font-size: clamp(36px, 8vw, 56px);
+    color: var(--gold-light);
+    opacity: 0.3;
+    position: absolute;
+    font-family: 'Georgia', serif;
+}
+
+.testimonial-quote::before {
+    top: 0;
+    left: -20px;
+}
+
+.testimonial-quote::after {
+    bottom: -30px;
+    right: -20px;
+}
+
+.testimonial-author {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.author-image {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--gold-light);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+}
+
+.author-name {
+    font-size: 16px;
+    color: var(--text-dark);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+}
+
+.author-title {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+}
+
+.testimonials-controls {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: var(--spacing-lg);
+}
+
+.testimonial-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(212, 175, 55, 0.3);
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.testimonial-dot.active {
+    background: var(--gold);
+    transform: scale(1.2);
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
 }
 
 .section-title {
