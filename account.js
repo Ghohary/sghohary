@@ -3,10 +3,7 @@
     'use strict';
 
     // Get DOM elements
-    const authSection = document.getElementById('authSection');
     const accountGrid = document.querySelector('.account-grid');
-    const signInBtn = document.getElementById('signInBtn');
-    const authEmail = document.getElementById('authEmail');
     const signOutBtn = document.getElementById('signOutBtn');
     const profileForm = document.getElementById('profileForm');
     const navItems = document.querySelectorAll('.account-nav-item:not(.special)');
@@ -17,73 +14,23 @@
         return JSON.parse(localStorage.getItem('ghoharyCurrentUser') || 'null');
     }
 
-    // Set current user
-    function setCurrentUser(userData) {
-        if (userData) {
-            localStorage.setItem('ghoharyCurrentUser', JSON.stringify(userData));
-        } else {
-            localStorage.removeItem('ghoharyCurrentUser');
-        }
-    }
-
     // Check if user is signed in on page load
-    function checkAuth() {
-        const currentUser = getCurrentUser();
-        if (currentUser && currentUser.email) {
-            showAccountDashboard(currentUser);
-        } else {
-            showAuthPage();
-        }
+    const currentUser = getCurrentUser();
+    if (!currentUser || !currentUser.email) {
+        // Redirect to auth-gate if not logged in
+        window.location.href = 'auth-gate.html';
+        return; // Stop execution
     }
 
-    // Show auth/login page
-    function showAuthPage() {
-        if (accountGrid) accountGrid.style.display = 'none';
-        if (authSection) authSection.style.display = 'block';
-    }
-
-    // Show account dashboard
-    function showAccountDashboard(user) {
-        if (authSection) authSection.style.display = 'none';
-        if (accountGrid) accountGrid.style.display = 'grid';
-        loadProfileData(user);
-        loadOrderHistory(user.email);
-        loadAppointments();
-    }
-
-    // Sign in handler
-    signInBtn.addEventListener('click', () => {
-        const email = authEmail.value.trim();
-        if (!email || !email.includes('@')) {
-            alert('Please enter a valid email');
-            return;
-        }
-
-        // Create user object
-        const userData = {
-            email: email,
-            firstName: '',
-            lastName: '',
-            phone: '',
-            address: '',
-            city: '',
-            emirate: ''
-        };
-
-        setCurrentUser(userData);
-        showAccountDashboard(userData);
-        authEmail.value = '';
-    });
-
-    // Sign out handler
+    // ===== SIGN OUT =====
     signOutBtn.addEventListener('click', () => {
         if (confirm('Are you sure you want to sign out?')) {
-            setCurrentUser(null);
-            showAuthPage();
+            localStorage.removeItem('ghoharyCurrentUser');
+            window.location.href = 'auth-gate.html';
         }
     });
 
-    // Load profile data
+    // ===== LOAD PROFILE DATA =====
     function loadProfileData(user) {
         document.getElementById('profileFirstName').value = user.firstName || '';
         document.getElementById('profileLastName').value = user.lastName || '';
@@ -94,7 +41,7 @@
         document.getElementById('profileEmirate').value = user.emirate || '';
     }
 
-    // Save profile
+    // ===== SAVE PROFILE =====
     profileForm.addEventListener('submit', (e) => {
         e.preventDefault();
         
@@ -108,9 +55,17 @@
             emirate: document.getElementById('profileEmirate').value
         };
 
-        setCurrentUser(userData);
+        localStorage.setItem('ghoharyCurrentUser', JSON.stringify(userData));
         
         // Show success
+        const successBanner = document.getElementById('successBanner');
+        if (successBanner) {
+            successBanner.style.display = 'flex';
+            setTimeout(() => {
+                successBanner.style.display = 'none';
+            }, 3000);
+        }
+
         const btn = profileForm.querySelector('button[type="submit"]');
         const originalText = btn.innerHTML;
         btn.innerHTML = '<span>✓ Saved</span>';
@@ -119,18 +74,15 @@
         }, 2000);
     });
 
-    // Load orders for user
+    // ===== LOAD ORDERS =====
     function loadOrderHistory(email) {
         const ordersTab = document.getElementById('ordersTab');
         ordersTab.innerHTML = '<h2 class="tab-title">My Orders</h2>';
         
         let orders = JSON.parse(localStorage.getItem('ghoharyOrders') || '[]');
         
-        // Filter orders by user email if available
-        let userOrders = orders.filter(order => {
-            // Match by email or accept all if email not stored in order
-            return !order.email || order.email === email;
-        });
+        // Filter orders by user email
+        let userOrders = orders.filter(order => !order.email || order.email === email);
 
         const ordersList = document.createElement('div');
         ordersList.className = 'orders-list';
@@ -181,7 +133,7 @@
         ordersTab.appendChild(ordersList);
     }
 
-    // Load appointments
+    // ===== LOAD APPOINTMENTS =====
     function loadAppointments() {
         const appointmentsTab = document.getElementById('appointmentsTab');
         if (!appointmentsTab) return;
@@ -236,7 +188,7 @@
         appointmentsTab.appendChild(appointmentsList);
     }
 
-    // Tab navigation
+    // ===== TAB NAVIGATION =====
     navItems.forEach(item => {
         item.addEventListener('click', function(e) {
             e.preventDefault();
@@ -253,19 +205,7 @@
         });
     });
 
-    // Check for order success
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('order') === 'success') {
-        const successBanner = document.getElementById('successBanner');
-        if (successBanner) {
-            successBanner.style.display = 'flex';
-            setTimeout(() => {
-                successBanner.style.display = 'none';
-            }, 5000);
-        }
-    }
-
-    // Update cart count
+    // ===== UPDATE CART COUNT =====
     function updateCartCount() {
         const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
         const cartCount = document.querySelector('.cart-count');
@@ -278,19 +218,10 @@
 
     updateCartCount();
 
-    // Initialize
-    function init() {
-        console.log('🔐 Initializing account page...');
-        console.log('Auth section element:', authSection);
-        console.log('Account grid element:', accountGrid);
-        checkAuth();
-        console.log('🔐 Account page loaded');
-    }
+    // ===== INITIALIZE =====
+    loadProfileData(currentUser);
+    loadOrderHistory(currentUser.email);
+    loadAppointments();
 
-    // Run init when DOM is ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    console.log('🔐 Account page loaded for:', currentUser.email);
 })();
