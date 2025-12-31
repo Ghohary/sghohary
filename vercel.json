@@ -10,11 +10,7 @@
       "maxDuration": 60
     }
   },
-  "env": {
-    "STRIPE_PUBLISHABLE_KEY": "@stripe_publishable_key",
-    "STRIPE_SECRET_KEY": "@stripe_secret_key",
-    "PORT": "3000"
-  },
+  "env": {},
   "rewrites": [
     {
       "source": "/api/(.*)",
