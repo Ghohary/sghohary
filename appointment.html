@@ -6,6 +6,12 @@
     <meta name="description" content="Book a private consultation at GHOHARY">
     <title>Book Appointment | GHOHARY</title>
     
+    <!-- Auth Check -->
+    <script>
+        const currentUser = JSON.parse(localStorage.getItem('ghoharyCurrentUser') || 'null');
+        if (!currentUser || !currentUser.email) window.location.href = 'auth-gate.html';
+    </script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">

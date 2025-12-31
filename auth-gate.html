@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="Login or Sign Up - GHOHARY Haute Couture">
+    <title>Login / Sign Up | GHOHARY</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #FEFBF7 0%, #F3E8D8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .auth-logo {
+            font-size: 32px;
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            color: var(--brown-dark);
+            margin-bottom: 10px;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .auth-tagline {
+            color: var(--text-muted);
+            font-size: 13px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .auth-card {
+            background: var(--white);
+            padding: 50px 40px;
+            border: 1px solid rgba(201, 169, 97, 0.2);
+            box-shadow: 0 8px 32px rgba(31, 25, 20, 0.08);
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 40px;
+            border-bottom: 1px solid rgba(201, 169, 97, 0.15);
+        }
+
+        .auth-tab-btn {
+            flex: 1;
+            padding: 16px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: all 0.3s ease;
+            position: relative;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .auth-tab-btn:hover {
+            color: var(--text-dark);
+        }
+
+        .auth-tab-btn.active {
+            color: var(--gold-dark);
+        }
+
+        .auth-tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gold);
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid rgba(201, 169, 97, 0.3);
+            border-radius: 4px;
+            font-size: 14px;
+            color: var(--text-dark);
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.15);
+            background: var(--ivory);
+        }
+
+        .form-group.signup {
+            display: none;
+        }
+
+        .form-group.signup.active {
+            display: block;
+        }
+
+        .auth-submit {
+            width: 100%;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+            margin-top: 10px;
+        }
+
+        .auth-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(201, 169, 97, 0.3);
+        }
+
+        .auth-submit:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            color: #c62828;
+            font-size: 12px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(201, 169, 97, 0.1);
+            color: var(--text-muted);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 40px 24px;
+            }
+
+            .auth-header {
+                margin-bottom: 30px;
+            }
+
+            .auth-logo {
+                font-size: 28px;
+            }
+
+            .auth-tabs {
+                margin-bottom: 30px;
+            }
+
+            .auth-tab-btn {
+                padding: 12px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <!-- Header -->
+        <div class="auth-header">
+            <div class="auth-logo">GHOHARY</div>
+            <div class="auth-tagline">Haute Couture Bridal & Evening Wear</div>
+        </div>
+
+        <!-- Auth Card -->
+        <div class="auth-card">
+            <!-- Tabs -->
+            <div class="auth-tabs">
+                <button class="auth-tab-btn active" data-tab="login">Login</button>
+                <button class="auth-tab-btn" data-tab="signup">Sign Up</button>
+            </div>
+
+            <!-- Login Form -->
+            <form class="auth-form active" id="loginForm" data-form="login">
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" placeholder="your@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+
+                <div class="error-message" id="loginError"></div>
+
+                <button type="submit" class="auth-submit">Sign In</button>
+
+                <div class="auth-footer">
+                    New to GHOHARY? <a href="#" onclick="switchTab('signup'); return false;" style="color: var(--gold); text-decoration: none; font-weight: 500;">Create an account</a>
+                </div>
+            </form>
+
+            <!-- Signup Form -->
+            <form class="auth-form" id="signupForm" data-form="signup">
+                <div class="form-group">
+                    <label for="signupFirstName">First Name</label>
+                    <input type="text" id="signupFirstName" placeholder="First Name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupLastName">Last Name</label>
+                    <input type="text" id="signupLastName" placeholder="Last Name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupEmail">Email Address</label>
+                    <input type="email" id="signupEmail" placeholder="your@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" placeholder="Create a password (min 6 characters)" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupPhone">Phone Number (Optional)</label>
+                    <input type="tel" id="signupPhone" placeholder="+971 50 123 4567">
+                </div>
+
+                <div class="error-message" id="signupError"></div>
+
+                <button type="submit" class="auth-submit">Create Account</button>
+
+                <div class="auth-footer">
+                    Already have an account? <a href="#" onclick="switchTab('login'); return false;" style="color: var(--gold); text-decoration: none; font-weight: 500;">Sign in</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching
+        function switchTab(tab) {
+            document.querySelectorAll('.auth-tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === tab);
+            });
+            document.querySelectorAll('.auth-form').forEach(form => {
+                form.classList.toggle('active', form.id === (tab === 'login' ? 'loginForm' : 'signupForm'));
+            });
+        }
+
+        document.querySelectorAll('.auth-tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+        });
+
+        // Login form
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            const errorEl = document.getElementById('loginError');
+
+            if (!email || !password) {
+                errorEl.textContent = 'Please fill in all fields';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            // Get users from localStorage
+            let users = JSON.parse(localStorage.getItem('ghoharyUsers') || '[]');
+            const user = users.find(u => u.email === email);
+
+            if (!user || user.password !== password) {
+                errorEl.textContent = 'Invalid email or password';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            // Login successful
+            localStorage.setItem('ghoharyCurrentUser', JSON.stringify({
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                phone: user.phone || '',
+                address: user.address || '',
+                city: user.city || '',
+                emirate: user.emirate || ''
+            }));
+
+            window.location.href = 'index.html';
+        });
+
+        // Signup form
+        document.getElementById('signupForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const firstName = document.getElementById('signupFirstName').value.trim();
+            const lastName = document.getElementById('signupLastName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value.trim();
+            const phone = document.getElementById('signupPhone').value.trim();
+            const errorEl = document.getElementById('signupError');
+
+            errorEl.classList.remove('show');
+
+            if (!firstName || !lastName || !email || !password) {
+                errorEl.textContent = 'Please fill in all required fields';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            if (password.length < 6) {
+                errorEl.textContent = 'Password must be at least 6 characters';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            if (!email.includes('@')) {
+                errorEl.textContent = 'Please enter a valid email';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            // Get users from localStorage
+            let users = JSON.parse(localStorage.getItem('ghoharyUsers') || '[]');
+            
+            if (users.find(u => u.email === email)) {
+                errorEl.textContent = 'This email is already registered';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            // Create new user
+            const newUser = {
+                email,
+                password,
+                firstName,
+                lastName,
+                phone,
+                address: '',
+                city: '',
+                emirate: '',
+                createdAt: new Date().toISOString()
+            };
+
+            users.push(newUser);
+            localStorage.setItem('ghoharyUsers', JSON.stringify(users));
+
+            // Auto login
+            localStorage.setItem('ghoharyCurrentUser', JSON.stringify({
+                email: newUser.email,
+                firstName: newUser.firstName,
+                lastName: newUser.lastName,
+                phone: newUser.phone,
+                address: newUser.address,
+                city: newUser.city,
+                emirate: newUser.emirate
+            }));
+
+            window.location.href = 'index.html';
+        });
+
+        // Check if already logged in
+        const currentUser = JSON.parse(localStorage.getItem('ghoharyCurrentUser') || 'null');
+        if (currentUser && currentUser.email) {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
