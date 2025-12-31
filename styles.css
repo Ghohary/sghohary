@@ -1204,15 +1204,19 @@ nav {
 }
 
 .product-title {
-    font-size: clamp(32px, 6vw, 52px);
+    font-size: clamp(24px, 5vw, 52px);
     color: var(--brown-dark);
     margin-bottom: 12px;
     letter-spacing: 0.08em;
     line-height: 1.1;
 }
 
+@media (min-width: 480px) {
+    .product-title { font-size: clamp(28px, 5vw, 52px); }
+}
+
 @media (min-width: 768px) {
-    .product-title { font-size: clamp(40px, 5vw, 56px); }
+    .product-title { font-size: clamp(36px, 5vw, 56px); }
 }
 
 .product-subtitle {
