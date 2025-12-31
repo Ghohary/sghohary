@@ -3,18 +3,18 @@
   "devCommand": "npm run dev",
   "installCommand": "npm install",
   "framework": null,
-  "outputDirectory": "public",
+  "outputDirectory": ".",
   "functions": {
     "api/**/*.js": {
       "memory": 1024,
       "maxDuration": 60
     }
   },
-  "env": [
-    "STRIPE_PUBLISHABLE_KEY",
-    "STRIPE_SECRET_KEY",
-    "PORT"
-  ],
+  "env": {
+    "STRIPE_PUBLISHABLE_KEY": "@stripe_publishable_key",
+    "STRIPE_SECRET_KEY": "@stripe_secret_key",
+    "PORT": "3000"
+  },
   "rewrites": [
     {
       "source": "/api/(.*)",
