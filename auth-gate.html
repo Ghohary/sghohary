@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
-            background: linear-gradient(135deg, #FEFBF7 0%, #F3E8D8 100%);
+            background: #FFFFFF;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -34,7 +34,7 @@
             font-size: 32px;
             font-weight: 300;
             letter-spacing: 0.15em;
-            color: var(--brown-dark);
+            color: var(--text-dark);
             margin-bottom: 10px;
             font-family: 'Cormorant Garamond', serif;
         }
@@ -49,15 +49,15 @@
         .auth-card {
             background: var(--white);
             padding: 50px 40px;
-            border: 1px solid rgba(201, 169, 97, 0.2);
-            box-shadow: 0 8px 32px rgba(31, 25, 20, 0.08);
+            border: 1px solid var(--gray-200);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
         }
 
         .auth-tabs {
             display: flex;
             gap: 0;
             margin-bottom: 40px;
-            border-bottom: 1px solid rgba(201, 169, 97, 0.15);
+            border-bottom: 1px solid var(--gray-200);
         }
 
         .auth-tab-btn {
@@ -81,7 +81,7 @@
         }
 
         .auth-tab-btn.active {
-            color: var(--gold-dark);
+            color: var(--text-dark);
         }
 
         .auth-tab-btn.active::after {
@@ -91,7 +91,7 @@
             left: 0;
             right: 0;
             height: 2px;
-            background: var(--gold);
+            background: var(--gray-700);
         }
 
         .auth-form {
@@ -119,7 +119,7 @@
         .form-group input {
             width: 100%;
             padding: 12px 14px;
-            border: 1px solid rgba(201, 169, 97, 0.3);
+            border: 1px solid var(--gray-300);
             border-radius: 4px;
             font-size: 14px;
             color: var(--text-dark);
@@ -134,9 +134,9 @@
 
         .form-group input:focus {
             outline: none;
-            border-color: var(--gold);
-            box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.15);
-            background: var(--ivory);
+            border-color: var(--gray-700);
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
+            background: var(--gray-50);
         }
 
         .form-group.signup {
@@ -150,7 +150,7 @@
         .auth-submit {
             width: 100%;
             padding: 14px 24px;
-            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            background: linear-gradient(135deg, var(--gray-700) 0%, var(--gray-800) 100%);
             color: var(--white);
             border: none;
             border-radius: 4px;
@@ -166,7 +166,7 @@
 
         .auth-submit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(201, 169, 97, 0.3);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
         }
 
         .auth-submit:active {
@@ -188,7 +188,7 @@
             text-align: center;
             margin-top: 30px;
             padding-top: 30px;
-            border-top: 1px solid rgba(201, 169, 97, 0.1);
+            border-top: 1px solid var(--gray-200);
             color: var(--text-muted);
             font-size: 12px;
             line-height: 1.6;
@@ -251,7 +251,7 @@
                 <button type="submit" class="auth-submit">Sign In</button>
 
                 <div class="auth-footer">
-                    New to GHOHARY? <a href="#" onclick="switchTab('signup'); return false;" style="color: var(--gold); text-decoration: none; font-weight: 500;">Create an account</a>
+                    New to GHOHARY? <a href="#" onclick="switchTab('signup'); return false;" style="color: var(--text-dark); text-decoration: none; font-weight: 500;">Create an account</a>
                 </div>
             </form>
 
@@ -287,7 +287,7 @@
                 <button type="submit" class="auth-submit">Create Account</button>
 
                 <div class="auth-footer">
-                    Already have an account? <a href="#" onclick="switchTab('login'); return false;" style="color: var(--gold); text-decoration: none; font-weight: 500;">Sign in</a>
+                    Already have an account? <a href="#" onclick="switchTab('signin'); return false;" style="color: var(--text-dark); text-decoration: none; font-weight: 500;">Sign in</a>
                 </div>
             </form>
         </div>
