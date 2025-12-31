@@ -7,8 +7,10 @@
     // Get from: https://dashboard.stripe.com/apikeys
     // Test Key: pk_test_...
     // Live Key: pk_live_...
-    const API_URL = 'http://localhost:5000'; // Change to your server URL when deployed
-    const STRIPE_PUBLISHABLE_KEY = 'pk_test_51QVEzSDJuJG4KKk0YlF0wJ1K4PXLQgHJXfpPVJqXlI4vIH0a4oVpRNw4zt4yI2iQYAEZQ1uZZVZQfSmNwXvN0VTw00qK0qZvfC'; // Replace with your key
+    const API_URL = window.location.hostname === 'localhost' 
+        ? 'http://localhost:5000' 
+        : window.location.origin; // Use Vercel API endpoints in production
+    const STRIPE_PUBLISHABLE_KEY = 'pk_live_51SkJ7rPozdfQVQjdB6NV393s0ivOkLCaRJoT0MSazHduATeJu1ko5qwukDbZY6kNAtTGpJJE8ChstvboDSiXGkwg00XuI7inp3'; // Replace with your key
 
     // Initialize Stripe
     if (!STRIPE_PUBLISHABLE_KEY.startsWith('pk_')) {
