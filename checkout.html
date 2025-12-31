@@ -15,6 +15,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="header-loader.js"></script>
     
     <!-- Stripe Elements CSS -->
     <style>
@@ -22,7 +23,7 @@
             box-sizing: border-box;
             height: 40px;
             padding: 10px 12px;
-            border: 1px solid rgba(201, 169, 97, 0.3);
+            border: 1px solid var(--gray-300);
             border-radius: 4px;
             background-color: white;
             box-shadow: 0 1px 3px 0 #e6ebf1;
@@ -32,7 +33,7 @@
 
         .StripeElement--focus {
             box-shadow: 0 1px 3px 0 #cfd7df;
-            border-color: var(--gold);
+            border-color: var(--gray-700);
         }
 
         .StripeElement--invalid {
@@ -47,19 +48,7 @@
     </style>
 </head>
 <body>
-    <!-- Navigation (simplified for checkout) -->
-    <div class="nav-container">
-        <nav class="container">
-            <a href="index.html" class="logo">GHOHARY</a>
-            <div class="checkout-steps">
-                <span class="step active">Cart</span>
-                <span class="step-arrow">→</span>
-                <span class="step active">Checkout</span>
-                <span class="step-arrow">→</span>
-                <span class="step">Confirmation</span>
-            </div>
-        </nav>
-    </div>
+    <header></header>
 
     <!-- Checkout Section -->
     <section class="checkout-section">
