@@ -18,27 +18,25 @@
     
     <style>
         :root {
-            /* Emperor Luxury Color Palette - Universal Responsive */
-            --gold: #D4AF37;
-            --gold-light: #F4E5C2;
-            --gold-dark: #B8942C;
-            --gold-accent: #FFD700;
-            --champagne: #F8F4E6;
-            --nude: #E6DCC8;
-            --beige: #F5F0E8;
-            --ivory: #FFFFF0;
-            --bronze: #CD7F32;
-            --bronze-dark: #8B5A2B;
-            --deep-burgundy: #3B1C1C;
-            --rich-brown: #2C1810;
-            --charcoal: #1C1C1C;
-            --cream: #FFFEF7;
-            --pearl: #F8F6F0;
+            /* Monochrome Color Palette */
+            --white: #FFFFFF;                   /* Pure white */
+            --black: #000000;                   /* Pure black */
+            --gray-50: #F9F9F9;                 /* Off white */
+            --gray-100: #F3F3F3;                /* Light gray background */
+            --gray-200: #E8E8E8;                /* Very light gray */
+            --gray-300: #D3D3D3;                /* Light gray */
+            --gray-400: #A8A8A8;                /* Medium-light gray */
+            --gray-500: #808080;                /* Medium gray */
+            --gray-600: #595959;                /* Medium-dark gray */
+            --gray-700: #404040;                /* Dark gray */
+            --gray-800: #2A2A2A;                /* Very dark gray */
+            --gray-900: #1A1A1A;                /* Almost black */
+            
+            /* Text colors */
             --text-dark: #1C1410;
             --text-mid: #3C3530;
             --text-light: #5C5248;
             --text-muted: #8C8478;
-            --white: #FFFFFF;
             
             /* Spacing - Fluid for All Devices (320px - 2560px) */
             --spacing-xs: clamp(6px, 1.2vw + 2px, 10px);
@@ -1087,56 +1085,10 @@
             user-select: none;
         }
     </style>
+    <script src="header-loader.js"></script>
 </head>
 <body>
-    <!-- Announcement Bar -->
-    <div class="announcement-bar">
-        Book Your Private Consultation — Experience Bespoke Luxury
-    </div>
-
-    <!-- Navigation -->
-    <div class="nav-container">
-        <nav class="container">
-            <a href="#" class="logo">GHOHARY</a>
-            
-            <ul class="nav-links">
-                <li><a href="collections.html">Collections</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="appointment.html">Book Appointment</a></li>
-                <li><a href="account.html">Account</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-            
-            <button class="mobile-menu-btn" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            
-            <div class="nav-icons">
-                <a href="#search" aria-label="Search" class="search-link">
-                    <svg class="nav-icon" viewBox="0 0 24 24">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="m21 21-4.35-4.35"></path>
-                    </svg>
-                </a>
-                <a href="account.html" aria-label="Account">
-                    <svg class="nav-icon" viewBox="0 0 24 24">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                </a>
-                <a href="cart.html" aria-label="Shopping cart" class="cart-link">
-                    <svg class="nav-icon" viewBox="0 0 24 24">
-                        <circle cx="9" cy="21" r="1"></circle>
-                        <circle cx="20" cy="21" r="1"></circle>
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                    </svg>
-                    <span class="cart-count">0</span>
-                </a>
-            </div>
-        </nav>
-    </div>
+    <header></header>
 
     <!-- Hero Section -->
     <section class="hero">
