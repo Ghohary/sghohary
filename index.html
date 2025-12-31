@@ -6,12 +6,9 @@
     <meta name="description" content="GHOHARY - Exquisite haute couture bridal gowns and evening wear in Dubai. Timeless elegance crafted for your most precious moments.">
     <title>GHOHARY | Haute Couture Bridal & Evening Wear Dubai</title>
     
-    <!-- Auth Check - Redirect if not logged in -->
+    <!-- Auth Check - Get current user if logged in -->
     <script>
         const currentUser = JSON.parse(localStorage.getItem('ghoharyCurrentUser') || 'null');
-        if (!currentUser || !currentUser.email) {
-            window.location.href = 'auth-gate.html';
-        }
     </script>
     
     <!-- Preconnect for performance -->

@@ -2,6 +2,13 @@
 (function() {
     'use strict';
 
+    // Check if user is logged in, redirect to auth-gate if not
+    const currentUser = JSON.parse(localStorage.getItem('ghoharyCurrentUser') || 'null');
+    if (!currentUser || !currentUser.email) {
+        window.location.href = 'auth-gate.html';
+        return;
+    }
+
     // Configuration
     // 🔑 IMPORTANT: Replace with your actual Stripe Publishable Key
     // Get from: https://dashboard.stripe.com/apikeys
