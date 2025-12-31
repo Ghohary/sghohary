@@ -267,6 +267,11 @@
         // Save to localStorage
         localStorage.setItem('lastOrder', JSON.stringify(orderData));
         
+        // Add to orders array for history
+        let orders = JSON.parse(localStorage.getItem('ghoharyOrders') || '[]');
+        orders.push(orderData);
+        localStorage.setItem('ghoharyOrders', JSON.stringify(orders));
+        
         // Show success and redirect
         showSuccess('Order placed successfully! Redirecting to confirmation...');
         

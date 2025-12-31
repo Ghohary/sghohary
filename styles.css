@@ -2902,3 +2902,90 @@ button, a {
     background: var(--gold-light);
     color: var(--brown-dark);
 }
+
+/* Order History Styling */
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg);
+}
+
+.order-card {
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 8px;
+    padding: var(--spacing-lg);
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.04) 100%);
+    transition: all 0.3s ease;
+}
+
+.order-card:hover {
+    border-color: rgba(212, 175, 55, 0.6);
+    box-shadow: 0 8px 24px rgba(212, 175, 55, 0.15);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.order-header h3 {
+    font-size: var(--text-lg);
+    color: var(--gold);
+    margin: 0 0 8px 0;
+    letter-spacing: 0.05em;
+}
+
+.order-date {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin: 0;
+}
+
+.order-total {
+    text-align: right;
+}
+
+.order-amount {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--gold-dark);
+}
+
+.order-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+    font-size: 13px;
+}
+
+.order-details p {
+    margin: 0;
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.order-details strong {
+    color: var(--brown-dark);
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .order-header {
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+
+    .order-total {
+        text-align: left;
+    }
+
+    .order-details {
+        grid-template-columns: 1fr;
+    }
+}
+
