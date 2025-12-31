@@ -270,61 +270,6 @@
         });
     });
 
-    // ===== PRODUCT PAGE - ADD TO CART =====
-    const addToCartBtn = document.getElementById('addToCartBtn');
-    
-    if (addToCartBtn) {
-        addToCartBtn.addEventListener('click', function() {
-            if (!selectedSize) {
-                alert('Please select a size');
-                return;
-            }
-
-            const productTitle = document.querySelector('.product-title');
-            const customizationInput = document.getElementById('customization');
-            
-            if (!productTitle) {
-                alert('Product information not found');
-                return;
-            }
-
-            const product = {
-                id: new URLSearchParams(window.location.search).get('id') || Date.now().toString(),
-                name: productTitle.textContent,
-                price: 25000,
-                size: selectedSize,
-                customization: customizationInput ? customizationInput.value : 'standard',
-                image: mainImage ? mainImage.src : '',
-                quantity: 1
-            };
-
-            let cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
-            
-            const existingIndex = cart.findIndex(item => 
-                item.id === product.id && item.size === product.size
-            );
-
-            if (existingIndex > -1) {
-                cart[existingIndex].quantity += 1;
-            } else {
-                cart.push(product);
-            }
-
-            localStorage.setItem('ghoharyCart', JSON.stringify(cart));
-            updateCartCount();
-
-            const successModal = document.getElementById('successModal');
-            if (successModal) {
-                successModal.style.display = 'flex';
-            }
-
-            this.innerHTML = '<span>✓ Added to Cart</span>';
-            setTimeout(() => {
-                this.innerHTML = '<span>Reserve This Gown</span>';
-            }, 2000);
-        });
-    }
-
     // ===== CART PAGE - RENDER CART =====
     const cartContent = document.getElementById('cartContent');
     const emptyCart = document.getElementById('emptyCart');
