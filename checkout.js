@@ -1,11 +1,53 @@
-// Checkout Page Functionality
+// Stripe Payment Processing for Checkout Page
 (function() {
     'use strict';
 
+    // Configuration
+    const API_URL = 'http://localhost:5000'; // Your server URL
+    const STRIPE_PUBLISHABLE_KEY = 'pk_test_YOUR_KEY'; // Replace with actual key
+
+    // Initialize Stripe
+    const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+    const elements = stripe.elements();
+    const cardElement = elements.create('card', {
+        style: {
+            base: {
+                fontFamily: '"Montserrat", sans-serif',
+                fontSize: '14px',
+                color: '#1F1914',
+                '::placeholder': {
+                    color: '#9A8F85',
+                },
+            },
+            invalid: {
+                color: '#fa755a',
+            },
+        },
+    });
+
+    // Mount card element
+    const cardElementContainer = document.getElementById('card-element');
+    if (cardElementContainer) {
+        cardElement.mount('#card-element');
+
+        // Handle real-time validation errors
+        cardElement.addEventListener('change', function(event) {
+            const displayError = document.getElementById('card-errors');
+            if (event.error) {
+                displayError.textContent = event.error.message;
+            } else {
+                displayError.textContent = '';
+            }
+        });
+    }
+
+    // DOM Elements
     const orderSummary = document.getElementById('orderSummary');
     const checkoutForm = document.getElementById('checkoutForm');
     const cardDetails = document.getElementById('cardDetails');
+    const submitBtn = checkoutForm ? checkoutForm.querySelector('button[type="submit"]') : null;
 
+    // Render order summary
     function renderOrderSummary() {
         const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
         
@@ -63,6 +105,9 @@
         `;
 
         orderSummary.innerHTML = summaryHTML;
+        
+        // Store total for payment
+        sessionStorage.setItem('orderTotal', total.toString());
     }
 
     // Payment method toggle
@@ -77,67 +122,178 @@
         });
     });
 
-    // Form submission
+    // Form submission with Stripe
     if (checkoutForm) {
-        checkoutForm.addEventListener('submit', function(e) {
+        checkoutForm.addEventListener('submit', async function(e) {
             e.preventDefault();
+
+            // Get payment method
+            const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
 
             // Basic validation
             const firstName = document.getElementById('firstName').value;
             const email = document.getElementById('email').value;
+            const address = document.getElementById('address').value;
 
-            if (!firstName || !email) {
-                alert('Please fill in all required fields');
+            if (!firstName || !email || !address) {
+                showError('Please fill in all required fields');
                 return;
             }
 
-            // Simulate order processing
-            const submitBtn = checkoutForm.querySelector('button[type="submit"]');
-            submitBtn.innerHTML = '<span>Processing...</span>';
-            submitBtn.disabled = true;
-
-            setTimeout(() => {
-                // Clear cart
-                localStorage.removeItem('ghoharyCart');
-                
-                // Store order confirmation
-                const orderNumber = 'GH' + Date.now().toString().slice(-8);
-                localStorage.setItem('lastOrder', JSON.stringify({
-                    orderNumber,
-                    customerName: firstName,
-                    email,
-                    date: new Date().toISOString()
-                }));
-
-                // Redirect to success page or account
-                window.location.href = 'account.html?order=success';
-            }, 2000);
-        });
-    }
-
-    // Card number formatting
-    const cardNumberInput = document.getElementById('cardNumber');
-    if (cardNumberInput) {
-        cardNumberInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\s/g, '');
-            let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
-            e.target.value = formattedValue;
-        });
-    }
-
-    // Expiry date formatting
-    const expiryInput = document.getElementById('expiry');
-    if (expiryInput) {
-        expiryInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\s/g, '');
-            if (value.length >= 2) {
-                value = value.slice(0, 2) + ' / ' + value.slice(2, 4);
+            // Handle consultation payment (manual payment)
+            if (paymentMethod === 'consultation') {
+                processConsultationPayment();
+                return;
             }
-            e.target.value = value;
+
+            // Handle Stripe payment
+            if (paymentMethod === 'card') {
+                processStripePayment();
+            }
         });
     }
 
-    renderOrderSummary();
+    // Process Stripe Payment
+    async function processStripePayment() {
+        // Disable submit button
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>Processing Payment...</span>';
 
-    console.log('Checkout page loaded');
+        try {
+            // Get order total
+            const orderTotal = parseFloat(sessionStorage.getItem('orderTotal') || '0');
+            if (orderTotal <= 0) {
+                throw new Error('Invalid order total');
+            }
+
+            // Step 1: Create payment intent on server
+            const paymentIntentResponse = await fetch(`${API_URL}/create-payment-intent`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    amount: orderTotal,
+                    currency: 'aed',
+                    metadata: {
+                        customer: document.getElementById('firstName').value,
+                        email: document.getElementById('email').value
+                    }
+                })
+            });
+
+            if (!paymentIntentResponse.ok) {
+                throw new Error('Failed to create payment intent');
+            }
+
+            const { clientSecret, paymentIntentId } = await paymentIntentResponse.json();
+
+            // Step 2: Confirm payment with Stripe
+            const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+                payment_method: {
+                    card: cardElement,
+                    billing_details: {
+                        name: document.getElementById('cardholderName').value || document.getElementById('firstName').value,
+                        email: document.getElementById('email').value,
+                        address: {
+                            line1: document.getElementById('address').value,
+                            city: document.getElementById('city').value,
+                            state: document.getElementById('emirate').value,
+                            country: 'AE'
+                        }
+                    }
+                }
+            });
+
+            if (error) {
+                // Show error to customer
+                showError(error.message);
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>Complete Order</span>';
+                return;
+            }
+
+            // Payment succeeded
+            if (paymentIntent.status === 'succeeded') {
+                completeOrder(paymentIntentId);
+            }
+        } catch (error) {
+            console.error('Payment Error:', error);
+            showError(error.message || 'Payment processing failed');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<span>Complete Order</span>';
+        }
+    }
+
+    // Process Consultation Payment
+    function processConsultationPayment() {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>Scheduling Consultation...</span>';
+
+        setTimeout(() => {
+            completeOrder('CONSULTATION');
+        }, 1500);
+    }
+
+    // Complete Order
+    function completeOrder(paymentId) {
+        // Clear cart
+        localStorage.removeItem('ghoharyCart');
+        
+        // Create order record
+        const orderNumber = 'GH' + Date.now().toString().slice(-8);
+        const orderData = {
+            orderNumber,
+            paymentId,
+            customerName: document.getElementById('firstName').value + ' ' + document.getElementById('lastName').value,
+            email: document.getElementById('email').value,
+            address: document.getElementById('address').value,
+            city: document.getElementById('city').value,
+            emirate: document.getElementById('emirate').value,
+            phone: document.getElementById('phone').value,
+            paymentMethod: document.querySelector('input[name="payment"]:checked').value,
+            orderTotal: sessionStorage.getItem('orderTotal'),
+            date: new Date().toISOString()
+        };
+
+        // Save to localStorage
+        localStorage.setItem('lastOrder', JSON.stringify(orderData));
+        
+        // Show success and redirect
+        showSuccess('Order placed successfully! Redirecting to confirmation...');
+        
+        setTimeout(() => {
+            window.location.href = 'account.html?order=success';
+        }, 2000);
+    }
+
+    // Show error message
+    function showError(message) {
+        const errorDiv = document.getElementById('card-errors');
+        if (errorDiv) {
+            errorDiv.textContent = message;
+            errorDiv.style.color = '#fa755a';
+        }
+    }
+
+    // Show success message
+    function showSuccess(message) {
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.style.display = 'flex';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </div>
+                <h2>Order Confirmed!</h2>
+                <p>${message}</p>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+
+    // Initialize
+    renderOrderSummary();
+    console.log('💳 Stripe checkout page loaded');
 })();
