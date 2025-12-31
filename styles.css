@@ -2,39 +2,49 @@
 /* Premium Beige, Gold & Brown Color Palette */
 
 :root {
-    /* Primary Luxury Colors - Tiffany Inspired */
-    --gold: #D4AF37;                    /* Luxe gold accent */
-    --gold-light: #F4E5C2;              /* Soft gold highlight */
-    --gold-dark: #B8942C;               /* Deep gold */
-    --beige: #E8DCC8;                   /* Warm beige primary */
-    --beige-light: #F5F0E8;             /* Light beige background */
-    --beige-dark: #D4C4B0;              /* Deep beige accent */
-    --brown: #6B5B4F;                   /* Warm medium brown */
-    --brown-dark: #3D332A;              /* Deep chocolate brown */
-    --brown-light: #9E8B7E;             /* Light taupe brown */
+    /* Ultra-Premium Luxury Colors - Enhanced Tiffany & Hermès Inspired */
     
-    /* Secondary Neutrals */
-    --champagne: #F8F4E6;               /* Warm champagne */
-    --cream: #FFFEF7;                   /* Off-white cream */
-    --ivory: #FFFFF0;                   /* Pure ivory */
-    --pearl: #F8F6F0;                   /* Pearl white */
-    --text-dark: #2F2926;               /* Deep text */
-    --text-mid: #4A4238;                /* Medium text */
-    --text-light: #6B6158;              /* Light text */
-    --text-muted: #8B7E72;              /* Muted text */
+    /* Gold Palette - The Heart of Luxury */
+    --gold: #C9A961;                    /* Rich champagne gold - primary luxury */
+    --gold-light: #E8D4A8;              /* Soft champagne highlight */
+    --gold-bright: #F4D03F;             /* Warm radiant gold accent */
+    --gold-dark: #8B7355;               /* Deep burnished gold */
+    --gold-accent: #FFE5B4;             /* Peach gold for highlights */
+    
+    /* Beige & Cream Palette - Sophisticated Neutrals */
+    --beige: #DFD3C3;                   /* Warm taupe-beige primary */
+    --beige-light: #F5F0E8;             /* Soft ivory-beige background */
+    --beige-dark: #C9BCAD;              /* Deep warm taupe */
+    --cream: #FEFBF7;                   /* Warm cream (almost white) */
+    --ivory: #FFFEF7;                   /* Pure ivory white */
+    --pearl: #FAF9F7;                   /* Pearl white with warm tone */
+    --champagne: #F3E8D8;               /* Warm champagne neutral */
+    
+    /* Brown Palette - Deep Elegance */
+    --brown: #5C4033;                   /* Rich warm brown */
+    --brown-dark: #2D241C;              /* Deep espresso brown */
+    --brown-light: #8B7A6B;             /* Warm taupe-brown */
+    --brown-accent: #6B5D52;            /* Medium sophisticated brown */
+    
+    /* Luxury Accents */
+    --rose-gold: #D4A574;               /* Rose gold accent */
+    --copper: #D4824F;                  /* Warm copper accent */
+    --bronze: #9C7D54;                  /* Bronze accent */
+    --burgundy: #6B4423;                /* Deep burgundy */
+    
+    /* Text Hierarchy - Premium Contrast */
+    --text-dark: #1F1914;               /* Nearly black for primary text */
+    --text-mid: #3D3528;                /* Medium brown text */
+    --text-light: #6B6158;              /* Light warm gray */
+    --text-muted: #9A8F85;              /* Muted warm gray */
     --white: #FFFFFF;                   /* Pure white */
     
-    /* Accent Colors */
-    --accent-gold: #FFD700;             /* Bright gold */
-    --accent-copper: #B87333;           /* Copper accent */
-    --accent-burgundy: #4A3728;         /* Deep burgundy */
-    
-    /* Premium Shadows */
-    --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.06);
-    --shadow-medium: 0 6px 20px rgba(0, 0, 0, 0.1);
-    --shadow-gold: 0 8px 32px rgba(212, 175, 55, 0.18);
-    --shadow-luxury: 0 16px 48px rgba(212, 175, 55, 0.15), 0 6px 20px rgba(0, 0, 0, 0.08);
-    --shadow-elevation: 0 20px 60px rgba(0, 0, 0, 0.12);
+    /* Ultra-Premium Shadows - Luxe Depth */
+    --shadow-soft: 0 2px 8px rgba(31, 25, 20, 0.04);
+    --shadow-medium: 0 6px 20px rgba(31, 25, 20, 0.08);
+    --shadow-gold: 0 8px 32px rgba(201, 169, 97, 0.2);
+    --shadow-luxury: 0 16px 48px rgba(201, 169, 97, 0.15), 0 6px 20px rgba(31, 25, 20, 0.1);
+    --shadow-elevation: 0 20px 60px rgba(31, 25, 20, 0.15);
     
     /* Spacing System - Fluid Responsive */
     --spacing-xs: clamp(6px, 1.2vw + 2px, 10px);
@@ -180,8 +190,8 @@ a:hover {
 
 /* Announcement Bar */
 .announcement-bar {
-    background: linear-gradient(90deg, var(--deep-burgundy) 0%, var(--rich-brown) 50%, var(--deep-burgundy) 100%);
-    color: var(--gold-accent);
+    background: linear-gradient(90deg, var(--brown-dark) 0%, var(--brown) 50%, var(--brown-dark) 100%);
+    color: var(--gold-bright);
     text-align: center;
     padding: clamp(12px, 2.5vh, 16px) var(--spacing-sm);
     font-size: var(--text-xs);
@@ -189,7 +199,7 @@ a:hover {
     text-transform: uppercase;
     position: relative;
     z-index: 1001;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 16px rgba(31, 25, 20, 0.15);
     overflow: hidden;
 }
 
@@ -200,7 +210,7 @@ a:hover {
     left: -100%;
     width: 200%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+    background: linear-gradient(90deg, transparent, rgba(201, 169, 97, 0.12), transparent);
     animation: announceShimmer 4s ease-in-out infinite;
 }
 
@@ -218,11 +228,11 @@ a:hover {
     position: sticky;
     top: 0;
     z-index: 1000;
-    background: rgba(255, 254, 247, 0.95);
+    background: rgba(254, 251, 247, 0.96);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     border-bottom: 1px solid transparent;
-    box-shadow: 0 1px 0 rgba(212, 175, 55, 0.2);
+    box-shadow: 0 1px 0 rgba(201, 169, 97, 0.25);
     transition: all 0.4s ease;
 }
 
@@ -420,8 +430,8 @@ nav {
     position: absolute;
     top: -10px;
     right: -12px;
-    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-accent) 100%);
-    color: var(--rich-brown);
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 100%);
+    color: var(--brown-dark);
     font-size: 10px;
     font-weight: 600;
     min-width: 20px;
@@ -431,7 +441,7 @@ nav {
     align-items: center;
     justify-content: center;
     padding: 2px;
-    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.4);
+    box-shadow: 0 2px 8px rgba(201, 169, 97, 0.45);
     animation: cartPulse 0.3s ease;
 }
 
@@ -470,17 +480,17 @@ nav {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--rich-brown) 0%, var(--charcoal) 100%);
+    background: linear-gradient(135deg, var(--brown-dark) 0%, var(--brown-accent) 100%);
     color: var(--gold-light);
     border: 1px solid var(--gold);
-    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 20px rgba(201, 169, 97, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .btn-primary::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-accent) 100%);
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 100%);
     transform: translateX(-100%);
     transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -515,7 +525,7 @@ nav {
 }
 
 .btn-primary:hover span {
-    color: var(--rich-brown);
+    color: var(--brown-dark);
 }
 
 .btn-primary:active {
@@ -560,7 +570,7 @@ nav {
 }
 
 .btn-secondary:hover span {
-    color: var(--rich-brown);
+    color: var(--brown-dark);
 }
 
 .btn-full {
@@ -613,7 +623,7 @@ nav {
 .hero {
     position: relative;
     height: 100vh;
-    background: linear-gradient(135deg, var(--beige) 0%, var(--champagne) 50%, var(--pearl) 100%);
+    background: linear-gradient(135deg, var(--beige) 0%, var(--champagne) 50%, var(--cream) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -625,7 +635,7 @@ nav {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.1), transparent 70%);
+    background: radial-gradient(ellipse at center, rgba(201, 169, 97, 0.12), transparent 70%);
     animation: heroGlow 6s ease-in-out infinite;
 }
 
@@ -653,7 +663,7 @@ nav {
 
 .hero-title {
     font-size: clamp(48px, 10vw, 96px);
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     font-weight: 300;
     letter-spacing: var(--ls-wide);
     line-height: 1.1;
@@ -695,7 +705,7 @@ nav {
 /* Page Hero */
 .page-hero {
     padding: var(--spacing-xl) 0 var(--spacing-lg);
-    background: linear-gradient(135deg, var(--beige) 0%, var(--champagne) 50%, var(--pearl) 100%);
+    background: linear-gradient(135deg, var(--beige) 0%, var(--champagne) 50%, var(--cream) 100%);
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -705,7 +715,7 @@ nav {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at top center, rgba(212, 175, 55, 0.08), transparent 60%);
+    background: radial-gradient(circle at top center, rgba(201, 169, 97, 0.1), transparent 60%);
     pointer-events: none;
 }
 
@@ -740,7 +750,7 @@ nav {
 }
 
 .page-title {
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     margin-bottom: 20px;
     font-size: clamp(32px, 6vw, 56px);
     letter-spacing: 0.15em;
@@ -803,7 +813,7 @@ nav {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, var(--rich-brown) 0%, var(--charcoal) 100%);
+    background: linear-gradient(135deg, var(--brown-dark) 0%, var(--brown-accent) 100%);
     transform: translateY(100%);
     transition: transform 0.3s ease;
 }
@@ -821,7 +831,7 @@ nav {
 .filter-btn.active,
 .filter-btn:hover {
     color: var(--cream);
-    border-color: var(--rich-brown);
+    border-color: var(--brown-dark);
     box-shadow: 0 4px 12px rgba(44, 24, 16, 0.2);
 }
 
@@ -904,7 +914,7 @@ nav {
 }
 
 .product-card:hover {
-    box-shadow: 0 12px 32px rgba(212, 175, 55, 0.15), 0 4px 16px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 12px 32px rgba(201, 169, 97, 0.18), 0 4px 16px rgba(31, 25, 20, 0.1);
     transform: translateY(-4px);
 }
 
@@ -955,23 +965,23 @@ nav {
     position: absolute;
     top: 16px;
     right: 16px;
-    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-accent) 100%);
-    color: var(--rich-brown);
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 100%);
+    color: var(--brown-dark);
     padding: 8px 16px;
     font-size: 9px;
     font-weight: 600;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.35);
+    box-shadow: 0 4px 12px rgba(201, 169, 97, 0.4);
 }
 
 .product-badge.bestseller {
-    background: linear-gradient(135deg, var(--rich-brown) 0%, var(--charcoal) 100%);
+    background: linear-gradient(135deg, var(--brown-dark) 0%, var(--brown-accent) 100%);
     color: var(--gold-light);
 }
 
 .product-badge.new {
-    background: linear-gradient(135deg, var(--deep-burgundy) 0%, var(--rich-brown) 100%);
+    background: linear-gradient(135deg, var(--burgundy) 0%, var(--brown) 100%);
     color: var(--gold-light);
 }
 
@@ -996,7 +1006,7 @@ nav {
 .product-name {
     font-family: 'Cormorant Garamond', serif;
     font-size: clamp(20px, 3vw, 24px);
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     margin-bottom: 10px;
     transition: color 0.3s ease;
     letter-spacing: 0.05em;
@@ -1032,7 +1042,7 @@ nav {
 /* CTA Section */
 .cta-section {
     padding: var(--spacing-2xl) 0;
-    background: linear-gradient(135deg, var(--beige) 0%, var(--champagne) 50%, var(--pearl) 100%);
+    background: linear-gradient(135deg, var(--beige) 0%, var(--champagne) 50%, var(--cream) 100%);
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -1042,7 +1052,7 @@ nav {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.08), transparent 70%);
+    background: radial-gradient(ellipse at center, rgba(201, 169, 97, 0.1), transparent 70%);
 }
 
 .cta-content {
@@ -1053,7 +1063,7 @@ nav {
 }
 
 .cta-title {
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     margin-bottom: var(--spacing-md);
     font-size: clamp(28px, 5vw, 44px);
     letter-spacing: 0.12em;
@@ -1123,7 +1133,7 @@ nav {
 }
 
 .zoom-btn:hover svg {
-    stroke: var(--rich-brown);
+    stroke: var(--brown-dark);
 }
 
 .thumbnail-gallery {
@@ -1153,7 +1163,7 @@ nav {
 .product-badge-detail {
     display: inline-block;
     background: linear-gradient(135deg, var(--gold) 0%, var(--gold-accent) 100%);
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     padding: 8px 20px;
     font-size: 10px;
     font-weight: 600;
@@ -1165,7 +1175,7 @@ nav {
 
 .product-title {
     font-size: clamp(32px, 6vw, 52px);
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     margin-bottom: 12px;
     letter-spacing: 0.08em;
     line-height: 1.1;
@@ -1301,9 +1311,9 @@ nav {
 
 .size-btn.selected,
 .size-btn:hover {
-    background: linear-gradient(135deg, var(--rich-brown) 0%, var(--charcoal) 100%);
+    background: linear-gradient(135deg, var(--brown-dark) 0%, var(--brown-accent) 100%);
     color: var(--gold-light);
-    border-color: var(--rich-brown);
+    border-color: var(--brown-dark);
     box-shadow: 0 4px 16px rgba(44, 24, 16, 0.25);
 }
 
@@ -1372,13 +1382,13 @@ nav {
 /* Related Products */
 .related-products {
     padding: var(--spacing-2xl) 0;
-    background: linear-gradient(180deg, var(--beige) 0%, var(--champagne) 100%);
+    background: linear-gradient(180deg, var(--cream) 0%, var(--champagne) 100%);
 }
 
 /* Testimonials */
 .testimonials-section {
     padding: var(--spacing-2xl) 0;
-    background: linear-gradient(180deg, var(--cream) 0%, var(--champagne) 100%);
+    background: linear-gradient(180deg, var(--pearl) 0%, var(--champagne) 100%);
     position: relative;
     overflow: hidden;
 }
@@ -1390,7 +1400,7 @@ nav {
     right: -10%;
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(212, 175, 55, 0.08), transparent);
+    background: radial-gradient(circle, rgba(201, 169, 97, 0.1), transparent);
     border-radius: 50%;
     pointer-events: none;
 }
@@ -1402,7 +1412,7 @@ nav {
 
 .testimonials-title {
     text-align: center;
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     margin-bottom: var(--spacing-xl);
     font-size: clamp(28px, 5vw, 44px);
     letter-spacing: var(--ls-wide);
@@ -1437,7 +1447,7 @@ nav {
 
 .testimonial-quote {
     font-size: clamp(18px, 3vw, 24px);
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     margin-bottom: var(--spacing-lg);
     line-height: 1.8;
     font-style: italic;
@@ -1478,7 +1488,7 @@ nav {
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid var(--gold-light);
-    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+    box-shadow: 0 4px 12px rgba(201, 169, 97, 0.25);
 }
 
 .author-name {
@@ -1515,12 +1525,12 @@ nav {
 .testimonial-dot.active {
     background: var(--gold);
     transform: scale(1.2);
-    box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+    box-shadow: 0 0 8px rgba(201, 169, 97, 0.45);
 }
 
 .section-title {
     text-align: center;
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     margin-bottom: var(--spacing-xl);
     font-size: clamp(28px, 5vw, 40px);
     letter-spacing: 0.12em;
@@ -1557,13 +1567,13 @@ nav {
     gap: var(--spacing-md);
     padding: var(--spacing-md);
     background: var(--white);
-    border: 1px solid rgba(212, 175, 55, 0.15);
+    border: 1px solid rgba(201, 169, 97, 0.2);
     transition: all 0.3s ease;
 }
 
 .cart-item:hover {
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-    border-color: rgba(212, 175, 55, 0.3);
+    box-shadow: 0 4px 20px rgba(31, 25, 20, 0.08);
+    border-color: rgba(201, 169, 97, 0.35);
 }
 
 @media (min-width: 768px) {
@@ -1596,7 +1606,7 @@ nav {
 .cart-item-name {
     font-family: 'Cormorant Garamond', serif;
     font-size: clamp(18px, 3vw, 22px);
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     letter-spacing: 0.03em;
 }
 
@@ -1653,7 +1663,7 @@ nav {
     background: none;
     border: none;
     font-size: 18px;
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     cursor: pointer;
     padding: 6px 10px;
     transition: all 0.2s ease;
@@ -1698,8 +1708,8 @@ nav {
     padding: var(--spacing-lg) var(--spacing-md);
     position: sticky;
     top: 100px;
-    border: 1px solid rgba(212, 175, 55, 0.25);
-    box-shadow: 0 12px 40px rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(201, 169, 97, 0.3);
+    box-shadow: 0 12px 40px rgba(201, 169, 97, 0.12);
 }
 
 @media (min-width: 768px) {
@@ -1710,7 +1720,7 @@ nav {
 
 .summary-title {
     font-size: clamp(22px, 4vw, 28px);
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     margin-bottom: var(--spacing-md);
     letter-spacing: 0.08em;
     padding-bottom: var(--spacing-sm);
@@ -1728,7 +1738,7 @@ nav {
 .summary-row.summary-total {
     font-size: clamp(18px, 3vw, 22px);
     font-weight: 500;
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     padding-top: var(--spacing-md);
     font-family: 'Cormorant Garamond', serif;
 }
@@ -1810,7 +1820,7 @@ nav {
 }
 
 .empty-cart h2 {
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     margin-bottom: var(--spacing-md);
 }
 
@@ -1893,7 +1903,7 @@ nav {
 
 .form-section-title {
     font-size: clamp(20px, 4vw, 24px);
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     margin-bottom: var(--spacing-md);
     letter-spacing: 0.08em;
     padding-bottom: var(--spacing-sm);
@@ -1949,7 +1959,7 @@ nav {
 .form-group textarea:focus {
     outline: none;
     border-color: var(--gold);
-    box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.12);
+    box-shadow: 0 0 0 4px rgba(201, 169, 97, 0.15);
 }
 
 .form-note {
@@ -1993,7 +2003,7 @@ nav {
 .payment-option input:checked + .payment-option-content {
     border-color: var(--gold);
     background: linear-gradient(135deg, var(--champagne) 0%, var(--pearl) 100%);
-    box-shadow: 0 4px 16px rgba(212, 175, 55, 0.15);
+    box-shadow: 0 4px 16px rgba(201, 169, 97, 0.18);
 }
 
 .payment-icon {
@@ -2009,7 +2019,7 @@ nav {
     top: 100px;
     max-height: calc(100vh - 120px);
     overflow-y: auto;
-    border: 1px solid rgba(212, 175, 55, 0.2);
+    border: 1px solid rgba(201, 169, 97, 0.25);
 }
 
 .summary-items {
@@ -2042,7 +2052,7 @@ nav {
 
 .summary-item-details h4 {
     font-size: 14px;
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     margin-bottom: 6px;
     font-weight: 400;
     letter-spacing: 0.02em;
@@ -2106,7 +2116,7 @@ nav {
 .account-sidebar {
     background: linear-gradient(180deg, var(--cream) 0%, var(--champagne) 100%);
     padding: var(--spacing-xl);
-    border: 1px solid rgba(212, 175, 55, 0.15);
+    border: 1px solid rgba(201, 169, 97, 0.2);
 }
 
 .account-nav {
@@ -2130,13 +2140,13 @@ nav {
 }
 
 .account-nav-item:hover {
-    background: rgba(212, 175, 55, 0.1);
+    background: rgba(201, 169, 97, 0.12);
     border-left-color: var(--gold-light);
-    color: var(--rich-brown);
+    color: var(--brown-dark);
 }
 
 .account-nav-item.active {
-    background: rgba(212, 175, 55, 0.15);
+    background: rgba(201, 169, 97, 0.18);
     border-left-color: var(--gold);
     color: var(--gold-dark);
     font-weight: 500;
@@ -2172,7 +2182,7 @@ nav {
 
 .tab-title {
     font-size: clamp(28px, 5vw, 36px);
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     margin-bottom: var(--spacing-xl);
     letter-spacing: 0.08em;
     position: relative;
@@ -2198,14 +2208,14 @@ nav {
 
 .order-card {
     background: var(--white);
-    border: 1px solid rgba(212, 175, 55, 0.15);
+    border: 1px solid rgba(201, 169, 97, 0.2);
     padding: var(--spacing-lg);
     transition: all 0.3s ease;
 }
 
 .order-card:hover {
-    border-color: rgba(212, 175, 55, 0.3);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    border-color: rgba(201, 169, 97, 0.35);
+    box-shadow: 0 4px 20px rgba(31,25,20,0.08);
 }
 
 .order-header {
@@ -2221,7 +2231,7 @@ nav {
     display: block;
     font-size: 17px;
     font-weight: 400;
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     letter-spacing: 0.03em;
 }
 
@@ -2268,7 +2278,7 @@ nav {
 
 .order-item-info h4 {
     font-size: 18px;
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     margin-bottom: 10px;
     letter-spacing: 0.03em;
 }
@@ -2313,15 +2323,15 @@ nav {
     grid-template-columns: auto 1fr auto;
     gap: var(--spacing-lg);
     background: var(--white);
-    border: 1px solid rgba(212, 175, 55, 0.15);
+    border: 1px solid rgba(201, 169, 97, 0.2);
     padding: var(--spacing-lg);
     align-items: center;
     transition: all 0.3s ease;
 }
 
 .appointment-card:hover {
-    border-color: rgba(212, 175, 55, 0.3);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    border-color: rgba(201, 169, 97, 0.35);
+    box-shadow: 0 4px 20px rgba(31,25,20,0.08);
 }
 
 @media (max-width: 767px) {
@@ -2346,7 +2356,7 @@ nav {
 
 .appointment-details h4 {
     font-size: 19px;
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     margin-bottom: 10px;
     letter-spacing: 0.03em;
 }
@@ -2383,7 +2393,7 @@ nav {
 }
 
 .cta-card h3 {
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     margin-bottom: 14px;
     letter-spacing: 0.05em;
 }
@@ -2457,7 +2467,7 @@ nav {
 .consultation-option input:checked + .consultation-card {
     border-color: var(--gold);
     background: linear-gradient(135deg, var(--champagne) 0%, var(--pearl) 100%);
-    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.2);
+    box-shadow: 0 6px 20px rgba(201, 169, 97, 0.25);
 }
 
 .consultation-card svg {
@@ -2467,7 +2477,7 @@ nav {
 
 .consultation-card h4 {
     font-size: 19px;
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     margin-bottom: 10px;
     letter-spacing: 0.03em;
 }
@@ -2503,9 +2513,9 @@ nav {
 
 .time-slot.selected,
 .time-slot:hover {
-    background: linear-gradient(135deg, var(--rich-brown) 0%, var(--charcoal) 100%);
+    background: linear-gradient(135deg, var(--brown-dark) 0%, var(--brown-accent) 100%);
     color: var(--cream);
-    border-color: var(--rich-brown);
+    border-color: var(--brown-dark);
     box-shadow: 0 4px 12px rgba(44, 24, 16, 0.2);
 }
 
@@ -2524,7 +2534,7 @@ nav {
 
 .info-card h3 {
     font-size: 21px;
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     margin-bottom: var(--spacing-lg);
     letter-spacing: 0.05em;
     padding-bottom: var(--spacing-sm);
@@ -2572,7 +2582,7 @@ nav {
 .atelier-detail strong {
     display: block;
     font-size: 14px;
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     margin-bottom: 10px;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -2594,7 +2604,7 @@ nav {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(28, 24, 16, 0.75);
+    background: rgba(31, 25, 20, 0.8);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     z-index: 2000;
@@ -2610,7 +2620,7 @@ nav {
     width: 100%;
     text-align: center;
     border: 1px solid var(--gold-light);
-    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.25), 0 8px 32px rgba(212, 175, 55, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    box-shadow: 0 24px 64px rgba(31, 25, 20, 0.3), 0 8px 32px rgba(201, 169, 97, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.6);
     animation: modalSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -2623,7 +2633,7 @@ nav {
     justify-content: center;
     border-radius: 50%;
     background: linear-gradient(135deg, var(--champagne) 0%, var(--pearl) 100%);
-    box-shadow: 0 4px 16px rgba(212, 175, 55, 0.15);
+    box-shadow: 0 4px 16px rgba(201, 169, 97, 0.18);
 }
 
 .modal-icon svg {
@@ -2639,7 +2649,7 @@ nav {
 }
 
 .modal-content h3 {
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     margin-bottom: var(--spacing-md);
     font-size: 24px;
     letter-spacing: 0.05em;
@@ -2666,7 +2676,7 @@ nav {
 
 /* Footer */
 footer {
-    background: linear-gradient(180deg, var(--charcoal) 0%, #1a1410 100%);
+    background: linear-gradient(180deg, var(--brown-dark) 0%, #1a1410 100%);
     color: var(--champagne);
     padding: var(--spacing-2xl) 0 var(--spacing-lg);
     position: relative;
@@ -2799,7 +2809,7 @@ footer::before {
 }
 
 .empty-state h3 {
-    color: var(--rich-brown);
+    color: var(--brown-dark);
     margin-bottom: 14px;
     font-size: 22px;
 }
@@ -2885,10 +2895,10 @@ button, a {
 /* Selection styling */
 ::selection {
     background: var(--gold-light);
-    color: var(--rich-brown);
+    color: var(--brown-dark);
 }
 
 ::-moz-selection {
     background: var(--gold-light);
-    color: var(--rich-brown);
+    color: var(--brown-dark);
 }
