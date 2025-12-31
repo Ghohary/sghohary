@@ -279,7 +279,18 @@
     updateCartCount();
 
     // Initialize
-    checkAuth();
+    function init() {
+        console.log('🔐 Initializing account page...');
+        console.log('Auth section element:', authSection);
+        console.log('Account grid element:', accountGrid);
+        checkAuth();
+        console.log('🔐 Account page loaded');
+    }
 
-    console.log('🔐 Account page loaded');
+    // Run init when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
 })();
