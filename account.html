@@ -66,6 +66,23 @@
 
             <h1 class="page-title">My Account</h1>
 
+            <!-- Auth Section -->
+            <div class="auth-section" id="authSection">
+                <div class="auth-card">
+                    <h2>Welcome to Your Account</h2>
+                    <p>Sign in to view your orders and manage your profile</p>
+                    <div class="auth-form">
+                        <div class="form-group">
+                            <label for="authEmail">Email Address</label>
+                            <input type="email" id="authEmail" placeholder="your@email.com" required>
+                        </div>
+                        <button type="button" class="btn btn-primary" id="signInBtn">
+                            <span>Sign In</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <!-- Success Message -->
             <div class="success-banner" id="successBanner" style="display: none;">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -117,44 +134,7 @@
                     <!-- Orders Tab -->
                     <div class="account-tab active" id="ordersTab">
                         <h2 class="tab-title">My Orders</h2>
-                        <div class="orders-list" id="ordersList">
-                            <!-- Sample Order -->
-                            <div class="order-card">
-                                <div class="order-header">
-                                    <div>
-                                        <span class="order-number">Order #GH12345678</span>
-                                        <span class="order-date">Placed on Dec 15, 2025</span>
-                                    </div>
-                                    <span class="order-status status-processing">In Production</span>
-                                </div>
-                                <div class="order-items">
-                                    <div class="order-item">
-                                        <img src="https://images.unsplash.com/photo-1594552072238-2d8e16ed7b2c?w=200&h=300&fit=crop" alt="Ethereal Lace">
-                                        <div class="order-item-info">
-                                            <h4>Ethereal Lace</h4>
-                                            <p>Size: Custom | Quantity: 1</p>
-                                            <p class="order-item-price">AED 25,000</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="order-footer">
-                                    <span class="order-total">Total: AED 26,250</span>
-                                    <a href="#" class="btn-link">View Details</a>
-                                </div>
-                            </div>
-
-                            <!-- Empty State -->
-                            <div class="empty-state" id="emptyOrders" style="display: none;">
-                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-                                    <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>
-                                </svg>
-                                <h3>No Orders Yet</h3>
-                                <p>Start your journey to finding the perfect gown</p>
-                                <a href="collections.html" class="btn btn-primary">
-                                    <span>Browse Collections</span>
-                                </a>
-                            </div>
-                        </div>
+                        <!-- Orders loaded here by JavaScript -->
                     </div>
 
                     <!-- Appointments Tab -->
@@ -195,32 +175,54 @@
                     <!-- Profile Tab -->
                     <div class="account-tab" id="profileTab">
                         <h2 class="tab-title">My Profile</h2>
-                        <form class="profile-form">
+                        <form class="profile-form" id="profileForm">
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>First Name</label>
-                                    <input type="text" value="Sarah" readonly>
+                                    <input type="text" id="profileFirstName" placeholder="First Name" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Last Name</label>
-                                    <input type="text" value="Ahmed" readonly>
+                                    <input type="text" id="profileLastName" placeholder="Last Name" required>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>Email Address</label>
-                                <input type="email" value="sarah@example.com" readonly>
+                                <input type="email" id="profileEmail" placeholder="your@email.com" required>
                             </div>
                             <div class="form-group">
                                 <label>Phone Number</label>
-                                <input type="tel" value="+971 50 123 4567" readonly>
+                                <input type="tel" id="profilePhone" placeholder="+971 50 123 4567">
                             </div>
                             <div class="form-group">
                                 <label>Address</label>
-                                <input type="text" value="Dubai Marina, Dubai, UAE" readonly>
+                                <input type="text" id="profileAddress" placeholder="Street address">
                             </div>
-                            <button type="button" class="btn btn-secondary" onclick="alert('Profile editing coming soon!')">
-                                <span>Edit Profile</span>
-                            </button>
+                            <div class="form-group">
+                                <label>City</label>
+                                <input type="text" id="profileCity" placeholder="City">
+                            </div>
+                            <div class="form-group">
+                                <label>Emirate</label>
+                                <select id="profileEmirate">
+                                    <option value="">Select Emirate</option>
+                                    <option value="Abu Dhabi">Abu Dhabi</option>
+                                    <option value="Dubai">Dubai</option>
+                                    <option value="Sharjah">Sharjah</option>
+                                    <option value="Ajman">Ajman</option>
+                                    <option value="Umm Al Quwain">Umm Al Quwain</option>
+                                    <option value="Ras Al Khaimah">Ras Al Khaimah</option>
+                                    <option value="Fujairah">Fujairah</option>
+                                </select>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <span>Save Profile</span>
+                                </button>
+                                <button type="button" class="btn btn-secondary" id="signOutBtn">
+                                    <span>Sign Out</span>
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>

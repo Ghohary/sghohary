@@ -2408,11 +2408,123 @@ nav {
     max-width: 600px;
 }
 
-.profile-form input[readonly] {
-    background: linear-gradient(135deg, var(--cream) 0%, var(--pearl) 100%);
-    cursor: not-allowed;
+.profile-form input,
+.profile-form select {
+    background: var(--white);
+    border: 1px solid rgba(201, 169, 97, 0.2);
+    padding: var(--spacing-md) var(--spacing-md);
+    border-radius: 4px;
+    font-size: 14px;
+    color: var(--text-dark);
+    transition: all 0.3s ease;
+}
+
+.profile-form input:focus,
+.profile-form select:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.1);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+}
+
+@media (max-width: 640px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.form-actions {
+    display: flex;
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+}
+
+.form-actions .btn {
+    flex: 1;
+}
+
+/* Auth Section */
+.auth-section {
+    display: none;
+    padding: var(--spacing-3xl) var(--spacing-lg);
+    background: linear-gradient(135deg, var(--cream) 0%, var(--champagne) 100%);
+    border-radius: 8px;
+    margin-top: var(--spacing-2xl);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.auth-card {
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+    background: var(--white);
+    padding: var(--spacing-2xl);
+    border-radius: 8px;
+    border: 1px solid rgba(201, 169, 97, 0.2);
+}
+
+.auth-card h2 {
+    font-size: clamp(24px, 5vw, 32px);
+    color: var(--brown-dark);
+    margin-bottom: var(--spacing-md);
+    letter-spacing: 0.05em;
+}
+
+.auth-card p {
     color: var(--text-muted);
-    border-color: rgba(212, 175, 55, 0.1);
+    margin-bottom: var(--spacing-xl);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.auth-form .form-group {
+    text-align: left;
+}
+
+.auth-form label {
+    display: block;
+    font-size: 13px;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-md);
+    border: 1px solid rgba(201, 169, 97, 0.3);
+    border-radius: 4px;
+    font-size: 14px;
+    color: var(--text-dark);
+    transition: all 0.3s ease;
+}
+
+.auth-form input::placeholder {
+    color: var(--text-muted);
+}
+
+.auth-form input:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.15);
+    background: var(--ivory);
+}
+
+.auth-form .btn {
+    width: 100%;
 }
 
 /* Appointment Page */
