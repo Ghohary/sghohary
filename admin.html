@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GHOHARY Admin Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="header-loader.js"></script>
     <style>
         * {
             margin: 0;
@@ -21,18 +26,6 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-        }
-
-        header {
-            background: linear-gradient(135deg, #2c1810 0%, #1a1410 100%);
-            color: white;
-            padding: 20px 0;
-            margin-bottom: 30px;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 28px;
         }
 
         .tabs {
@@ -254,12 +247,7 @@
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>GHOHARY Admin Dashboard</h1>
-            <p>Manage products, orders, and inventory</p>
-        </div>
-    </header>
+    <header></header>
 
     <div class="container">
         <div id="alertContainer"></div>
