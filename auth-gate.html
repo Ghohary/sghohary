@@ -311,8 +311,8 @@
         // Login form
         document.getElementById('loginForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value.trim();
+            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+            const password = document.getElementById('loginPassword').value;
             const errorEl = document.getElementById('loginError');
 
             if (!email || !password) {
@@ -323,11 +323,19 @@
 
             // Get users from localStorage
             let users = JSON.parse(localStorage.getItem('ghoharyUsers') || '[]');
-            const user = users.find(u => u.email === email);
+            const user = users.find(u => u.email.toLowerCase() === email);
 
-            if (!user || user.password !== password) {
+            if (!user) {
                 errorEl.textContent = 'Invalid email or password';
                 errorEl.classList.add('show');
+                console.log('User not found. Registered users:', users.map(u => u.email));
+                return;
+            }
+
+            if (String(user.password) !== String(password)) {
+                errorEl.textContent = 'Invalid email or password';
+                errorEl.classList.add('show');
+                console.log('Password mismatch. Stored:', String(user.password), 'Entered:', String(password));
                 return;
             }
 
@@ -350,8 +358,8 @@
             e.preventDefault();
             const firstName = document.getElementById('signupFirstName').value.trim();
             const lastName = document.getElementById('signupLastName').value.trim();
-            const email = document.getElementById('signupEmail').value.trim();
-            const password = document.getElementById('signupPassword').value.trim();
+            const email = document.getElementById('signupEmail').value.trim().toLowerCase();
+            const password = document.getElementById('signupPassword').value;
             const phone = document.getElementById('signupPhone').value.trim();
             const errorEl = document.getElementById('signupError');
 
@@ -378,7 +386,7 @@
             // Get users from localStorage
             let users = JSON.parse(localStorage.getItem('ghoharyUsers') || '[]');
             
-            if (users.find(u => u.email === email)) {
+            if (users.find(u => u.email.toLowerCase() === email)) {
                 errorEl.textContent = 'This email is already registered';
                 errorEl.classList.add('show');
                 return;
@@ -399,6 +407,7 @@
 
             users.push(newUser);
             localStorage.setItem('ghoharyUsers', JSON.stringify(users));
+            console.log('New user registered:', email);
 
             // Auto login
             localStorage.setItem('ghoharyCurrentUser', JSON.stringify({
