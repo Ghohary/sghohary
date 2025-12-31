@@ -10,7 +10,7 @@
     const API_URL = window.location.hostname === 'localhost' 
         ? 'http://localhost:5000' 
         : window.location.origin; // Use Vercel API endpoints in production
-    const STRIPE_PUBLISHABLE_KEY = 'pk_live_51SkJ7rPozdfQVQjdB6NV393s0ivOkLCaRJoT0MSazHduATeJu1ko5qwukDbZY6kNAtTGpJJE8ChstvboDSiXGkwg00XuI7inp3'; // Replace with your key
+    const STRIPE_PUBLISHABLE_KEY = 'pk_live_YOUR_PUBLISHABLE_KEY_HERE'; // Replace with your actual publishable key
 
     // Initialize Stripe
     if (!STRIPE_PUBLISHABLE_KEY.startsWith('pk_')) {
