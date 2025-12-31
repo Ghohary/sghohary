@@ -2,49 +2,57 @@
 /* Premium Beige, Gold & Brown Color Palette */
 
 :root {
-    /* Ultra-Premium Luxury Colors - Enhanced Tiffany & Hermès Inspired */
+    /* Monochrome Color Palette - Black, White & Gray */
     
-    /* Gold Palette - The Heart of Luxury */
-    --gold: #C9A961;                    /* Rich champagne gold - primary luxury */
-    --gold-light: #E8D4A8;              /* Soft champagne highlight */
-    --gold-bright: #F4D03F;             /* Warm radiant gold accent */
-    --gold-dark: #8B7355;               /* Deep burnished gold */
-    --gold-accent: #FFE5B4;             /* Peach gold for highlights */
-    
-    /* Beige & Cream Palette - Sophisticated Neutrals */
-    --beige: #DFD3C3;                   /* Warm taupe-beige primary */
-    --beige-light: #F5F0E8;             /* Soft ivory-beige background */
-    --beige-dark: #C9BCAD;              /* Deep warm taupe */
-    --cream: #FEFBF7;                   /* Warm cream (almost white) */
-    --ivory: #FFFEF7;                   /* Pure ivory white */
-    --pearl: #FAF9F7;                   /* Pearl white with warm tone */
-    --champagne: #F3E8D8;               /* Warm champagne neutral */
-    
-    /* Brown Palette - Deep Elegance */
-    --brown: #5C4033;                   /* Rich warm brown */
-    --brown-dark: #2D241C;              /* Deep espresso brown */
-    --brown-light: #8B7A6B;             /* Warm taupe-brown */
-    --brown-accent: #6B5D52;            /* Medium sophisticated brown */
-    
-    /* Luxury Accents */
-    --rose-gold: #D4A574;               /* Rose gold accent */
-    --copper: #D4824F;                  /* Warm copper accent */
-    --bronze: #9C7D54;                  /* Bronze accent */
-    --burgundy: #6B4423;                /* Deep burgundy */
-    
-    /* Text Hierarchy - Premium Contrast */
-    --text-dark: #1F1914;               /* Nearly black for primary text */
-    --text-mid: #3D3528;                /* Medium brown text */
-    --text-light: #6B6158;              /* Light warm gray */
-    --text-muted: #9A8F85;              /* Muted warm gray */
+    /* Gray Scale - Primary Palette */
     --white: #FFFFFF;                   /* Pure white */
+    --black: #000000;                   /* Pure black */
+    --gray-50: #F9F9F9;                 /* Off white */
+    --gray-100: #F3F3F3;                /* Light gray background */
+    --gray-200: #E8E8E8;                /* Very light gray */
+    --gray-300: #D3D3D3;                /* Light gray */
+    --gray-400: #A8A8A8;                /* Medium-light gray */
+    --gray-500: #808080;                /* Medium gray */
+    --gray-600: #595959;                /* Medium-dark gray */
+    --gray-700: #404040;                /* Dark gray */
+    --gray-800: #2A2A2A;                /* Very dark gray */
+    --gray-900: #1A1A1A;                /* Almost black */
     
-    /* Ultra-Premium Shadows - Luxe Depth */
-    --shadow-soft: 0 2px 8px rgba(31, 25, 20, 0.04);
-    --shadow-medium: 0 6px 20px rgba(31, 25, 20, 0.08);
-    --shadow-gold: 0 8px 32px rgba(201, 169, 97, 0.2);
-    --shadow-luxury: 0 16px 48px rgba(201, 169, 97, 0.15), 0 6px 20px rgba(31, 25, 20, 0.1);
-    --shadow-elevation: 0 20px 60px rgba(31, 25, 20, 0.15);
+    /* Legacy color mappings to grayscale */
+    --gold: #404040;                    /* Replaced with dark gray */
+    --gold-light: #D3D3D3;              /* Replaced with light gray */
+    --gold-bright: #A8A8A8;             /* Replaced with medium gray */
+    --gold-dark: #2A2A2A;               /* Replaced with very dark gray */
+    --gold-accent: #595959;             /* Replaced with medium-dark gray */
+    --beige: #E8E8E8;                   /* Replaced with very light gray */
+    --beige-light: #F3F3F3;             /* Replaced with light gray background */
+    --beige-dark: #A8A8A8;              /* Replaced with medium-light gray */
+    --cream: #FFFFFF;                   /* Replaced with white */
+    --ivory: #FAFAFA;                   /* Replaced with off-white */
+    --pearl: #F5F5F5;                   /* Replaced with light gray */
+    --champagne: #F0F0F0;               /* Replaced with very light gray */
+    --brown: #404040;                   /* Replaced with dark gray */
+    --brown-dark: #1A1A1A;              /* Replaced with almost black */
+    --brown-light: #595959;             /* Replaced with medium-dark gray */
+    --brown-accent: #505050;            /* Replaced with dark gray */
+    --rose-gold: #707070;               /* Replaced with medium gray */
+    --copper: #696969;                  /* Replaced with medium gray */
+    --bronze: #606060;                  /* Replaced with dark gray */
+    --bronze-dark: #3A3A3A;             /* Replaced with dark gray */
+    --burgundy: #2A2A2A;                /* Replaced with very dark gray */
+    
+    /* Text Hierarchy */
+    --text-dark: #1A1A1A;               /* Almost black for primary text */
+    --text-mid: #404040;                /* Dark gray for secondary text */
+    --text-light: #707070;              /* Medium gray for tertiary text */
+    --text-muted: #A8A8A8;              /* Light gray for muted text */
+    
+    /* Shadows - Grayscale */
+    --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.04);
+    --shadow-medium: 0 6px 20px rgba(0, 0, 0, 0.08);
+    --shadow-gold: 0 8px 32px rgba(0, 0, 0, 0.1);
+    --shadow-luxury: 0 16px 48px rgba(0, 0, 0, 0.12), 0 6px 20px rgba(0, 0, 0, 0.06);
+    --shadow-elevation: 0 20px 60px rgba(0, 0, 0, 0.15);
     
     /* Spacing System - Fluid Responsive */
     --spacing-xs: clamp(6px, 1.2vw + 2px, 10px);
@@ -70,7 +78,7 @@
     --text-2xl: clamp(24px, 4vw + 10px, 36px);
     --text-3xl: clamp(32px, 5vw + 12px, 56px);
     
-    /* Letter Spacing for Luxury */
+    /* Letter Spacing */
     --ls-tight: 0.04em;
     --ls-normal: 0.08em;
     --ls-wide: 0.12em;
@@ -91,7 +99,7 @@ html {
 
 body {
     font-family: 'Montserrat', sans-serif;
-    background: linear-gradient(135deg, #FEFBF7 0%, #F3E8D8 100%);
+    background: #FFFFFF;
     color: var(--text-dark);
     font-weight: 300;
     line-height: 1.7;
@@ -190,7 +198,7 @@ a:hover {
 
 /* Announcement Bar */
 .announcement-bar {
-    background: linear-gradient(90deg, var(--gold-dark) 0%, var(--gold) 50%, var(--gold-dark) 100%);
+    background: linear-gradient(90deg, var(--gray-800) 0%, var(--gray-600) 50%, var(--gray-800) 100%);
     color: var(--white);
     text-align: center;
     padding: clamp(12px, 2.5vh, 16px) var(--spacing-sm);
@@ -199,7 +207,7 @@ a:hover {
     text-transform: uppercase;
     position: relative;
     z-index: 1001;
-    box-shadow: 0 4px 16px rgba(201, 169, 97, 0.2);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
     overflow: hidden;
 }
 
@@ -228,11 +236,11 @@ a:hover {
     position: sticky;
     top: 0;
     z-index: 1000;
-    background: rgba(253, 251, 248, 0.98);
+    background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-bottom: 1px solid rgba(201, 169, 97, 0.2);
-    box-shadow: 0 2px 12px rgba(201, 169, 97, 0.15);
+    border-bottom: 1px solid var(--gray-200);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     transition: all 0.4s ease;
 }
 
@@ -243,7 +251,7 @@ a:hover {
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    background: linear-gradient(90deg, transparent, var(--gray-300), transparent);
 }
 
 nav {
@@ -264,14 +272,11 @@ nav {
     font-size: clamp(22px, 4.5vw, 36px);
     font-weight: 400;
     letter-spacing: 0.45em;
-    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--text-dark);
     text-decoration: none;
     position: relative;
     z-index: 1001;
-    text-shadow: 0 2px 12px rgba(212, 175, 55, 0.15);
+    text-shadow: none;
 }
 
 .logo::after {
@@ -279,13 +284,9 @@ nav {
     display: block;
     font-size: clamp(6px, 1.2vw, 9px);
     letter-spacing: 0.6em;
-    color: var(--gold-dark);
+    color: var(--gray-600);
     text-align: center;
     margin-top: clamp(1px, 0.3vh, 3px);
-    background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-dark));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
 }
 
 /* Mobile Menu */
@@ -304,10 +305,10 @@ nav {
 .mobile-menu-btn span {
     width: clamp(22px, 4vw, 26px);
     height: 2px;
-    background: linear-gradient(90deg, var(--bronze-dark), var(--gold));
+    background: var(--gray-700);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 2px;
-    box-shadow: 0 1px 2px rgba(212, 175, 55, 0.3);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .mobile-menu-btn.active span:nth-child(1) {
@@ -329,7 +330,7 @@ nav {
     right: -100%;
     width: 100%;
     height: 100vh;
-    background: linear-gradient(135deg, var(--pearl) 0%, var(--ivory) 50%, var(--champagne) 100%);
+    background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 50%, var(--gray-100) 100%);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -417,7 +418,7 @@ nav {
 }
 
 .nav-icons a:hover .nav-icon {
-    stroke: var(--gold);
+    stroke: var(--gray-600);
     transform: scale(1.1);
 }
 
@@ -430,8 +431,8 @@ nav {
     position: absolute;
     top: -10px;
     right: -12px;
-    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 100%);
-    color: var(--brown-dark);
+    background: linear-gradient(135deg, var(--gray-700) 0%, var(--gray-600) 100%);
+    color: var(--white);
     font-size: 10px;
     font-weight: 600;
     min-width: 20px;
@@ -441,7 +442,7 @@ nav {
     align-items: center;
     justify-content: center;
     padding: 2px;
-    box-shadow: 0 2px 8px rgba(201, 169, 97, 0.45);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     animation: cartPulse 0.3s ease;
 }
 
