@@ -15,7 +15,7 @@
                 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=1200&h=1600&fit=crop',
                 'https://images.unsplash.com/photo-1591604021695-0c69b7c05981?w=1200&h=1600&fit=crop'
             ],
-            description: 'Exquisite bridal gown with delicate lace detailing',
+            description: 'A breathtaking masterpiece featuring delicate French lace overlay with hand-sewn pearl embellishments. This timeless gown combines classic elegance with modern sophistication, perfect for the bride who dreams of fairy-tale romance.',
             sizes: ['XS', 'S', 'M', 'L', 'XL', 'Custom']
         },
         '2': {
@@ -29,13 +29,13 @@
                 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=1200&h=1600&fit=crop',
                 'https://images.unsplash.com/photo-1591604021695-0c69b7c05981?w=1200&h=1600&fit=crop'
             ],
-            description: 'Stunning gown adorned with Swarovski crystals',
+            description: 'An enchanting bridal gown adorned with Swarovski crystals that catch and reflect light beautifully. Perfect for the modern bride seeking sparkle and glamour.',
             sizes: ['XS', 'S', 'M', 'L', 'XL', 'Custom']
         },
         '3': {
             id: '3',
-            name: 'Silk Dreams',
-            price: 22000,
+            name: 'Royal Silk Train',
+            price: 32000,
             category: 'Bridal',
             images: [
                 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=1200&h=1600&fit=crop',
@@ -43,13 +43,55 @@
                 'https://images.unsplash.com/photo-1594552072238-2d8e16ed7b2c?w=1200&h=1600&fit=crop',
                 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&h=1600&fit=crop'
             ],
-            description: 'Flowing silk gown with timeless elegance',
+            description: 'A luxurious bridal masterpiece featuring flowing silk with an majestic train. This stunning gown exudes elegance and timeless beauty.',
             sizes: ['XS', 'S', 'M', 'L', 'XL', 'Custom']
         },
         '4': {
             id: '4',
-            name: 'Golden Elegance',
-            price: 26000,
+            name: 'Champagne Elegance',
+            price: 16000,
+            category: 'Evening',
+            images: [
+                'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=1200&h=1600&fit=crop',
+                'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=1200&h=1600&fit=crop',
+                'https://images.unsplash.com/photo-1591604021695-0c69b7c05981?w=1200&h=1600&fit=crop',
+                'https://images.unsplash.com/photo-1594552072238-2d8e16ed7b2c?w=1200&h=1600&fit=crop'
+            ],
+            description: 'An elegant evening gown in champagne tones with sophisticated draping. Perfect for formal occasions and special events.',
+            sizes: ['XS', 'S', 'M', 'L', 'XL', 'Custom']
+        },
+        '5': {
+            id: '5',
+            name: 'Pearl Embellished',
+            price: 28500,
+            category: 'Bridal',
+            images: [
+                'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&h=1600&fit=crop',
+                'https://images.unsplash.com/photo-1594552072238-2d8e16ed7b2c?w=1200&h=1600&fit=crop',
+                'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=1200&h=1600&fit=crop',
+                'https://images.unsplash.com/photo-1591604021695-0c69b7c05981?w=1200&h=1600&fit=crop'
+            ],
+            description: 'A stunning bridal gown with intricate pearl embellishments throughout. Each pearl is hand-sewn to create a shimmering, luxurious effect.',
+            sizes: ['XS', 'S', 'M', 'L', 'XL', 'Custom']
+        },
+        '6': {
+            id: '6',
+            name: 'Bespoke Creation',
+            price: 35000,
+            category: 'Custom',
+            images: [
+                'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=1200&h=1600&fit=crop',
+                'https://images.unsplash.com/photo-1594552072238-2d8e16ed7b2c?w=1200&h=1600&fit=crop',
+                'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=1200&h=1600&fit=crop',
+                'https://images.unsplash.com/photo-1591604021695-0c69b7c05981?w=1200&h=1600&fit=crop'
+            ],
+            description: 'Create your own custom haute couture gown. Our master designers will work with you to bring your vision to life with bespoke craftsmanship.',
+            sizes: ['Custom']
+        },
+        '7': {
+            id: '7',
+            name: 'Golden Hour',
+            price: 19500,
             category: 'Evening',
             images: [
                 'https://images.unsplash.com/photo-1591604021695-0c69b7c05981?w=1200&h=1600&fit=crop',
@@ -57,7 +99,7 @@
                 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&h=1600&fit=crop',
                 'https://images.unsplash.com/photo-1594552072238-2d8e16ed7b2c?w=1200&h=1600&fit=crop'
             ],
-            description: 'Evening gown with luxurious gold details',
+            description: 'A breathtaking evening gown with golden accents. Perfect for sunset celebrations and evening affairs.',
             sizes: ['XS', 'S', 'M', 'L', 'XL', 'Custom']
         }
     };
@@ -80,8 +122,16 @@
     const titleEl = document.querySelector('.product-title');
     if (titleEl) titleEl.textContent = product.name;
 
+    // Update product subtitle
+    const subtitleEl = document.querySelector('.product-subtitle');
+    if (subtitleEl) subtitleEl.textContent = product.category + ' Collection';
+
+    // Update product description
+    const descriptionEl = document.querySelector('.product-description p');
+    if (descriptionEl) descriptionEl.textContent = product.description;
+
     // Update product price
-    const priceEl = document.querySelector('.product-price');
+    const priceEl = document.querySelector('.price-amount');
     if (priceEl) priceEl.textContent = `AED ${product.price.toLocaleString()}`;
 
     // Update images
