@@ -147,19 +147,19 @@ p {
 }
 
 a {
-    color: var(--brown-dark);
+    color: var(--gray-700);
     text-decoration: none;
     transition: all 0.3s ease;
 }
 
 a:hover {
-    color: var(--gold);
-}}
+    color: var(--gray-900);
+}
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--beige); }
-::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+::-webkit-scrollbar-track { background: var(--gray-100); }
+::-webkit-scrollbar-thumb { background: var(--gray-600); border-radius: 3px; }
 
 /* Container - Fluid Responsive */
 .container {
@@ -218,7 +218,7 @@ a:hover {
     left: -100%;
     width: 200%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(201, 169, 97, 0.12), transparent);
+    background: linear-gradient(90deg, transparent, rgba(64, 64, 64, 0.05), transparent);
     animation: announceShimmer 4s ease-in-out infinite;
 }
 
@@ -366,7 +366,7 @@ nav {
     transform: translateX(-50%);
     width: 0;
     height: 1px;
-    background: var(--gold);
+    background: var(--gray-400);
     transition: width 0.4s ease;
 }
 
@@ -377,8 +377,8 @@ nav {
 
 .nav-links a:hover,
 .nav-links a:active {
-    color: var(--gold);
-    text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+    color: var(--gray-900);
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
 @media (min-width: 1024px) {
@@ -458,8 +458,8 @@ nav {
     align-items: center;
     justify-content: center;
     gap: 12px;
-    padding: 18px 40px;
-    font-size: 11px;
+    padding: clamp(14px, 3vh, 20px) clamp(24px, 5vw, 48px);
+    font-size: clamp(10px, 2vw, 12px);
     letter-spacing: 0.22em;
     text-transform: uppercase;
     text-decoration: none;
@@ -471,27 +471,27 @@ nav {
     -webkit-tap-highlight-color: transparent;
     position: relative;
     overflow: hidden;
+    min-height: 44px;
 }
 
 @media (min-width: 768px) {
     .btn {
-        padding: 20px 48px;
-        font-size: 11px;
+        width: auto;
     }
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+    background: linear-gradient(135deg, var(--gray-700) 0%, var(--gray-800) 100%);
     color: var(--white);
-    border: 1px solid var(--gold);
-    box-shadow: 0 6px 20px rgba(201, 169, 97, 0.3);
+    border: 1px solid var(--gray-600);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
 .btn-primary::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 100%);
+    background: linear-gradient(135deg, var(--gray-600) 0%, var(--gray-700) 100%);
     transform: translateX(-100%);
     transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -521,31 +521,31 @@ nav {
 }
 
 .btn-primary:hover {
-    box-shadow: 0 8px 32px rgba(212, 175, 55, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     transform: translateY(-2px);
 }
 
 .btn-primary:hover span {
-    color: var(--brown-dark);
+    color: var(--white);
 }
 
 .btn-primary:active {
     transform: translateY(0);
-    box-shadow: 0 4px 16px rgba(212, 175, 55, 0.35);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .btn-secondary {
     background: transparent;
-    color: var(--gold-dark);
-    border: 2px solid var(--gold);
-    box-shadow: inset 0 0 0 0 var(--gold);
+    color: var(--text-dark);
+    border: 2px solid var(--gray-400);
+    box-shadow: inset 0 0 0 0 var(--gray-300);
 }
 
 .btn-secondary::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-accent) 100%);
+    background: linear-gradient(135deg, var(--gray-300) 0%, var(--gray-200) 100%);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -565,13 +565,13 @@ nav {
 
 .btn-secondary:hover,
 .btn-secondary:active {
-    border-color: var(--gold-accent);
-    box-shadow: 0 8px 28px rgba(212, 175, 55, 0.35);
+    border-color: var(--gray-500);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.15);
     transform: translateY(-2px);
 }
 
 .btn-secondary:hover span {
-    color: var(--brown-dark);
+    color: var(--text-dark);
 }
 
 .btn-full {
@@ -581,7 +581,7 @@ nav {
 .btn-link {
     background: none;
     border: none;
-    color: var(--gold-dark);
+    color: var(--gray-700);
     font-size: 13px;
     text-decoration: none;
     cursor: pointer;
@@ -597,14 +597,14 @@ nav {
     left: 0;
     width: 100%;
     height: 1px;
-    background: var(--gold);
+    background: var(--gray-500);
     transform: scaleX(0);
     transform-origin: right;
     transition: transform 0.3s ease;
 }
 
 .btn-link:hover {
-    color: var(--gold);
+    color: var(--gray-900);
 }
 
 .btn-link:hover::after {
@@ -624,7 +624,7 @@ nav {
 .hero {
     position: relative;
     height: 100vh;
-    background: linear-gradient(135deg, var(--beige) 0%, var(--champagne) 50%, var(--cream) 100%);
+    background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 50%, var(--gray-50) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -636,7 +636,7 @@ nav {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse at center, rgba(201, 169, 97, 0.12), transparent 70%);
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.03), transparent 70%);
     animation: heroGlow 6s ease-in-out infinite;
 }
 
@@ -655,7 +655,7 @@ nav {
 
 .hero-subtitle {
     font-size: var(--text-sm);
-    color: var(--gold-dark);
+    color: var(--text-mid);
     text-transform: uppercase;
     letter-spacing: 0.3em;
     margin-bottom: var(--spacing-md);
@@ -664,12 +664,12 @@ nav {
 
 .hero-title {
     font-size: clamp(48px, 10vw, 96px);
-    color: var(--brown-dark);
+    color: var(--text-dark);
     font-weight: 300;
     letter-spacing: var(--ls-wide);
     line-height: 1.1;
     margin-bottom: var(--spacing-lg);
-    text-shadow: 0 2px 20px rgba(212, 175, 55, 0.1);
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
 }
 
 .hero-description {
@@ -706,7 +706,7 @@ nav {
 /* Page Hero */
 .page-hero {
     padding: var(--spacing-xl) 0 var(--spacing-lg);
-    background: linear-gradient(135deg, var(--beige) 0%, var(--champagne) 50%, var(--cream) 100%);
+    background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 50%, var(--gray-50) 100%);
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -716,7 +716,7 @@ nav {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at top center, rgba(201, 169, 97, 0.1), transparent 60%);
+    background: radial-gradient(circle at top center, rgba(0, 0, 0, 0.03), transparent 60%);
     pointer-events: none;
 }
 
@@ -737,21 +737,21 @@ nav {
 }
 
 .breadcrumb a {
-    color: var(--gold-dark);
+    color: var(--gray-700);
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 .breadcrumb a:hover {
-    color: var(--gold);
+    color: var(--gray-900);
 }
 
 .breadcrumb span:not(:last-child) {
-    color: var(--gold);
+    color: var(--gray-500);
 }
 
 .page-title {
-    color: var(--brown-dark);
+    color: var(--text-dark);
     margin-bottom: 20px;
     font-size: clamp(32px, 6vw, 56px);
     letter-spacing: 0.15em;
@@ -768,8 +768,8 @@ nav {
 /* Filters Section */
 .filters-section {
     padding: var(--spacing-lg) 0;
-    background: linear-gradient(180deg, var(--cream) 0%, var(--pearl) 100%);
-    border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+    background: linear-gradient(180deg, var(--white) 0%, var(--gray-50) 100%);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .filters-bar {
@@ -801,8 +801,8 @@ nav {
     letter-spacing: 0.18em;
     text-transform: uppercase;
     background: transparent;
-    border: 1px solid var(--gold);
-    color: var(--gold-dark);
+    border: 1px solid var(--gray-400);
+    color: var(--text-dark);
     cursor: pointer;
     white-space: nowrap;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -814,7 +814,7 @@ nav {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+    background: linear-gradient(135deg, var(--gray-300) 0%, var(--gray-200) 100%);
     transform: translateY(100%);
     transition: transform 0.3s ease;
 }
