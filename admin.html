@@ -584,12 +584,21 @@
             background: linear-gradient(135deg, #F0FDF4 0%, #ECFDF5 100%);
             border-color: #10B981;
             color: #047857;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15);
         }
 
         .status-out-of-stock {
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.05) 100%);
-            border-color: var(--gold);
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.12) 0%, rgba(212, 175, 55, 0.08) 100%);
+            border: 2px solid var(--gold);
             color: var(--gold);
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(212, 175, 55, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .status-out-of-stock:hover {
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+            transform: translateY(-1px);
         }
 
         /* Size Selector */
@@ -1599,11 +1608,6 @@
             } catch (error) {
                 showAlert('Error: ' + error.message, 'error');
             }
-        }
-
-        // Placeholder functions
-        function editProduct(id) {
-            alert('Edit feature coming soon for product: ' + id);
         }
 
         function viewOrder(id) {
