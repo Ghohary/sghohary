@@ -221,7 +221,6 @@
                                 name="email" 
                                 placeholder="admin@ghohary.com"
                                 required
-                                autocomplete="email"
                             >
                         </div>
 
@@ -233,7 +232,6 @@
                                 name="password" 
                                 placeholder="••••••••••••"
                                 required
-                                autocomplete="current-password"
                             >
                         </div>
 
