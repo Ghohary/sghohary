@@ -107,7 +107,18 @@
     // Get product ID from URL
     const urlParams = new URLSearchParams(window.location.search);
     const productId = urlParams.get('id') || '1';
-    const product = products[productId];
+    
+    // Try to load product from localStorage (admin-created products)
+    let product = null;
+    const adminProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
+    const adminProduct = adminProducts.find(p => p.id == productId || p.id === parseInt(productId));
+    
+    if (adminProduct && adminProduct.visible !== false) {
+        product = adminProduct;
+    } else {
+        // Fallback to hardcoded products
+        product = products[productId];
+    }
 
     if (!product) {
         document.body.innerHTML = '<div style="text-align:center; padding: 50px;"><h2>Product not found</h2></div>';
@@ -132,7 +143,13 @@
 
     // Update product price
     const priceEl = document.querySelector('.price-amount');
-    if (priceEl) priceEl.textContent = `AED ${product.price.toLocaleString()}`;
+    if (priceEl) {
+        if (typeof product.price === 'number') {
+            priceEl.textContent = `AED ${product.price.toLocaleString()}`;
+        } else {
+            priceEl.textContent = product.price || 'Price Upon Request';
+        }
+    }
 
     // Update images
     const mainImage = document.getElementById('mainImage');
@@ -162,15 +179,41 @@
 
     // ===== SIZE SELECTION =====
     const sizeBtns = document.querySelectorAll('.size-btn');
+    const sizeContainer = document.querySelector('.size-options');
     let selectedSize = null;
 
-    sizeBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            sizeBtns.forEach(b => b.classList.remove('selected'));
-            this.classList.add('selected');
-            selectedSize = this.dataset.size;
+    // If product has sizes array from admin, render them dynamically
+    if (product.sizes && Array.isArray(product.sizes) && product.sizes.length > 0) {
+        if (sizeContainer) {
+            sizeContainer.innerHTML = '';
+            const sizesArray = Array.isArray(product.sizes[0]) ? product.sizes : 
+                              (product.sizes[0] && typeof product.sizes[0] === 'object' 
+                                  ? product.sizes.map(s => s.size) 
+                                  : product.sizes);
+            
+            sizesArray.forEach(size => {
+                const btn = document.createElement('button');
+                btn.className = 'size-btn';
+                btn.dataset.size = size;
+                btn.textContent = size;
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedSize = this.dataset.size;
+                });
+                sizeContainer.appendChild(btn);
+            });
+        }
+    } else {
+        // Use existing hardcoded size buttons
+        sizeBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                sizeBtns.forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedSize = this.dataset.size;
+            });
         });
-    });
+    }
 
     // ===== ADD TO CART =====
     const addToCartBtn = document.getElementById('addToCartBtn');
