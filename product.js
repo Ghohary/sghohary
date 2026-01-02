@@ -393,7 +393,22 @@
         };
     }
 
-    window.updateCartCount();
+    // Wait for header to be loaded before calling updateCartCount
+    function initializeCartCount() {
+        if (window.updateCartCount) {
+            window.updateCartCount();
+        } else {
+            // Retry after 100ms if header hasn't loaded yet
+            setTimeout(initializeCartCount, 100);
+        }
+    }
+
+    // Initialize on DOM ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeCartCount);
+    } else {
+        initializeCartCount();
+    }
 
     // ===== ZOOM FUNCTIONALITY =====
     const zoomBtn = document.querySelector('.zoom-btn');

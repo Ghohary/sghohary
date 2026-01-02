@@ -158,7 +158,22 @@
 
     // Initial render
     renderCart();
-    window.updateCartCount();
+
+    // Wait for header to be loaded before calling updateCartCount
+    function initializeCartCount() {
+        if (window.updateCartCount) {
+            window.updateCartCount();
+        } else {
+            // Retry after 100ms if header hasn't loaded yet
+            setTimeout(initializeCartCount, 100);
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeCartCount);
+    } else {
+        initializeCartCount();
+    }
 
     console.log('Cart page loaded');
 })();
