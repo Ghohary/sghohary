@@ -1155,15 +1155,20 @@
                 let needsUpdate = false;
                 products = products.map(p => {
                     if (p.images && p.images.length > 0) {
-                        // Check if any image is a base64 data URI (starts with 'data:')
-                        const hasBase64 = p.images.some(img => typeof img === 'string' && img.startsWith('data:'));
-                        if (hasBase64) {
-                            // Replace base64 images with placeholder URLs
-                            p.images = p.images.map((img, idx) => 
-                                typeof img === 'string' && img.startsWith('data:') 
-                                    ? `https://placeholder.com/image?w=1200&h=1600&text=Image${idx + 1}`
-                                    : img
-                            );
+                        // Check if any image is a base64 data URI (starts with 'data:') or broken placeholder
+                        const hasBase64OrBroken = p.images.some(img => 
+                            typeof img === 'string' && (img.startsWith('data:') || img.includes('placeholder.com'))
+                        );
+                        if (hasBase64OrBroken) {
+                            // Replace base64 images and broken placeholders with working URLs
+                            p.images = p.images.map((img, idx) => {
+                                if (typeof img === 'string' && (img.startsWith('data:') || img.includes('placeholder.com'))) {
+                                    // Replace with working image URL
+                                    const randomId = Math.floor(Math.random() * 1000);
+                                    return `https://picsum.photos/1200/1600?random=${randomId}`;
+                                }
+                                return img;
+                            });
                             needsUpdate = true;
                         }
                     }
@@ -1551,8 +1556,10 @@
                             if (typeof file === 'string') {
                                 return file; // Already a URL
                             } else if (file instanceof File) {
-                                // For new files, generate a reference URL
-                                return `https://placeholder.com/image?w=1200&h=1600&text=${encodeURIComponent(file.name)}`;
+                                // For new files, generate a working placeholder URL
+                                // Using picsum.photos for actual working images
+                                const randomId = Math.floor(Math.random() * 1000);
+                                return `https://picsum.photos/1200/1600?random=${randomId}`;
                             }
                             return '';
                         }).filter(url => url);
@@ -1578,8 +1585,10 @@
                         if (typeof file === 'string') {
                             return file; // URL string
                         } else if (file instanceof File) {
-                            // For new files, generate a reference URL
-                            return `https://placeholder.com/image?w=1200&h=1600&text=${encodeURIComponent(file.name)}`;
+                            // For new files, generate a working placeholder URL
+                            // Using picsum.photos for actual working images
+                            const randomId = Math.floor(Math.random() * 1000);
+                            return `https://picsum.photos/1200/1600?random=${randomId}`;
                         }
                         return '';
                     }).filter(url => url);
