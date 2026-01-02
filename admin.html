@@ -478,9 +478,9 @@
         }
 
         .status-out-of-stock {
-            background: linear-gradient(135deg, #FEF2F2 0%, #FEF1F1 100%);
-            border-color: #DC2626;
-            color: #991B1B;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.05) 100%);
+            border-color: var(--gold);
+            color: var(--gold);
         }
 
         /* Size Selector */
@@ -529,6 +529,70 @@
             font-size: clamp(12px, 1.8vw, 14px);
             color: #333333;
             margin-top: clamp(12px, 2vh, 16px);
+        }
+
+        .inventory-management {
+            margin-top: clamp(24px, 4vh, 32px);
+            padding: clamp(20px, 3vw, 28px);
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(212, 175, 55, 0.02) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-left: 4px solid var(--gold);
+        }
+
+        .inventory-management label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: clamp(16px, 2vh, 20px);
+            color: #1A1A1A;
+            text-transform: uppercase;
+            font-size: clamp(11px, 1.5vw, 13px);
+            letter-spacing: 0.15em;
+        }
+
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: clamp(16px, 2.5vw, 20px);
+        }
+
+        .inventory-item {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(8px, 1.5vw, 12px);
+            padding: clamp(14px, 2vh, 18px);
+            background: #FFFFFF;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 2px;
+            transition: all 0.2s ease;
+        }
+
+        .inventory-item:hover {
+            border-color: var(--gold);
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.15);
+        }
+
+        .inventory-item label {
+            margin: 0;
+            font-size: clamp(10px, 1.4vw, 12px);
+            font-weight: 600;
+            text-transform: capitalize;
+            letter-spacing: 0.05em;
+            color: #1A1A1A;
+        }
+
+        .inventory-item input {
+            padding: clamp(10px, 1.8vh, 14px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            font-size: clamp(13px, 1.8vw, 14px);
+            font-weight: 500;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .inventory-item input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
         }
 
         /* Image Preview Container */
@@ -839,6 +903,12 @@
                     <div id="selectedSizes" class="selected-sizes-display">Selected: None</div>
                 </div>
 
+                <!-- Inventory Management Section -->
+                <div id="inventorySection" class="inventory-management" style="display: none;">
+                    <label>Inventory Management</label>
+                    <div id="inventoryGrid" class="inventory-grid"></div>
+                </div>
+
                 <div class="form-group">
                     <label>Colors (comma separated)</label>
                     <input type="text" id="productColors" placeholder="White,Ivory">
@@ -1117,6 +1187,17 @@
                 return;
             }
 
+            // Get inventory values for selected sizes
+            const sizes = Array.from(selectedSizeBtns).map(btn => {
+                const sizeValue = btn.getAttribute('data-size');
+                const inventoryInput = document.getElementById(`inventory-${sizeValue}`);
+                const inventory = inventoryInput ? parseInt(inventoryInput.value) || 0 : 0;
+                return {
+                    size: sizeValue,
+                    inventory: inventory
+                };
+            });
+
             // Create product object (WITHOUT storing images as base64)
             const product = {
                 id: Date.now(),
@@ -1125,13 +1206,11 @@
                 category: category,
                 price: document.getElementById('productPrice').value || 'Price Upon Request',
                 description: document.getElementById('productDescription').value,
-                sizes: Array.from(selectedSizeBtns).map(btn => ({
-                    size: btn.getAttribute('data-size'),
-                    inventory: 0
-                })),
+                sizes: sizes,
                 colors: document.getElementById('productColors').value.split(',').filter(c => c.trim()).map(c => c.trim()),
                 imageCount: document.querySelectorAll('.image-preview-item').length,
                 images: [], // We won't store actual image data
+                visible: true,
                 createdAt: new Date().toISOString()
             };
 
@@ -1149,6 +1228,8 @@
                 document.getElementById('productForm').reset();
                 document.getElementById('imagePreview').innerHTML = '';
                 document.getElementById('selectedSizes').textContent = 'Selected: None';
+                document.getElementById('inventorySection').style.display = 'none';
+                document.getElementById('inventoryGrid').innerHTML = '';
                 document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('active'));
                 
                 loadProducts();
@@ -1230,7 +1311,35 @@
             const selectedBtns = document.querySelectorAll('.size-btn.active');
             const selectedSizes = Array.from(selectedBtns).map(btn => btn.getAttribute('data-size')).join(', ');
             const display = document.getElementById('selectedSizes');
+            const inventorySection = document.getElementById('inventorySection');
+            const inventoryGrid = document.getElementById('inventoryGrid');
+            
             display.textContent = selectedSizes ? `Selected: ${selectedSizes}` : 'Selected: None';
+            
+            // Show/hide inventory management section
+            if (selectedSizes) {
+                inventorySection.style.display = 'block';
+                renderInventoryGrid(selectedBtns);
+            } else {
+                inventorySection.style.display = 'none';
+                inventoryGrid.innerHTML = '';
+            }
+        }
+
+        function renderInventoryGrid(selectedBtns) {
+            const inventoryGrid = document.getElementById('inventoryGrid');
+            inventoryGrid.innerHTML = '';
+            
+            selectedBtns.forEach(btn => {
+                const size = btn.getAttribute('data-size');
+                const inventoryItem = document.createElement('div');
+                inventoryItem.className = 'inventory-item';
+                inventoryItem.innerHTML = `
+                    <label for="inventory-${size}">Size ${size}</label>
+                    <input type="number" id="inventory-${size}" class="size-inventory" data-size="${size}" value="0" min="0" max="999" placeholder="0">
+                `;
+                inventoryGrid.appendChild(inventoryItem);
+            });
         }
 
         // Image Preview and Reordering
