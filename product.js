@@ -51,14 +51,6 @@
         document.body.innerHTML = '<div style="padding: 40px; text-align: center; font-family: sans-serif;"><h1>Product not found</h1><p>Please add products through the admin dashboard.</p><a href="collections.html">Back to Collections</a></div>';
         return;
     }
-            console.log('No products found, using default product:', product?.name);
-        }
-    }
-
-    if (!product) {
-        document.body.innerHTML = '<div style="text-align:center; padding: 50px;"><h2>Product not found</h2></div>';
-        return;
-    }
 
     // Update breadcrumb
     const breadcrumb = document.querySelector('.breadcrumb span:last-child');

@@ -1151,36 +1151,6 @@
                 // Load products from localStorage
                 products = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
                 
-                // MIGRATION: Clean up old base64 images and convert to URLs
-                let needsUpdate = false;
-                products = products.map(p => {
-                    if (p.images && p.images.length > 0) {
-                        // Check if any image is a base64 data URI (starts with 'data:') or broken placeholder
-                        const hasBase64OrBroken = p.images.some(img => 
-                            typeof img === 'string' && (img.startsWith('data:') || img.includes('placeholder.com'))
-                        );
-                        if (hasBase64OrBroken) {
-                            // Replace base64 images and broken placeholders with working URLs
-                            p.images = p.images.map((img, idx) => {
-                                if (typeof img === 'string' && (img.startsWith('data:') || img.includes('placeholder.com'))) {
-                                    // Replace with working image URL using stable ID based on product ID
-                                    // Use product ID + image index to ensure consistent images
-                                    const stableId = (p.id * 100) + idx; // Unique but stable
-                                    return `https://picsum.photos/1200/1600?random=${stableId}`;
-                                }
-                                return img;
-                            });
-                            needsUpdate = true;
-                        }
-                    }
-                    return p;
-                });
-                
-                // Save migrated data if needed
-                if (needsUpdate) {
-                    localStorage.setItem('ghoharyProducts', JSON.stringify(products));
-                }
-                
                 // products is already assigned above (not re-assigning)
                 
                 document.getElementById('totalProducts').textContent = products.length;
@@ -1552,15 +1522,12 @@
                     if (productIndex !== -1) {
                         const existingProduct = existingProducts[productIndex];
                         
-                        // Only store image URLs, not base64 data
-                        const images = imageFiles.map(file => {
+                        // Store existing URLs or uploaded image data URLs
+                        const images = imageFiles.map((file, index) => {
                             if (typeof file === 'string') {
                                 return file; // Already a URL
                             } else if (file instanceof File) {
-                                // For new files, generate a stable placeholder URL
-                                // Use file name hash to ensure consistent images
-                                const stableId = file.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-                                return `https://picsum.photos/1200/1600?random=${stableId}`;
+                                return imageDataURLs[index] || '';
                             }
                             return '';
                         }).filter(url => url);
@@ -1581,21 +1548,17 @@
                     }
                 } else {
                     // Create and add new product
-                    // Only store image URLs, not base64 data
                     console.log('[Admin] Adding new product, imageFiles:', imageFiles);
                     console.log('[Admin] imageFiles types:', imageFiles.map(f => typeof f + ' ' + (f instanceof File ? 'File' : f instanceof String ? 'String' : 'Other')));
                     
-                    const images = imageFiles.map(file => {
+                    const images = imageFiles.map((file, index) => {
                         if (typeof file === 'string') {
                             console.log('[Admin] Image is already a URL:', file);
                             return file; // URL string
                         } else if (file instanceof File) {
-                            // For new files, generate a stable placeholder URL
-                            // Use file name hash to ensure consistent images
-                            const stableId = file.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-                            const url = `https://picsum.photos/1200/1600?random=${stableId}`;
-                            console.log('[Admin] Converted File to URL:', url);
-                            return url;
+                            const dataUrl = imageDataURLs[index] || '';
+                            console.log('[Admin] Using uploaded image data URL');
+                            return dataUrl;
                         }
                         console.log('[Admin] Skipping invalid file:', file);
                         return '';

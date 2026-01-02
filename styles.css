@@ -267,6 +267,8 @@ a:hover {
     border-bottom: 1px solid var(--gray-200);
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     transition: all 0.4s ease;
+    display: flex;
+    justify-content: center;
 }
 
 .nav-container::after {
@@ -314,7 +316,9 @@ nav .nav-icons {
     letter-spacing: 0.45em;
     color: var(--text-dark);
     text-decoration: none;
-    position: relative;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 1001;
     text-shadow: none;
 }
@@ -423,7 +427,27 @@ nav .nav-icons {
 
 @media (min-width: 1024px) {
     .mobile-menu-btn { display: none; }
+
+    nav {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        grid-template-rows: auto auto;
+        row-gap: 14px;
+        align-items: center;
+    }
     
+    .logo {
+        grid-column: 2;
+        grid-row: 1;
+        justify-self: center;
+    }
+
+    .nav-icons {
+        grid-column: 3;
+        grid-row: 1;
+        justify-self: end;
+    }
+
     .nav-links {
         position: static;
         flex-direction: row;
@@ -431,24 +455,12 @@ nav .nav-icons {
         height: auto;
         background: transparent;
         gap: 40px;
-        justify-self: start;
+        grid-column: 1 / -1;
+        grid-row: 2;
+        justify-content: center;
     }
     
     .nav-links a { font-size: 11px; }
-
-    .nav-icons {
-        justify-self: end;
-    }
-
-    nav {
-        position: relative;
-    }
-
-    .logo {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-    }
 }
 
 .nav-icons {
