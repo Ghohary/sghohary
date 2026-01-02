@@ -872,7 +872,7 @@
                 const totalInventory = p.sizes ? p.sizes.reduce((sum, s) => sum + (s.inventory || 0), 0) : 0;
                 const priceDisplay = p.price === 'Price Upon Request' ? 'Price Upon Request' : `AED ${Number(p.price).toLocaleString()}`;
                 const isVisible = p.visible !== false; // Default to visible if not set
-                const visibilityIcon = isVisible ? '👁️' : '👁️‍🗨️';
+                const visibilityIcon = isVisible ? '👁️' : '🚫';
                 
                 return `
                 <tr>
