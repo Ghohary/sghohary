@@ -94,7 +94,7 @@
             const productPrice = product ? (parseFloat(product.price) || 0) : (parseFloat(item.price) || 0);
             const productImage = (product?.images && product.images.length > 0) 
                 ? product.images[0] 
-                : '/placeholder.jpg';
+                : (item.image || '/placeholder.jpg');
             
             if (!product) {
                 console.warn(`Product ${item.id} not found in products array. Using fallback data from cart.`, item);

@@ -227,11 +227,12 @@
 
             const customizationField = document.getElementById('customization');
             
-            // Store essential data + product name/price as fallback for cart display
+            // Store essential data + product name/price/image as fallback for cart display
             const cartProduct = {
                 id: product.id,
                 name: product.name,  // Store name as fallback
                 price: product.price, // Store price as fallback
+                image: (product.images && product.images.length > 0) ? product.images[0] : '/placeholder.jpg', // Store image as fallback
                 size: selectedSize,
                 customization: customizationField ? customizationField.value : '',
                 quantity: 1
