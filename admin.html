@@ -872,8 +872,7 @@
                 const totalInventory = p.sizes ? p.sizes.reduce((sum, s) => sum + (s.inventory || 0), 0) : 0;
                 const priceDisplay = p.price === 'Price Upon Request' ? 'Price Upon Request' : `AED ${Number(p.price).toLocaleString()}`;
                 const isVisible = p.visible !== false; // Default to visible if not set
-                const visibilityText = isVisible ? '👁️ Visible' : '👁️‍🗨️ Hidden';
-                const visibilityClass = isVisible ? 'status-available' : 'status-out-of-stock';
+                const visibilityIcon = isVisible ? '👁️' : '👁️‍🗨️';
                 
                 return `
                 <tr>
@@ -882,18 +881,20 @@
                     <td>${p.category}</td>
                     <td>${priceDisplay}</td>
                     <td><span class="status-badge ${totalInventory > 0 ? 'status-available' : 'status-out-of-stock'}">${totalInventory} items</span></td>
-                    <td><span class="status-badge ${visibilityClass} visibility-badge" data-product-id="${p.id}">${visibilityText}</span></td>
                     <td>
-                        <button class="btn-small visibility-btn" data-product-id="${p.id}" style="margin-right: 8px;">Toggle</button>
+                        <span class="visibility-icon" data-product-id="${p.id}" title="Click to toggle visibility" style="cursor: pointer; font-size: 20px; padding: 8px; display: inline-block;">${visibilityIcon}</span>
+                    </td>
+                    <td>
                         <button class="btn-small delete-btn" data-product-id="${p.id}">Delete</button>
                     </td>
                 </tr>
             `}).join('');
 
-            // Attach event listeners to visibility buttons
-            document.querySelectorAll('.visibility-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
+            // Attach event listeners to visibility icons
+            document.querySelectorAll('.visibility-icon').forEach(icon => {
+                icon.addEventListener('click', function(e) {
                     e.preventDefault();
+                    e.stopPropagation();
                     const productId = parseInt(this.getAttribute('data-product-id'));
                     toggleProductVisibility(productId);
                 });
