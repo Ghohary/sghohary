@@ -540,8 +540,8 @@
                         <input type="text" id="productName" required>
                     </div>
                     <div class="form-group">
-                        <label>SKU *</label>
-                        <input type="text" id="productSku" required>
+                        <label>SKU (Optional)</label>
+                        <input type="text" id="productSku" placeholder="Leave blank for auto-generated">
                     </div>
                 </div>
 
@@ -556,8 +556,8 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Price (AED) *</label>
-                        <input type="number" id="productPrice" step="100" required>
+                        <label>Price (AED) - Optional (Leave blank for "Price Upon Request")</label>
+                        <input type="number" id="productPrice" step="100" placeholder="Leave blank for price upon request">
                     </div>
                 </div>
 
@@ -780,9 +780,12 @@
 
             const formData = new FormData();
             formData.append('name', document.getElementById('productName').value);
-            formData.append('sku', document.getElementById('productSku').value);
+            formData.append('sku', document.getElementById('productSku').value || `SKU-${Date.now()}`);
             formData.append('category', document.getElementById('productCategory').value);
-            formData.append('price', document.getElementById('productPrice').value);
+            
+            const priceValue = document.getElementById('productPrice').value;
+            formData.append('price', priceValue || 'Price Upon Request');
+            
             formData.append('description', document.getElementById('productDescription').value);
             
             const sizes = document.getElementById('productSizes').value.split(',').filter(s => s.trim());
