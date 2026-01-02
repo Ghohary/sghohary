@@ -106,6 +106,8 @@ body {
     line-height: 1.7;
     overflow-x: hidden;
     font-size: var(--text-base);
+    margin: 0;
+    padding: 0;
 }
 
 /* Typography - Luxury */
@@ -208,6 +210,9 @@ a:hover {
     text-transform: uppercase;
     position: relative;
     z-index: 1001;
+    width: 100%;
+    left: 0;
+    right: 0;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
     overflow: hidden;
 }
@@ -237,6 +242,9 @@ a:hover {
     position: sticky;
     top: 0;
     z-index: 1000;
+    width: 100%;
+    left: 0;
+    right: 0;
     background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
@@ -1866,7 +1874,7 @@ nav {
 
 /* Checkout Page */
 .checkout-section {
-    padding: clamp(40px, 8vh, 80px) 0;
+    padding: clamp(48px, 9vh, 96px) 0;
 }
 
 .checkout-steps {
@@ -1927,8 +1935,8 @@ nav {
 
 /* Forms */
 .form-section {
-    margin-bottom: clamp(30px, 5vh, 40px);
-    padding-bottom: clamp(30px, 5vh, 40px);
+    margin-bottom: clamp(36px, 6vh, 48px);
+    padding-bottom: clamp(36px, 6vh, 48px);
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
@@ -1963,9 +1971,9 @@ nav {
 
 .form-group label {
     display: block;
-    font-size: clamp(11px, 1.8vw, 12px);
+    font-size: clamp(12px, 2vw, 14px);
     color: var(--text-dark);
-    margin-bottom: clamp(8px, 1.5vh, 10px);
+    margin-bottom: clamp(10px, 1.8vh, 12px);
     text-transform: uppercase;
     letter-spacing: 0.1em;
     font-weight: 400;
