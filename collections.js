@@ -23,92 +23,8 @@
         // Filter only visible products
         allProducts = adminProducts.filter(p => p.visible !== false);
         
-        // If no admin products, use fallback hardcoded products
-        if (allProducts.length === 0) {
-            allProducts = [
-                {
-                    id: 1,
-                    name: 'Ethereal Lace',
-                    price: 25000,
-                    category: 'Bridal Couture',
-                    images: ['https://images.unsplash.com/photo-1594552072238-2d8e16ed7b2c?w=800&h=1200&fit=crop'],
-                    visible: true,
-                    createdAt: Date.now() - 86400000
-                },
-                {
-                    id: 2,
-                    name: 'Crystal Romance',
-                    price: 28000,
-                    category: 'Bridal Couture',
-                    images: ['https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800&h=1200&fit=crop'],
-                    visible: true,
-                    createdAt: Date.now() - 86400000
-                },
-                {
-                    id: 3,
-                    name: 'Royal Silk Train',
-                    price: 32000,
-                    category: 'Bridal Couture',
-                    images: ['https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=800&h=1200&fit=crop'],
-                    visible: true,
-                    createdAt: Date.now() - 86400000
-                },
-                {
-                    id: 4,
-                    name: 'Champagne Elegance',
-                    price: 16000,
-                    category: 'Evening Wear',
-                    images: ['https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&h=1200&fit=crop'],
-                    visible: true,
-                    createdAt: Date.now() - 86400000
-                },
-                {
-                    id: 5,
-                    name: 'Pearl Embellished',
-                    price: 28500,
-                    category: 'Bridal Couture',
-                    images: ['https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=1200&fit=crop'],
-                    visible: true,
-                    createdAt: Date.now() - 86400000
-                },
-                {
-                    id: 6,
-                    name: 'Bespoke Creation',
-                    price: 35000,
-                    category: 'Custom Design',
-                    images: ['https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=800&h=1200&fit=crop'],
-                    visible: true,
-                    createdAt: Date.now() - 86400000
-                },
-                {
-                    id: 7,
-                    name: 'Golden Hour',
-                    price: 19500,
-                    category: 'Evening Wear',
-                    images: ['https://images.unsplash.com/photo-1591604021695-0c69b7c05981?w=800&h=1200&fit=crop'],
-                    visible: true,
-                    createdAt: Date.now() - 86400000
-                },
-                {
-                    id: 8,
-                    name: 'Cathedral Dreams',
-                    price: 30000,
-                    category: 'Bridal Couture',
-                    images: ['https://images.unsplash.com/photo-1596783074918-c84cb06531ca?w=800&h=1200&fit=crop'],
-                    visible: true,
-                    createdAt: Date.now() - 86400000
-                },
-                {
-                    id: 9,
-                    name: 'Couture Atelier',
-                    price: 40000,
-                    category: 'Custom Design',
-                    images: ['https://images.unsplash.com/photo-1624626699269-7a8a2d0f7d0e?w=800&h=1200&fit=crop'],
-                    visible: true,
-                    createdAt: Date.now() - 86400000
-                }
-            ];
-        }
+        // Use ONLY admin products - no fallback stock images
+        // If no admin products exist, collections will show empty message
         
         filteredProducts = [...allProducts];
         renderProducts();
@@ -120,8 +36,11 @@
         const items = productsGrid.querySelectorAll('.product-card');
         items.forEach(item => item.remove());
 
+        // Filter products with images only
+        const productsWithImages = filteredProducts.filter(p => p.images && p.images.length > 0 && p.images[0]);
+
         // If no products, show message
-        if (filteredProducts.length === 0) {
+        if (productsWithImages.length === 0) {
             const emptyMsg = document.createElement('div');
             emptyMsg.style.gridColumn = '1 / -1';
             emptyMsg.style.textAlign = 'center';
@@ -134,7 +53,7 @@
         // Paginate products
         const startIndex = 0;
         const endIndex = currentPage * itemsPerPage;
-        const productsToShow = filteredProducts.slice(startIndex, endIndex);
+        const productsToShow = productsWithImages.slice(startIndex, endIndex);
 
         // Render visible products
         productsToShow.forEach((product, index) => {
@@ -152,10 +71,8 @@
             productCard.dataset.category = filterCategory;
             productCard.dataset.date = product.createdAt || Date.now();
             
-            // Get first image or use placeholder
-            const productImage = product.images && product.images[0] 
-                ? product.images[0] 
-                : 'https://images.unsplash.com/photo-1594552072238-2d8e16ed7b2c?w=800&h=1200&fit=crop';
+            // Get first image
+            const productImage = product.images[0];
             
             console.log('[Collections] Product:', product.name, 'Images:', product.images, 'Using:', productImage);
             
@@ -185,7 +102,7 @@
 
         // Update load more button visibility
         if (loadMoreBtn) {
-            if (endIndex >= filteredProducts.length) {
+            if (endIndex >= productsWithImages.length) {
                 loadMoreBtn.innerHTML = '<span>All Gowns Loaded</span>';
                 loadMoreBtn.disabled = true;
                 loadMoreBtn.style.opacity = '0.5';

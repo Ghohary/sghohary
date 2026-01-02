@@ -2,113 +2,11 @@
 (function() {
     'use strict';
 
-    // Product database
-    const products = {
-        '1': {
-            id: '1',
-            name: 'Ethereal Lace',
-            price: 25000,
-            category: 'Bridal',
-            images: [
-                'https://images.unsplash.com/photo-1594552072238-2d8e16ed7b2c?w=1200&h=1600&fit=crop',
-                'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&h=1600&fit=crop',
-                'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=1200&h=1600&fit=crop',
-                'https://images.unsplash.com/photo-1591604021695-0c69b7c05981?w=1200&h=1600&fit=crop'
-            ],
-            description: 'A breathtaking masterpiece featuring delicate French lace overlay with hand-sewn pearl embellishments. This timeless gown combines classic elegance with modern sophistication, perfect for the bride who dreams of fairy-tale romance.',
-            sizes: ['XS', 'S', 'M', 'L', 'XL', 'Custom']
-        },
-        '2': {
-            id: '2',
-            name: 'Crystal Romance',
-            price: 28000,
-            category: 'Bridal',
-            images: [
-                'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&h=1600&fit=crop',
-                'https://images.unsplash.com/photo-1594552072238-2d8e16ed7b2c?w=1200&h=1600&fit=crop',
-                'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=1200&h=1600&fit=crop',
-                'https://images.unsplash.com/photo-1591604021695-0c69b7c05981?w=1200&h=1600&fit=crop'
-            ],
-            description: 'An enchanting bridal gown adorned with Swarovski crystals that catch and reflect light beautifully. Perfect for the modern bride seeking sparkle and glamour.',
-            sizes: ['XS', 'S', 'M', 'L', 'XL', 'Custom']
-        },
-        '3': {
-            id: '3',
-            name: 'Royal Silk Train',
-            price: 32000,
-            category: 'Bridal',
-            images: [
-                'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=1200&h=1600&fit=crop',
-                'https://images.unsplash.com/photo-1591604021695-0c69b7c05981?w=1200&h=1600&fit=crop',
-                'https://images.unsplash.com/photo-1594552072238-2d8e16ed7b2c?w=1200&h=1600&fit=crop',
-                'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&h=1600&fit=crop'
-            ],
-            description: 'A luxurious bridal masterpiece featuring flowing silk with an majestic train. This stunning gown exudes elegance and timeless beauty.',
-            sizes: ['XS', 'S', 'M', 'L', 'XL', 'Custom']
-        },
-        '4': {
-            id: '4',
-            name: 'Champagne Elegance',
-            price: 16000,
-            category: 'Evening',
-            images: [
-                'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=1200&h=1600&fit=crop',
-                'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=1200&h=1600&fit=crop',
-                'https://images.unsplash.com/photo-1591604021695-0c69b7c05981?w=1200&h=1600&fit=crop',
-                'https://images.unsplash.com/photo-1594552072238-2d8e16ed7b2c?w=1200&h=1600&fit=crop'
-            ],
-            description: 'An elegant evening gown in champagne tones with sophisticated draping. Perfect for formal occasions and special events.',
-            sizes: ['XS', 'S', 'M', 'L', 'XL', 'Custom']
-        },
-        '5': {
-            id: '5',
-            name: 'Pearl Embellished',
-            price: 28500,
-            category: 'Bridal',
-            images: [
-                'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&h=1600&fit=crop',
-                'https://images.unsplash.com/photo-1594552072238-2d8e16ed7b2c?w=1200&h=1600&fit=crop',
-                'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=1200&h=1600&fit=crop',
-                'https://images.unsplash.com/photo-1591604021695-0c69b7c05981?w=1200&h=1600&fit=crop'
-            ],
-            description: 'A stunning bridal gown with intricate pearl embellishments throughout. Each pearl is hand-sewn to create a shimmering, luxurious effect.',
-            sizes: ['XS', 'S', 'M', 'L', 'XL', 'Custom']
-        },
-        '6': {
-            id: '6',
-            name: 'Bespoke Creation',
-            price: 35000,
-            category: 'Custom',
-            images: [
-                'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=1200&h=1600&fit=crop',
-                'https://images.unsplash.com/photo-1594552072238-2d8e16ed7b2c?w=1200&h=1600&fit=crop',
-                'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=1200&h=1600&fit=crop',
-                'https://images.unsplash.com/photo-1591604021695-0c69b7c05981?w=1200&h=1600&fit=crop'
-            ],
-            description: 'Create your own custom haute couture gown. Our master designers will work with you to bring your vision to life with bespoke craftsmanship.',
-            sizes: ['Custom']
-        },
-        '7': {
-            id: '7',
-            name: 'Golden Hour',
-            price: 19500,
-            category: 'Evening',
-            images: [
-                'https://images.unsplash.com/photo-1591604021695-0c69b7c05981?w=1200&h=1600&fit=crop',
-                'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=1200&h=1600&fit=crop',
-                'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&h=1600&fit=crop',
-                'https://images.unsplash.com/photo-1594552072238-2d8e16ed7b2c?w=1200&h=1600&fit=crop'
-            ],
-            description: 'A breathtaking evening gown with golden accents. Perfect for sunset celebrations and evening affairs.',
-            sizes: ['XS', 'S', 'M', 'L', 'XL', 'Custom']
-        }
-    };
-
     // Get product ID from URL
     const urlParams = new URLSearchParams(window.location.search);
     const productIdParam = urlParams.get('id');
     
-    // ALWAYS prioritize admin products from localStorage
+    // Load admin products from localStorage only - no hardcoded fallback
     let product = null;
     const adminProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
     const visibleAdminProducts = adminProducts.filter(p => p.visible !== false);
@@ -119,7 +17,7 @@
         console.log('Admin product IDs:', visibleAdminProducts.map(p => p.id));
     }
     
-    // If there are admin products, use them exclusively
+    // Use ONLY admin products
     if (visibleAdminProducts.length > 0) {
         if (productIdParam) {
             // Try to find in admin products by ID (handle both string and numeric)
@@ -144,20 +42,15 @@
         // If still no product, use the first admin product
         if (!product) {
             product = visibleAdminProducts[0];
-            console.log('No specific product found, using first admin product:', product.name);
+            console.log('Using first admin product:', product.name);
         }
-    } else {
-        // Only use hardcoded products if NO admin products exist
-        if (productIdParam) {
-            product = products[productIdParam];
-            if (product) {
-                console.log('No admin products, using hardcoded product:', product.name);
-            }
-        }
-        
-        // Fallback to first hardcoded product
-        if (!product) {
-            product = products['1'];
+    }
+    
+    // If no admin products exist, show error
+    if (!product) {
+        document.body.innerHTML = '<div style="padding: 40px; text-align: center; font-family: sans-serif;"><h1>Product not found</h1><p>Please add products through the admin dashboard.</p><a href="collections.html">Back to Collections</a></div>';
+        return;
+    }
             console.log('No products found, using default product:', product?.name);
         }
     }
