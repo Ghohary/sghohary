@@ -15,7 +15,7 @@
 
     // ===== LOAD PRODUCTS FROM SERVER API =====
     function loadProducts() {
-        const API_URL = 'http://localhost:3001/api';
+        const API_URL = 'http://localhost:5000/api';
         
         // Try to fetch from server
         fetch(`${API_URL}/products`)
