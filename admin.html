@@ -373,18 +373,42 @@
         .btn-small {
             padding: clamp(12px, 2vh, 14px) clamp(20px, 3vw, 28px);
             font-size: clamp(11px, 1.6vw, 12px);
-            margin-right: clamp(12px, 2vw, 16px);
+            margin-right: clamp(8px, 1.5vw, 12px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             background: #1A1A1A;
             color: #FFFFFF;
             border: none;
             cursor: pointer;
             display: inline-block;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            transition: all 0.2s ease;
         }
 
         .btn-small:hover {
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
             background: #000000;
+            transform: translateY(-1px);
+        }
+
+        .edit-btn {
+            background: var(--gold);
+            color: #1A1A1A;
+        }
+
+        .edit-btn:hover {
+            background: #E5C158;
+            color: #1A1A1A;
+        }
+
+        .delete-btn {
+            background: #DC2626;
+            color: #FFFFFF;
+        }
+
+        .delete-btn:hover {
+            background: #B91C1C;
         }
 
         /* Premium Tables */
@@ -1078,6 +1102,7 @@
                         <span class="visibility-icon" data-product-id="${p.id}" title="Click to toggle visibility" style="cursor: pointer; padding: 8px; display: inline-block; color: var(--text-dark);">${visibilityIcon}</span>
                     </td>
                     <td>
+                        <button class="btn-small edit-btn" data-product-id="${p.id}">Edit</button>
                         <button class="btn-small delete-btn" data-product-id="${p.id}">Delete</button>
                     </td>
                 </tr>
@@ -1104,6 +1129,16 @@
                     }
                 });
             });
+
+            // Attach event listeners to edit buttons
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const productId = parseInt(this.getAttribute('data-product-id'));
+                    editProduct(productId);
+                });
+            });
         }
 
         function toggleProductVisibility(productId) {
@@ -1113,6 +1148,61 @@
                 localStorage.setItem('ghoharyProducts', JSON.stringify(products));
                 renderProductsTable();
             }
+        }
+
+        function editProduct(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            // Populate form with product data
+            document.getElementById('productName').value = product.name;
+            document.getElementById('productCategory').value = product.category;
+            document.getElementById('productSku').value = product.sku || '';
+            document.getElementById('productPrice').value = product.price === 'Price Upon Request' ? '' : product.price;
+            document.getElementById('productDescription').value = product.description || '';
+            document.getElementById('productColors').value = product.colors ? product.colors.join(', ') : '';
+
+            // Set selected sizes and inventory
+            document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('active'));
+            if (product.sizes && product.sizes.length > 0) {
+                product.sizes.forEach(sizeObj => {
+                    const btn = document.querySelector(`.size-btn[data-size="${sizeObj.size}"]`);
+                    if (btn) {
+                        btn.classList.add('active');
+                        // Store inventory for later
+                        btn.dataset.inventory = sizeObj.inventory;
+                    }
+                });
+                updateSelectedSizesDisplay();
+                
+                // Update inventory inputs with existing values
+                setTimeout(() => {
+                    product.sizes.forEach(sizeObj => {
+                        const input = document.getElementById(`inventory-${sizeObj.size}`);
+                        if (input) {
+                            input.value = sizeObj.inventory;
+                        }
+                    });
+                }, 100);
+            }
+
+            // Clear images and store product ID for update
+            imageFiles = [];
+            imagePreviewContainer.innerHTML = '';
+            document.getElementById('imagePreview').innerHTML = '';
+            document.getElementById('productImages').value = '';
+            
+            // Store the product ID being edited
+            document.getElementById('productForm').dataset.editingProductId = productId;
+
+            // Scroll to form
+            document.getElementById('productForm').scrollIntoView({ behavior: 'smooth' });
+            
+            // Change submit button text
+            const submitBtn = document.querySelector('#productForm button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Update Product';
+            submitBtn.dataset.originalText = originalText;
         }
 
         function deleteProductNow(productId) {
@@ -1198,39 +1288,71 @@
                 };
             });
 
-            // Create product object (WITHOUT storing images as base64)
-            const product = {
-                id: Date.now(),
-                name: name,
-                sku: document.getElementById('productSku').value || '',
-                category: category,
-                price: document.getElementById('productPrice').value || 'Price Upon Request',
-                description: document.getElementById('productDescription').value,
-                sizes: sizes,
-                colors: document.getElementById('productColors').value.split(',').filter(c => c.trim()).map(c => c.trim()),
-                imageCount: document.querySelectorAll('.image-preview-item').length,
-                images: [], // We won't store actual image data
-                visible: true,
-                createdAt: new Date().toISOString()
-            };
+            // Check if we're editing or adding
+            const editingProductId = document.getElementById('productForm').dataset.editingProductId;
+            const isEditing = editingProductId && editingProductId !== 'undefined';
 
             try {
                 // Get existing products from localStorage
-                const existingProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
+                let existingProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
                 
-                // Add new product
-                existingProducts.push(product);
+                if (isEditing) {
+                    // Update existing product
+                    const productIndex = existingProducts.findIndex(p => p.id === parseInt(editingProductId));
+                    if (productIndex !== -1) {
+                        const existingProduct = existingProducts[productIndex];
+                        existingProducts[productIndex] = {
+                            ...existingProduct,
+                            name: name,
+                            sku: document.getElementById('productSku').value || '',
+                            category: category,
+                            price: document.getElementById('productPrice').value || 'Price Upon Request',
+                            description: document.getElementById('productDescription').value,
+                            sizes: sizes,
+                            colors: document.getElementById('productColors').value.split(',').filter(c => c.trim()).map(c => c.trim()),
+                            imageCount: document.querySelectorAll('.image-preview-item').length
+                        };
+                        showAlert('Product updated successfully!', 'success');
+                    }
+                } else {
+                    // Create and add new product
+                    const product = {
+                        id: Date.now(),
+                        name: name,
+                        sku: document.getElementById('productSku').value || '',
+                        category: category,
+                        price: document.getElementById('productPrice').value || 'Price Upon Request',
+                        description: document.getElementById('productDescription').value,
+                        sizes: sizes,
+                        colors: document.getElementById('productColors').value.split(',').filter(c => c.trim()).map(c => c.trim()),
+                        imageCount: document.querySelectorAll('.image-preview-item').length,
+                        images: [], // We won't store actual image data
+                        visible: true,
+                        createdAt: new Date().toISOString()
+                    };
+                    
+                    existingProducts.push(product);
+                    showAlert('Product added successfully!', 'success');
+                }
                 
                 // Save to localStorage
                 localStorage.setItem('ghoharyProducts', JSON.stringify(existingProducts));
                 
-                showAlert('Product added successfully!', 'success');
+                // Reset form
                 document.getElementById('productForm').reset();
+                document.getElementById('productForm').dataset.editingProductId = '';
                 document.getElementById('imagePreview').innerHTML = '';
                 document.getElementById('selectedSizes').textContent = 'Selected: None';
                 document.getElementById('inventorySection').style.display = 'none';
                 document.getElementById('inventoryGrid').innerHTML = '';
                 document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('active'));
+                imageFiles = [];
+                
+                // Reset button text
+                const submitBtn = document.querySelector('#productForm button[type="submit"]');
+                if (submitBtn.dataset.originalText) {
+                    submitBtn.textContent = submitBtn.dataset.originalText;
+                }
                 
                 loadProducts();
             } catch (error) {
