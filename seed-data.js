@@ -1,5 +1,5 @@
 // Seed data - initializes with empty products on first visit
-// Users can add their own products through the admin panel
+// Only your own products will show in collections
 window.SEED_PRODUCTS = [];
 
 // Initialize products on first visit only
