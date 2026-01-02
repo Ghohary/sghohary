@@ -1149,7 +1149,33 @@
         async function loadProducts() {
             try {
                 // Load products from localStorage
-                products = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
+                let products = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
+                
+                // MIGRATION: Clean up old base64 images and convert to URLs
+                let needsUpdate = false;
+                products = products.map(p => {
+                    if (p.images && p.images.length > 0) {
+                        // Check if any image is a base64 data URI (starts with 'data:')
+                        const hasBase64 = p.images.some(img => typeof img === 'string' && img.startsWith('data:'));
+                        if (hasBase64) {
+                            // Replace base64 images with placeholder URLs
+                            p.images = p.images.map((img, idx) => 
+                                typeof img === 'string' && img.startsWith('data:') 
+                                    ? `https://placeholder.com/image?w=1200&h=1600&text=Image${idx + 1}`
+                                    : img
+                            );
+                            needsUpdate = true;
+                        }
+                    }
+                    return p;
+                });
+                
+                // Save migrated data if needed
+                if (needsUpdate) {
+                    localStorage.setItem('ghoharyProducts', JSON.stringify(products));
+                }
+                
+                products = products;
                 
                 document.getElementById('totalProducts').textContent = products.length;
                 
