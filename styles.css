@@ -1,62 +1,59 @@
-/* GHOHARY Haute Couture - Dior Luxury Aesthetic */
-/* Deep Burgundy, Black, Silver & Cream Color Palette */
+/* GHOHARY Haute Couture - Luxury Warm Aesthetic */
+/* Warm Brown, Gold & Beige Color Palette */
 
 :root {
-    /* Dior Color Palette - Deep, Sophisticated Luxury */
+    /* Luxury Warm Palette - Brown, Gold & Beige */
     
     /* Core Colors */
     --white: #FFFFFF;                   /* Pure white */
-    --black: #0A0A0A;                   /* Dior black - nearly pure */
-    --gray-50: #F8F7F6;                 /* Cream off-white */
-    --gray-100: #F0EEEC;                /* Light cream */
-    --gray-200: #E8E5E0;                /* Warm beige */
-    --gray-300: #D9D4CD;                /* Soft taupe */
-    --gray-400: #C4BCB3;                /* Medium taupe */
-    --gray-500: #A89A8F;                /* Muted taupe */
-    --gray-600: #8B7F75;                /* Dark taupe */
-    --gray-700: #5A5450;                /* Dark brown */
-    --gray-800: #3D3936;                /* Very dark brown */
-    --gray-900: #1F1D1B;                /* Almost black */
+    --black: #0A0A0A;                   /* Deep black */
+    --gray-50: #FAF8F5;                 /* Warm cream off-white */
+    --gray-100: #F5F2EE;                /* Light warm cream */
+    --gray-200: #EFE9E3;                /* Warm beige */
+    --gray-300: #E5DDD3;                /* Soft taupe */
+    --gray-400: #D4C9B8;                /* Medium taupe */
+    --gray-500: #BEA89F;                /* Muted taupe */
+    --gray-600: #9D8B7E;                /* Warm medium brown */
+    --gray-700: #6B5D52;                /* Dark warm brown */
+    --gray-800: #4A3E35;                /* Very dark brown */
+    --gray-900: #2A1F18;                /* Deep chocolate brown */
     
-    /* Dior Signature Colors */
-    --gold: #D4AF37;                    /* Classic Dior gold */
+    /* Luxury Brown, Gold & Beige Signature Colors */
+    --gold: #C9A55D;                    /* Warm champagne gold */
     --gold-light: #E8D4B8;              /* Light gold accent */
-    --gold-bright: #C9A55D;             /* Warm gold */
-    --gold-dark: #8B6F47;               /* Dark gold */
-    --gold-accent: #A0826D;             /* Muted gold */
-    --burgundy: #6B1C2C;                /* Deep Dior burgundy */
-    --burgundy-light: #9B4654;          /* Medium burgundy */
-    --burgundy-dark: #3D0F1B;           /* Dark burgundy */
+    --gold-bright: #D4B896;             /* Warm honey gold */
+    --gold-dark: #9D7E4A;               /* Dark mustard gold */
+    --gold-accent: #B8956A;             /* Muted warm gold */
+    --brown: #6B5443;                   /* Warm medium brown (primary) */
+    --brown-light: #8B7355;             /* Light warm brown */
+    --brown-dark: #3A2D25;              /* Deep chocolate brown */
+    --brown-accent: #5F4C42;            /* Dark warm accent */
     --beige: #D4C5B9;                   /* Warm beige */
-    --beige-light: #E8DFDA;             /* Light beige */
-    --beige-dark: #B8A89F;              /* Dark beige */
-    --cream: #FBF9F7;                   /* Luxury cream */
+    --beige-light: #EAE0D9;             /* Light beige */
+    --beige-dark: #B8A895;              /* Dark beige */
+    --cream: #FAF8F5;                   /* Luxury warm cream */
     --ivory: #F5F2EE;                   /* Ivory tone */
     --pearl: #F8F5F2;                   /* Pearl white */
     --champagne: #F0EBE5;               /* Champagne */
-    --brown: #4A3F38;                   /* Rich brown */
-    --brown-dark: #2D2420;              /* Deep brown */
-    --brown-light: #7A6F66;             /* Light brown */
-    --brown-accent: #5F5550;            /* Warm brown accent */
-    --rose-gold: #9B7B6F;               /* Rose gold tone */
-    --copper: #8B6F47;                  /* Copper tone */
-    --bronze: #6B5D52;                  /* Bronze tone */
-    --bronze-dark: #453C35;             /* Dark bronze */
+    --rose-gold: #B8956A;               /* Rose gold tone */
+    --copper: #9D7E4A;                  /* Copper tone */
+    --bronze: #7A6B5E;                  /* Bronze tone */
+    --bronze-dark: #4A3E35;             /* Dark bronze */
     --silver: #C0C0C0;                  /* Silver accent */
     --silver-light: #E8E8E8;            /* Light silver */
     
-    /* Text Hierarchy - Dior Aesthetic */
-    --text-dark: #1F1D1B;               /* Deep text */
-    --text-mid: #5A5450;                /* Medium text */
-    --text-light: #8B7F75;              /* Light text */
-    --text-muted: #A89A8F;              /* Muted text */
+    /* Text Hierarchy - Warm Aesthetic */
+    --text-dark: #2A1F18;               /* Deep chocolate text */
+    --text-mid: #6B5D52;                /* Warm brown text */
+    --text-light: #9D8B7E;              /* Light warm text */
+    --text-muted: #B8A895;              /* Muted warm text */
     
-    /* Shadows - Premium Burgundy & Black */
-    --shadow-soft: 0 2px 8px rgba(107, 28, 44, 0.06);
-    --shadow-medium: 0 6px 20px rgba(107, 28, 44, 0.12);
-    --shadow-gold: 0 8px 32px rgba(212, 175, 55, 0.15);
-    --shadow-luxury: 0 16px 48px rgba(31, 29, 27, 0.15), 0 6px 20px rgba(107, 28, 44, 0.08);
-    --shadow-elevation: 0 20px 60px rgba(31, 29, 27, 0.2);
+    /* Shadows - Premium Brown & Gold */
+    --shadow-soft: 0 2px 8px rgba(107, 84, 67, 0.08);
+    --shadow-medium: 0 6px 20px rgba(107, 84, 67, 0.15);
+    --shadow-gold: 0 8px 32px rgba(201, 165, 93, 0.2);
+    --shadow-luxury: 0 16px 48px rgba(42, 31, 24, 0.15), 0 6px 20px rgba(107, 84, 67, 0.1);
+    --shadow-elevation: 0 20px 60px rgba(42, 31, 24, 0.2);
     
     /* Spacing System - Fluid Responsive */
     --spacing-xs: clamp(8px, 1.5vw + 3px, 12px);
@@ -1386,10 +1383,10 @@ nav {
     bottom: 32px;
     right: 32px;
     background: rgba(251, 249, 247, 0.95);
-    border: 2px solid var(--burgundy);
+    border: 2px solid var(--brown);
     padding: 16px;
     cursor: pointer;
-    box-shadow: 0 10px 40px rgba(107, 28, 44, 0.2);
+    box-shadow: 0 10px 40px rgba(107, 84, 67, 0.2);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     align-items: center;
@@ -1399,9 +1396,9 @@ nav {
 }
 
 .zoom-btn:hover {
-    background: var(--burgundy);
+    background: var(--brown);
     transform: translateY(-3px);
-    box-shadow: 0 15px 50px rgba(107, 28, 44, 0.35);
+    box-shadow: 0 15px 50px rgba(107, 84, 67, 0.35);
 }
 
 .zoom-btn:hover svg {
@@ -1409,7 +1406,7 @@ nav {
 }
 
 .zoom-btn svg {
-    stroke: var(--burgundy);
+    stroke: var(--brown);
     transition: stroke 0.3s ease;
     stroke-width: 1.5;
 }
@@ -1490,15 +1487,15 @@ nav {
 .thumbnail.active,
 .thumbnail:hover {
     opacity: 1;
-    border-color: var(--burgundy);
-    box-shadow: 0 8px 28px rgba(107, 28, 44, 0.3);
+    border-color: var(--brown);
+    box-shadow: 0 8px 28px rgba(107, 84, 67, 0.3);
     transform: scale(1.02);
 }
 
 .product-badge-detail {
     display: inline-block;
     background: transparent;
-    color: var(--burgundy);
+    color: var(--brown);
     padding: 0;
     font-size: 8px;
     font-weight: 700;
@@ -1912,13 +1909,13 @@ nav {
     top: 7px;
     width: 20px;
     height: 20px;
-    background: var(--burgundy);
+    background: var(--gold);
     border-radius: 50%;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FFFFFF' stroke-width='3'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
     background-size: 12px;
     background-repeat: no-repeat;
     background-position: center;
-    box-shadow: 0 4px 12px rgba(107, 28, 44, 0.3);
+    box-shadow: 0 4px 12px rgba(201, 165, 93, 0.4);
 }
 
 .product-options {
@@ -2054,7 +2051,7 @@ nav {
     padding: 10px 20px;
     font-size: 10px;
     background: var(--white);
-    border: 2px solid rgba(107, 28, 44, 0.3);
+    border: 2px solid rgba(107, 84, 67, 0.3);
     color: var(--text-dark);
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -2100,7 +2097,7 @@ nav {
     content: '';
     position: absolute;
     inset: 0;
-    background: var(--burgundy);
+    background: var(--brown);
     opacity: 0;
     transition: opacity 0.3s ease;
     border-radius: 0;
@@ -2109,17 +2106,17 @@ nav {
 
 .size-btn.selected,
 .size-btn:hover {
-    border-color: var(--burgundy);
+    border-color: var(--brown);
     color: var(--cream);
-    box-shadow: 0 8px 28px rgba(107, 28, 44, 0.4);
+    box-shadow: 0 8px 28px rgba(107, 84, 67, 0.4);
     transform: translateY(-3px);
 }
 
 .size-btn.selected {
-    background: var(--burgundy);
-    border-color: var(--burgundy);
+    background: var(--brown);
+    border-color: var(--brown);
     color: var(--cream);
-    box-shadow: 0 8px 28px rgba(107, 28, 44, 0.5), inset 0 0 0 1px rgba(212, 175, 55, 0.15);
+    box-shadow: 0 8px 28px rgba(107, 84, 67, 0.5), inset 0 0 0 1px rgba(201, 165, 93, 0.15);
 }
 
 .inventory-status {
@@ -2206,14 +2203,14 @@ nav {
     left: 0;
     width: 100%;
     height: 2px;
-    background: linear-gradient(90deg, var(--burgundy), transparent);
+    background: linear-gradient(90deg, var(--gold), transparent);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .size-guide-link:hover {
-    color: var(--burgundy-dark);
+    color: var(--brown-dark);
 }
 
 .size-guide-link:hover::after {
@@ -2279,7 +2276,7 @@ nav {
 
 .product-meta {
     padding-top: 12px;
-    border-top: 1px solid rgba(107, 28, 44, 0.12);
+    border-top: 1px solid rgba(107, 84, 67, 0.12);
     margin-top: 16px;
     font-size: 10px;
     color: var(--text-mid);
@@ -2340,7 +2337,7 @@ nav {
     padding: 18px 0;
     font-size: 13px;
     color: var(--text-light);
-    border-bottom: 1px solid rgba(107, 28, 44, 0.08);
+    border-bottom: 1px solid rgba(107, 84, 67, 0.08);
     letter-spacing: 0.3px;
 }
 
@@ -2349,7 +2346,7 @@ nav {
 }
 
 .meta-item svg {
-    stroke: var(--burgundy);
+    stroke: var(--brown);
     flex-shrink: 0;
     width: 24px;
     height: 24px;
