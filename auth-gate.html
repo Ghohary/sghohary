@@ -16,16 +16,19 @@
             background: #FFFFFF;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: stretch;
             justify-content: flex-start;
             min-height: 100vh;
-            padding: clamp(20px, 4vw, 40px);
+            padding: 0;
+            margin: 0;
+            width: 100%;
         }
 
         .auth-container {
             width: 100%;
             max-width: 450px;
-            margin-top: clamp(40px, 8vh, 80px);
+            margin: clamp(40px, 8vh, 80px) auto 0;
+            padding: 0 clamp(20px, 4vw, 40px);
         }
 
         .auth-header {
@@ -233,7 +236,7 @@
 
         @media (min-width: 768px) {
             body {
-                justify-content: center;
+                justify-content: flex-start;
                 padding: clamp(20px, 4vw, 60px);
             }
 
