@@ -832,15 +832,18 @@
         // Load products
         async function loadProducts() {
             try {
-                const response = await fetch(`${API_BASE}/products?limit=100`);
-                const data = await response.json();
-                products = data.products;
+                // Load products from localStorage
+                products = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
                 
-                document.getElementById('totalProducts').textContent = data.pagination.total;
+                document.getElementById('totalProducts').textContent = products.length;
                 
                 let totalStock = 0;
                 products.forEach(p => {
-                    totalStock += p.totalInventory || 0;
+                    if (p.sizes) {
+                        p.sizes.forEach(s => {
+                            totalStock += s.inventory || 0;
+                        });
+                    }
                 });
                 document.getElementById('totalInventory').textContent = totalStock;
 
@@ -853,19 +856,36 @@
         // Render products table
         function renderProductsTable() {
             const tbody = document.getElementById('productsTable');
-            tbody.innerHTML = products.map(p => `
+            if (products.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #999;">No products added yet</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = products.map(p => {
+                const totalInventory = p.sizes ? p.sizes.reduce((sum, s) => sum + (s.inventory || 0), 0) : 0;
+                const priceDisplay = p.price === 'Price Upon Request' ? 'Price Upon Request' : `AED ${Number(p.price).toLocaleString()}`;
+                
+                return `
                 <tr>
-                    <td>${p.sku}</td>
+                    <td>${p.sku || '-'}</td>
                     <td>${p.name}</td>
                     <td>${p.category}</td>
-                    <td>AED ${p.price.toLocaleString()}</td>
-                    <td><span class="status-badge ${p.totalInventory > 0 ? 'status-available' : 'status-out-of-stock'}">${p.totalInventory} items</span></td>
+                    <td>${priceDisplay}</td>
+                    <td><span class="status-badge ${totalInventory > 0 ? 'status-available' : 'status-out-of-stock'}">${totalInventory} items</span></td>
                     <td>
-                        <button class="btn-small" onclick="editProduct('${p._id}')">Edit</button>
-                        <button class="btn-small" onclick="deleteProduct('${p._id}')">Delete</button>
+                        <button class="btn-small" onclick="deleteProduct(${p.id})">Delete</button>
                     </td>
                 </tr>
-            `).join('');
+            `}).join('');
+        }
+
+        function deleteProduct(productId) {
+            if (confirm('Are you sure you want to delete this product?')) {
+                products = products.filter(p => p.id !== productId);
+                localStorage.setItem('ghoharyProducts', JSON.stringify(products));
+                renderProductsTable();
+                showAlert('Product deleted successfully', 'success');
+            }
         }
 
         // Load orders
@@ -914,46 +934,71 @@
         async function handleAddProduct(e) {
             e.preventDefault();
 
-            const formData = new FormData();
-            formData.append('name', document.getElementById('productName').value);
-            formData.append('sku', document.getElementById('productSku').value);
-            formData.append('category', document.getElementById('productCategory').value);
+            // Validate form
+            const name = document.getElementById('productName').value;
+            const category = document.getElementById('productCategory').value;
             
-            const priceValue = document.getElementById('productPrice').value;
-            formData.append('price', priceValue || 'Price Upon Request');
-            
-            formData.append('description', document.getElementById('productDescription').value);
-            
-            // Get selected sizes from active buttons
-            const selectedSizeBtns = document.querySelectorAll('.size-btn.active');
-            const sizes = Array.from(selectedSizeBtns).map(btn => btn.getAttribute('data-size'));
-            formData.append('sizes', JSON.stringify(sizes.map(s => ({ size: s, inventory: 0 }))));
-            
-            const colors = document.getElementById('productColors').value.split(',').filter(c => c.trim());
-            formData.append('colors', JSON.stringify(colors.map(c => c.trim())));
+            if (!name || !category) {
+                showAlert('Please fill in all required fields', 'error');
+                return;
+            }
 
-            // Get files in order from preview
+            const selectedSizeBtns = document.querySelectorAll('.size-btn.active');
+            if (selectedSizeBtns.length === 0) {
+                showAlert('Please select at least one size', 'error');
+                return;
+            }
+
+            // Create product object
+            const product = {
+                id: Date.now(),
+                name: name,
+                sku: document.getElementById('productSku').value || '',
+                category: category,
+                price: document.getElementById('productPrice').value || 'Price Upon Request',
+                description: document.getElementById('productDescription').value,
+                sizes: Array.from(selectedSizeBtns).map(btn => ({
+                    size: btn.getAttribute('data-size'),
+                    inventory: 0
+                })),
+                colors: document.getElementById('productColors').value.split(',').filter(c => c.trim()).map(c => c.trim()),
+                images: [],
+                createdAt: new Date().toISOString()
+            };
+
+            // Handle images (store as base64 or file paths)
             const imageItems = document.querySelectorAll('.image-preview-item');
-            imageItems.forEach((item, index) => {
+            for (let item of imageItems) {
                 if (item.file) {
-                    formData.append('images', item.file);
+                    const reader = new FileReader();
+                    const imagePromise = new Promise((resolve) => {
+                        reader.onload = function(e) {
+                            resolve(e.target.result);
+                        };
+                        reader.readAsDataURL(item.file);
+                    });
+                    const imageData = await imagePromise;
+                    product.images.push(imageData);
                 }
-            });
+            }
 
             try {
-                const response = await fetch(`${API_BASE}/admin/products`, {
-                    method: 'POST',
-                    headers: { 'Authorization': `Bearer ${authToken}` },
-                    body: formData
-                });
-
-                if (response.ok) {
-                    showAlert('Product added successfully!');
-                    document.getElementById('productForm').reset();
-                    loadProducts();
-                } else {
-                    showAlert('Error adding product', 'error');
-                }
+                // Get existing products from localStorage
+                const existingProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
+                
+                // Add new product
+                existingProducts.push(product);
+                
+                // Save to localStorage
+                localStorage.setItem('ghoharyProducts', JSON.stringify(existingProducts));
+                
+                showAlert('Product added successfully!', 'success');
+                document.getElementById('productForm').reset();
+                document.getElementById('imagePreview').innerHTML = '';
+                document.getElementById('selectedSizes').textContent = 'Selected: None';
+                document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('active'));
+                
+                loadProducts();
             } catch (error) {
                 showAlert('Error: ' + error.message, 'error');
             }
