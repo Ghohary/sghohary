@@ -477,6 +477,127 @@
             color: #991B1B;
         }
 
+        /* Size Selector */
+        .size-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: clamp(12px, 2vw, 16px);
+            margin-bottom: clamp(20px, 3vh, 28px);
+        }
+
+        .size-btn {
+            padding: clamp(12px, 2vh, 16px) clamp(16px, 3vw, 20px);
+            border: 2px solid rgba(0, 0, 0, 0.12);
+            background: #FAFAFA;
+            color: #1A1A1A;
+            border-radius: 0;
+            cursor: pointer;
+            font-size: clamp(12px, 1.8vw, 14px);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.3s ease;
+        }
+
+        .size-btn:hover {
+            border-color: #1A1A1A;
+            background: #FFFFFF;
+        }
+
+        .size-btn.active {
+            background: #1A1A1A;
+            color: #FFFFFF;
+            border-color: #1A1A1A;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .size-btn.universal.active {
+            background: #5C4B4B;
+            border-color: #5C4B4B;
+        }
+
+        .selected-sizes-display {
+            padding: clamp(12px, 2vh, 16px);
+            background: #F0F0F0;
+            border-left: 4px solid #1A1A1A;
+            font-size: clamp(12px, 1.8vw, 14px);
+            color: #333333;
+            margin-top: clamp(12px, 2vh, 16px);
+        }
+
+        /* Image Preview Container */
+        .image-preview-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: clamp(12px, 2vw, 16px);
+            margin-top: clamp(16px, 3vh, 20px);
+        }
+
+        .image-preview-item {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1;
+            background: #F5F5F5;
+            border: 2px dashed rgba(0, 0, 0, 0.1);
+            border-radius: 0;
+            overflow: hidden;
+            cursor: grab;
+            transition: all 0.3s ease;
+        }
+
+        .image-preview-item:hover {
+            border-color: rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-preview-item.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+        }
+
+        .image-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-preview-controls {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: clamp(8px, 1.5vw, 12px);
+        }
+
+        .image-preview-item:hover .image-preview-controls {
+            display: flex;
+        }
+
+        .image-preview-btn {
+            padding: 6px 12px;
+            background: #1A1A1A;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 0;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.3s ease;
+        }
+
+        .image-preview-btn:hover {
+            background: #FFFFFF;
+            color: #1A1A1A;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .container {
@@ -562,18 +683,33 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Description</label>
+                    <label>Description (Optional)</label>
                     <textarea id="productDescription"></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label>Product Images (up to 5)</label>
+                    <label>Product Images (up to 5) - Drag to Reorder</label>
                     <input type="file" id="productImages" accept="image/*" multiple>
+                    <div id="imagePreview" class="image-preview-container"></div>
                 </div>
 
                 <div class="form-group">
-                    <label>Sizes (comma separated, e.g., XS,S,M,L)</label>
-                    <input type="text" id="productSizes" placeholder="XS,S,M,L">
+                    <label>Available Sizes</label>
+                    <div id="sizeSelector" class="size-selector">
+                        <button type="button" class="size-btn" data-size="32">32</button>
+                        <button type="button" class="size-btn" data-size="34">34</button>
+                        <button type="button" class="size-btn" data-size="36">36</button>
+                        <button type="button" class="size-btn" data-size="38">38</button>
+                        <button type="button" class="size-btn" data-size="40">40</button>
+                        <button type="button" class="size-btn" data-size="42">42</button>
+                        <button type="button" class="size-btn" data-size="44">44</button>
+                        <button type="button" class="size-btn" data-size="46">46</button>
+                        <button type="button" class="size-btn" data-size="48">48</button>
+                        <button type="button" class="size-btn" data-size="50">50</button>
+                        <button type="button" class="size-btn" data-size="52">52</button>
+                        <button type="button" class="size-btn universal" data-size="Universal">Universal</button>
+                    </div>
+                    <div id="selectedSizes" class="selected-sizes-display">Selected: None</div>
                 </div>
 
                 <div class="form-group">
@@ -788,16 +924,21 @@
             
             formData.append('description', document.getElementById('productDescription').value);
             
-            const sizes = document.getElementById('productSizes').value.split(',').filter(s => s.trim());
-            formData.append('sizes', JSON.stringify(sizes.map(s => ({ size: s.trim(), inventory: 0 }))));
+            // Get selected sizes from active buttons
+            const selectedSizeBtns = document.querySelectorAll('.size-btn.active');
+            const sizes = Array.from(selectedSizeBtns).map(btn => btn.getAttribute('data-size'));
+            formData.append('sizes', JSON.stringify(sizes.map(s => ({ size: s, inventory: 0 }))));
             
             const colors = document.getElementById('productColors').value.split(',').filter(c => c.trim());
             formData.append('colors', JSON.stringify(colors.map(c => c.trim())));
 
-            const files = document.getElementById('productImages').files;
-            for (let file of files) {
-                formData.append('images', file);
-            }
+            // Get files in order from preview
+            const imageItems = document.querySelectorAll('.image-preview-item');
+            imageItems.forEach((item, index) => {
+                if (item.file) {
+                    formData.append('images', item.file);
+                }
+            });
 
             try {
                 const response = await fetch(`${API_BASE}/admin/products`, {
@@ -896,6 +1037,113 @@
                 loadProducts();
             }
         };
+
+        // Size Button Selection
+        document.querySelectorAll('.size-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                this.classList.toggle('active');
+                updateSelectedSizesDisplay();
+            });
+        });
+
+        function updateSelectedSizesDisplay() {
+            const selectedBtns = document.querySelectorAll('.size-btn.active');
+            const selectedSizes = Array.from(selectedBtns).map(btn => btn.getAttribute('data-size')).join(', ');
+            const display = document.getElementById('selectedSizes');
+            display.textContent = selectedSizes ? `Selected: ${selectedSizes}` : 'Selected: None';
+        }
+
+        // Image Preview and Reordering
+        const productImagesInput = document.getElementById('productImages');
+        const imagePreviewContainer = document.getElementById('imagePreview');
+        let imageFiles = [];
+
+        productImagesInput.addEventListener('change', function(e) {
+            imageFiles = Array.from(this.files);
+            renderImagePreview();
+        });
+
+        function renderImagePreview() {
+            imagePreviewContainer.innerHTML = '';
+            
+            imageFiles.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const item = document.createElement('div');
+                    item.className = 'image-preview-item';
+                    item.draggable = true;
+                    item.dataset.index = index;
+                    item.file = file;
+                    
+                    item.innerHTML = `
+                        <img src="${e.target.result}" alt="Preview">
+                        <div class="image-preview-controls">
+                            <button type="button" class="image-preview-btn move-up" ${index === 0 ? 'disabled' : ''}>↑ Up</button>
+                            <button type="button" class="image-preview-btn move-down" ${index === imageFiles.length - 1 ? 'disabled' : ''}>↓ Down</button>
+                            <button type="button" class="image-preview-btn remove">Remove</button>
+                        </div>
+                    `;
+
+                    item.querySelector('.move-up').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        if (index > 0) {
+                            [imageFiles[index - 1], imageFiles[index]] = [imageFiles[index], imageFiles[index - 1]];
+                            renderImagePreview();
+                        }
+                    });
+
+                    item.querySelector('.move-down').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        if (index < imageFiles.length - 1) {
+                            [imageFiles[index], imageFiles[index + 1]] = [imageFiles[index + 1], imageFiles[index]];
+                            renderImagePreview();
+                        }
+                    });
+
+                    item.querySelector('.remove').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        imageFiles.splice(index, 1);
+                        renderImagePreview();
+                    });
+
+                    item.addEventListener('dragstart', handleDragStart);
+                    item.addEventListener('dragover', handleDragOver);
+                    item.addEventListener('drop', handleDrop);
+                    item.addEventListener('dragend', handleDragEnd);
+
+                    imagePreviewContainer.appendChild(item);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        let draggedItem = null;
+
+        function handleDragStart(e) {
+            draggedItem = this;
+            this.classList.add('dragging');
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            if (draggedItem !== this) {
+                const allItems = Array.from(imagePreviewContainer.children);
+                const draggedIndex = allItems.indexOf(draggedItem);
+                const targetIndex = allItems.indexOf(this);
+                
+                [imageFiles[draggedIndex], imageFiles[targetIndex]] = [imageFiles[targetIndex], imageFiles[draggedIndex]];
+                renderImagePreview();
+            }
+        }
+
+        function handleDragEnd(e) {
+            this.classList.remove('dragging');
+        }
     </script>
 </body>
 </html>
