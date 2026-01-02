@@ -542,6 +542,51 @@
             border: 1px solid rgba(212, 175, 55, 0.15);
         }
 
+        .image-preview-wrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: clamp(12px, 2vw, 16px);
+            margin-top: clamp(20px, 4vh, 28px);
+        }
+
+        .image-preview-nav {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(8px, 1.5vw, 12px);
+        }
+
+        .image-nav-btn {
+            padding: 10px 12px;
+            background: var(--gold);
+            color: #1A1A1A;
+            border: none;
+            border-radius: 0;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-nav-btn:hover {
+            background: #FFFFFF;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .image-nav-btn:active {
+            transform: scale(0.95);
+        }
+
+        .image-nav-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
         .image-preview-item {
             position: relative;
             width: 100%;
@@ -559,6 +604,12 @@
             border-color: var(--gold);
             box-shadow: 0 8px 20px rgba(212, 175, 55, 0.25);
             transform: translateY(-2px);
+        }
+
+        .image-preview-item.selected {
+            border: 3px solid var(--gold);
+            box-shadow: 0 8px 24px rgba(212, 175, 55, 0.35);
+            background: rgba(212, 175, 55, 0.05);
         }
 
         .image-preview-item.dragging {
@@ -760,7 +811,13 @@
                 <div class="form-group">
                     <label>Product Images (up to 5) - Drag to Reorder</label>
                     <input type="file" id="productImages" accept="image/*" multiple>
-                    <div id="imagePreview" class="image-preview-container"></div>
+                    <div class="image-preview-wrapper">
+                        <div class="image-preview-nav">
+                            <button type="button" class="image-nav-btn" id="moveImageLeft" title="Move selected image left">←</button>
+                            <button type="button" class="image-nav-btn" id="moveImageRight" title="Move selected image right">→</button>
+                        </div>
+                        <div id="imagePreview" class="image-preview-container"></div>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -1179,11 +1236,33 @@
         // Image Preview and Reordering
         const productImagesInput = document.getElementById('productImages');
         const imagePreviewContainer = document.getElementById('imagePreview');
+        const moveLeftBtn = document.getElementById('moveImageLeft');
+        const moveRightBtn = document.getElementById('moveImageRight');
         let imageFiles = [];
+        let selectedImageIndex = -1;
 
         productImagesInput.addEventListener('change', function(e) {
             imageFiles = Array.from(this.files);
+            selectedImageIndex = -1;
             renderImagePreview();
+        });
+
+        moveLeftBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (selectedImageIndex > 0) {
+                [imageFiles[selectedImageIndex - 1], imageFiles[selectedImageIndex]] = [imageFiles[selectedImageIndex], imageFiles[selectedImageIndex - 1]];
+                selectedImageIndex--;
+                renderImagePreview();
+            }
+        });
+
+        moveRightBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (selectedImageIndex < imageFiles.length - 1) {
+                [imageFiles[selectedImageIndex + 1], imageFiles[selectedImageIndex]] = [imageFiles[selectedImageIndex], imageFiles[selectedImageIndex + 1]];
+                selectedImageIndex++;
+                renderImagePreview();
+            }
         });
 
         function renderImagePreview() {
@@ -1196,6 +1275,11 @@
                     item.className = 'image-preview-item';
                     item.draggable = true;
                     item.file = file;
+                    item.dataset.index = index;
+                    
+                    if (index === selectedImageIndex) {
+                        item.classList.add('selected');
+                    }
                     
                     item.innerHTML = `
                         <img src="${e.target.result}" alt="Preview">
@@ -1204,9 +1288,22 @@
                         </div>
                     `;
 
+                    item.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        // Don't select if clicking remove button
+                        if (!e.target.closest('.image-preview-btn')) {
+                            selectedImageIndex = index;
+                            renderImagePreview();
+                        }
+                    });
+
                     item.querySelector('.remove').addEventListener('click', (e) => {
                         e.preventDefault();
+                        e.stopPropagation();
                         imageFiles.splice(index, 1);
+                        if (selectedImageIndex >= imageFiles.length) {
+                            selectedImageIndex = imageFiles.length - 1;
+                        }
                         renderImagePreview();
                     });
 
@@ -1220,6 +1317,10 @@
                 };
                 reader.readAsDataURL(file);
             });
+
+            // Update button states
+            moveLeftBtn.disabled = selectedImageIndex <= 0;
+            moveRightBtn.disabled = selectedImageIndex < 0 || selectedImageIndex >= imageFiles.length - 1;
         }
 
         let draggedItem = null;
