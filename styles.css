@@ -66,6 +66,7 @@
     --container-mobile: 94%;
     --container-tablet: 90%;
     --container-desktop: 86%;
+    --container-wide: 82%;
     --container-max: 1800px;
     
     /* Typography Scale */
@@ -1068,7 +1069,6 @@ nav {
     margin-bottom: var(--spacing-md);
     font-size: clamp(28px, 5vw, 44px);
     letter-spacing: 0.12em;
-}
 }
 
 .cta-description {
@@ -3134,5 +3134,53 @@ button, a {
     .order-details {
         grid-template-columns: 1fr;
     }
+}
+
+/* Missing CSS Classes - Added for completeness */
+.account-content {
+    padding: var(--spacing-lg) 0;
+}
+
+.appointment-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 450px;
+}
+
+.btn-add-to-cart {
+    background: var(--text-dark);
+    color: var(--white);
+    padding: clamp(12px, 2vw, 16px) clamp(24px, 4vw, 40px);
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: clamp(12px, 2vw, 14px);
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    min-height: 44px;
+}
+
+.btn-add-to-cart:hover {
+    background: var(--gray-800);
+    transform: translateY(-2px);
+}
+
+.product-gallery {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+}
+
+.checkout-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
 }
 
