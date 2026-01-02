@@ -155,25 +155,44 @@
     const mainImage = document.getElementById('mainImage');
     const thumbnails = document.querySelectorAll('.thumbnail');
 
-    if (mainImage && product.images.length > 0) {
+    if (mainImage && product.images && product.images.length > 0) {
         mainImage.src = product.images[0];
+        mainImage.alt = product.name;
     }
 
-    thumbnails.forEach((thumb, index) => {
-        if (product.images[index]) {
-            thumb.src = product.images[index].replace('w=1200&h=1600', 'w=200&h=300');
-            thumb.style.display = 'block';
-        } else {
-            thumb.style.display = 'none';
-        }
-    });
+    if (thumbnails.length > 0 && product.images && product.images.length > 0) {
+        thumbnails.forEach((thumb, index) => {
+            if (product.images[index]) {
+                const imageUrl = product.images[index];
+                // Only modify unsplash URLs, leave admin images as-is
+                if (imageUrl.includes('unsplash.com')) {
+                    thumb.src = imageUrl.replace('w=1200&h=1600', 'w=200&h=300');
+                } else {
+                    thumb.src = imageUrl;
+                }
+                thumb.style.display = 'block';
+                thumb.alt = product.name + ' - View ' + (index + 1);
+            } else {
+                thumb.style.display = 'none';
+            }
+        });
+    }
 
     // ===== IMAGE GALLERY =====
     thumbnails.forEach(thumb => {
         thumb.addEventListener('click', function() {
             thumbnails.forEach(t => t.classList.remove('active'));
             this.classList.add('active');
-            mainImage.src = this.src.replace('w=200&h=300', 'w=1200&h=1600');
+            
+            // Get the full resolution image
+            const thumbSrc = this.src;
+            if (thumbSrc.includes('unsplash.com')) {
+                // For unsplash URLs, replace the dimensions
+                mainImage.src = thumbSrc.replace('w=200&h=300', 'w=1200&h=1600');
+            } else {
+                // For admin images, use as-is
+                mainImage.src = thumbSrc;
+            }
         });
     });
 
