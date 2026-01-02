@@ -1147,7 +1147,7 @@
     </div>
 
     <script>
-        const API_BASE = 'http://localhost:5000/api';
+        const API_BASE = '';
         let authToken = localStorage.getItem('adminToken');
         let products = [];
         let orders = [];
@@ -1177,10 +1177,11 @@
         // Load products
         async function loadProducts() {
             try {
-                // Load products from localStorage
-                products = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
-                
-                // products is already assigned above (not re-assigning)
+                const response = await fetch(`${API_BASE}/api/products`);
+                if (!response.ok) {
+                    throw new Error('Failed to load products');
+                }
+                products = await response.json();
                 
                 document.getElementById('totalProducts').textContent = products.length;
                 
@@ -1355,12 +1356,20 @@
             });
         }
 
-        function toggleProductVisibility(productId) {
+        async function toggleProductVisibility(productId) {
             const productIndex = products.findIndex(p => p.id === productId);
             if (productIndex !== -1) {
-                products[productIndex].visible = !products[productIndex].visible;
-                localStorage.setItem('ghoharyProducts', JSON.stringify(products));
-                renderProductsTable();
+                const updated = { ...products[productIndex], visible: !products[productIndex].visible };
+                const response = await fetch(`${API_BASE}/api/products/${productId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ visible: updated.visible })
+                });
+                if (response.ok) {
+                    loadProducts();
+                } else {
+                    showAlert('Error updating visibility', 'error');
+                }
             }
         }
 
@@ -1427,41 +1436,47 @@
             submitBtn.dataset.originalText = originalText;
         }
 
-        function duplicateProduct(productId) {
+        async function duplicateProduct(productId) {
             const product = products.find(p => p.id === productId);
             if (!product) return;
 
             try {
-                // Create a new product with copied data
                 const newProduct = {
                     ...product,
-                    id: Date.now(),
                     name: product.name + ' (Copy)',
-                    sku: product.sku ? product.sku + '-COPY' : '',
-                    createdAt: new Date().toISOString()
+                    sku: product.sku ? product.sku + '-COPY' : ''
                 };
+                delete newProduct.id;
+                delete newProduct.createdAt;
 
-                // Add to products array
-                products.push(newProduct);
-
-                // Save to localStorage
-                localStorage.setItem('ghoharyProducts', JSON.stringify(products));
+                const response = await fetch(`${API_BASE}/api/products`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newProduct)
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to duplicate product');
+                }
 
                 showAlert('Product duplicated successfully!', 'success');
-                renderProductsTable();
+                loadProducts();
             } catch (error) {
                 showAlert('Error duplicating product: ' + error.message, 'error');
             }
         }
 
-        function deleteProductNow(productId) {
+        async function deleteProductNow(productId) {
             try {
-                products = products.filter(p => p.id !== productId);
-                localStorage.setItem('ghoharyProducts', JSON.stringify(products));
-                renderProductsTable();
-                alert('Product deleted successfully');
+                const response = await fetch(`${API_BASE}/api/products/${productId}`, {
+                    method: 'DELETE'
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to delete product');
+                }
+                showAlert('Product deleted successfully!', 'success');
+                loadProducts();
             } catch (error) {
-                alert('Error deleting product: ' + error.message);
+                showAlert('Error deleting product: ' + error.message, 'error');
             }
         }
 
@@ -1557,79 +1572,54 @@
             const isEditing = editingProductId && editingProductId !== 'undefined';
 
             try {
-                // Get existing products from localStorage
-                let existingProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
-                
-                if (isEditing) {
-                    // Update existing product
-                    const productIndex = existingProducts.findIndex(p => p.id === parseInt(editingProductId));
-                    if (productIndex !== -1) {
-                        const existingProduct = existingProducts[productIndex];
-                        
-                        // Store existing URLs or uploaded image data URLs
-                        const images = imageFiles.map((file, index) => {
-                            if (typeof file === 'string') {
-                                return file; // Already a URL - save it
-                            }
-                            // Skip File objects - don't save base64 data URLs
-                            return '';
-                        }).filter(url => url);
-                        
-                        existingProducts[productIndex] = {
-                            ...existingProduct,
-                            name: name,
-                            sku: document.getElementById('productSku').value || '',
-                            category: category,
-                            price: document.getElementById('productPrice').value || 'Price Upon Request',
-                            description: document.getElementById('productDescription').value,
-                            sizes: sizes,
-                            colors: document.getElementById('productColors').value.split(',').filter(c => c.trim()).map(c => c.trim()),
-                            images: images, // Store only URLs, not base64
-                            imageCount: images.length
-                        };
-                        showAlert('Product updated successfully!', 'success');
+                const images = imageFiles.map((file, index) => {
+                    if (typeof file === 'string') {
+                        return file;
                     }
+                    if (file instanceof File) {
+                        return imageDataURLs[index] || '';
+                    }
+                    return '';
+                }).filter(url => url);
+
+                const payload = {
+                    name: name,
+                    sku: document.getElementById('productSku').value || '',
+                    category: category,
+                    price: document.getElementById('productPrice').value || 'Price Upon Request',
+                    description: document.getElementById('productDescription').value,
+                    sizes: sizes,
+                    colors: document.getElementById('productColors').value.split(',').filter(c => c.trim()).map(c => c.trim()),
+                    images: images,
+                    imageCount: images.length
+                };
+
+                if (isEditing) {
+                    const existingProduct = products.find(p => p.id === parseInt(editingProductId));
+                    if (existingProduct && existingProduct.visible !== undefined) {
+                        payload.visible = existingProduct.visible;
+                    }
+                    const response = await fetch(`${API_BASE}/api/products/${editingProductId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) {
+                        throw new Error('Failed to update product');
+                    }
+                    showAlert('Product updated successfully!', 'success');
                 } else {
-                    // Create and add new product
-                    console.log('[Admin] Adding new product, imageFiles:', imageFiles);
-                    console.log('[Admin] imageFiles types:', imageFiles.map(f => typeof f + ' ' + (f instanceof File ? 'File' : f instanceof String ? 'String' : 'Other')));
-                    
-                    const images = imageFiles.map((file, index) => {
-                        if (typeof file === 'string') {
-                            console.log('[Admin] Image is already a URL:', file);
-                            return file; // URL string
-                        }
-                        // Skip File objects - don't save base64 data URLs
-                        // Tell user they need to use URLs instead
-                        console.log('[Admin] File upload not supported for storage - use image URLs instead');
-                        return '';
-                    }).filter(url => url);
-                    
-                    console.log('[Admin] Final images array:', images);
-                    console.log('[Admin] Images array length:', images.length);
-                    
-                    const product = {
-                        id: Date.now(),
-                        name: name,
-                        sku: document.getElementById('productSku').value || '',
-                        category: category,
-                        price: document.getElementById('productPrice').value || 'Price Upon Request',
-                        description: document.getElementById('productDescription').value,
-                        sizes: sizes,
-                        colors: document.getElementById('productColors').value.split(',').filter(c => c.trim()).map(c => c.trim()),
-                        images: images, // Store only URLs, not base64
-                        imageCount: images.length,
-                        visible: true,
-                        createdAt: new Date().toISOString()
-                    };
-                    
-                    console.log('[Admin] Product object:', product);
-                    existingProducts.push(product);
+                    payload.visible = true;
+                    const response = await fetch(`${API_BASE}/api/products`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) {
+                        throw new Error('Failed to add product');
+                    }
                     showAlert('Product added successfully!', 'success');
                 }
-                
-                // Save to localStorage
-                localStorage.setItem('ghoharyProducts', JSON.stringify(existingProducts));
                 
                 // Reset form
                 document.getElementById('productForm').reset();
@@ -1699,11 +1689,6 @@
 
         // Load initial data
         window.onload = () => {
-            // Clean up any placeholder products
-            let storedProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
-            storedProducts = storedProducts.filter(p => p.name !== 'Golden Elixir');
-            localStorage.setItem('ghoharyProducts', JSON.stringify(storedProducts));
-            
             // Load products on page load
             loadProducts();
         };
@@ -1938,8 +1923,7 @@
             exportBtn.addEventListener('click', function(e) {
                 e.preventDefault();
                 try {
-                    const productsData = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
-                    const dataStr = JSON.stringify(productsData, null, 2);
+                    const dataStr = JSON.stringify(products, null, 2);
                     const dataBlob = new Blob([dataStr], { type: 'application/json' });
                     const url = URL.createObjectURL(dataBlob);
                     const link = document.createElement('a');
@@ -1957,7 +1941,7 @@
         }
 
         if (importBtn) {
-            importBtn.addEventListener('click', function(e) {
+            importBtn.addEventListener('click', async function(e) {
                 e.preventDefault();
                 if (!importFile.files || importFile.files.length === 0) {
                     showAlert('Please select a file to import', 'error');
@@ -1967,7 +1951,7 @@
                 const file = importFile.files[0];
                 const reader = new FileReader();
 
-                reader.onload = function(e) {
+                reader.onload = async function(e) {
                     try {
                         const importedData = JSON.parse(e.target.result);
                         
@@ -1976,31 +1960,34 @@
                             return;
                         }
 
-                        // Merge imported products with existing ones
-                        const existingProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
-                        const mergedProducts = [...existingProducts];
-
-                        importedData.forEach(importedProduct => {
-                            // Check if product with same ID exists
-                            const existingIndex = mergedProducts.findIndex(p => p.id === importedProduct.id);
-                            if (existingIndex !== -1) {
-                                // Update existing
-                                mergedProducts[existingIndex] = importedProduct;
+                        for (const importedProduct of importedData) {
+                            if (importedProduct.id) {
+                                const updateResponse = await fetch(`${API_BASE}/api/products/${importedProduct.id}`, {
+                                    method: 'PUT',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(importedProduct)
+                                });
+                                if (updateResponse.status === 404) {
+                                    await fetch(`${API_BASE}/api/products`, {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify(importedProduct)
+                                    });
+                                }
                             } else {
-                                // Add new
-                                mergedProducts.push(importedProduct);
+                                await fetch(`${API_BASE}/api/products`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(importedProduct)
+                                });
                             }
-                        });
-
-                        // Save merged data
-                        localStorage.setItem('ghoharyProducts', JSON.stringify(mergedProducts));
-                        products = mergedProducts;
+                        }
                         
                         // Clear import input
                         importFile.value = '';
                         
                         // Refresh display
-                        renderProductsTable();
+                        loadProducts();
                         
                         showAlert(`Successfully imported ${importedData.length} product(s)!`, 'success');
                     } catch (error) {

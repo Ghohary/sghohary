@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3001;
 const DB_FILE = path.join(__dirname, 'server-db.json');
 
 // Middleware
@@ -15,7 +15,9 @@ const corsOptions = {
     origin: [
         'http://localhost:8000',
         'http://localhost:3000',
-        'http://localhost:5000',
+        'http://localhost:3001',
+        'http://192.168.0.186:8000',
+        'http://192.168.0.186:3001',
         'https://mohsenghohary.net',
         'https://www.mohsenghohary.net'
     ],

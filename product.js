@@ -1,52 +1,51 @@
 // Product Page Functionality
-(function() {
+(async function() {
     'use strict';
 
     // Get product ID from URL
     const urlParams = new URLSearchParams(window.location.search);
     const productIdParam = urlParams.get('id');
     
-    // Load admin products from localStorage only - no hardcoded fallback
     let product = null;
-    const adminProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
-    const visibleAdminProducts = adminProducts.filter(p => p.visible !== false);
-    
-    console.log('Requested product ID:', productIdParam);
-    console.log('Admin products available:', visibleAdminProducts.length);
-    if (visibleAdminProducts.length > 0) {
-        console.log('Admin product IDs:', visibleAdminProducts.map(p => p.id));
-        console.log('Full admin products:', JSON.stringify(visibleAdminProducts, null, 2));
-    }
-    
-    // Use ONLY admin products
-    if (visibleAdminProducts.length > 0) {
+
+    try {
         if (productIdParam) {
-            // Try to find in admin products by ID (handle both string and numeric)
-            product = visibleAdminProducts.find(p => {
-                return p.id == productIdParam || p.id === parseInt(productIdParam) || p.id === productIdParam.toString();
-            });
-            
-            // If not found by ID, try by numeric index
-            if (!product) {
-                const index = parseInt(productIdParam);
-                if (!isNaN(index) && index > 0 && index <= visibleAdminProducts.length) {
-                    product = visibleAdminProducts[index - 1];
-                    console.log('Found product by numeric index:', product.name);
+            const productRes = await fetch(`/api/products/${productIdParam}`);
+            if (productRes.ok) {
+                product = await productRes.json();
+            }
+        }
+
+        if (!product) {
+            const listRes = await fetch('/api/products');
+            if (listRes.ok) {
+                const adminProducts = await listRes.json();
+                const visibleAdminProducts = adminProducts.filter(p => p.visible !== false);
+
+                if (productIdParam) {
+                    product = visibleAdminProducts.find(p => p.id == productIdParam);
+                }
+
+                if (!product && visibleAdminProducts.length > 0) {
+                    product = visibleAdminProducts[0];
                 }
             }
-            
-            if (product) {
-                console.log('Found admin product:', product.name);
-            }
         }
-        
-        // If still no product, use the first admin product
-        if (!product) {
+    } catch (error) {
+        console.error('[Product Page] API error:', error);
+    }
+
+    if (!product) {
+        const adminProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
+        const visibleAdminProducts = adminProducts.filter(p => p.visible !== false);
+        if (productIdParam) {
+            product = visibleAdminProducts.find(p => p.id == productIdParam);
+        }
+        if (!product && visibleAdminProducts.length > 0) {
             product = visibleAdminProducts[0];
-            console.log('Using first admin product:', product.name);
         }
     }
-    
+
     // If no admin products exist, show error
     if (!product) {
         document.body.innerHTML = '<div style="padding: 40px; text-align: center; font-family: sans-serif;"><h1>Product not found</h1><p>Please add products through the admin dashboard.</p><a href="collections.html">Back to Collections</a></div>';

@@ -1088,28 +1088,44 @@ nav .nav-icons {
     }
 }
 
-.product-badge {
+
+
+.product-ribbon {
     position: absolute;
-    top: 16px;
-    right: 16px;
-    background: linear-gradient(135deg, var(--gray-700) 0%, var(--gray-600) 100%);
-    color: var(--white);
-    padding: 8px 16px;
-    font-size: 9px;
+    top: clamp(8px, 2vw, 12px);
+    right: clamp(-28px, -5vw, -32px);
+    background: linear-gradient(135deg, var(--brown-dark) 0%, var(--brown) 100%);
+    color: var(--cream);
+    padding: clamp(6px, 1.5vw, 8px) clamp(40px, 8vw, 48px);
+    font-size: clamp(8px, 1.2vw, 12px);
     font-weight: 600;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    font-family: 'Montserrat', sans-serif;
+    transform: rotate(45deg);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    z-index: 15;
+    transition: all 0.3s ease;
+    white-space: nowrap;
 }
 
-.product-badge.bestseller {
-    background: linear-gradient(135deg, var(--gray-600) 0%, var(--gray-500) 100%);
-    color: var(--white);
+.product-card:hover .product-ribbon {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transform: rotate(45deg) translateY(-2px);
 }
 
-.product-badge.new {
-    background: linear-gradient(135deg, var(--gray-500) 0%, var(--gray-400) 100%);
-    color: var(--white);
+@media (min-width: 768px) {
+    .product-ribbon {
+        top: 12px;
+        right: -32px;
+        padding: 8px 48px;
+        font-size: 11px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    .product-card:hover .product-ribbon {
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    }
 }
 
 .product-info {

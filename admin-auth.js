@@ -30,7 +30,7 @@
     // CHANGE THESE TO YOUR DESIRED EMAIL AND PASSWORD
     function initializeAdminCredentials() {
         const adminEmail = 'admin@ghohary.com';
-        const adminPassword = 'Admin123!'; // Simple password - change after first login
+        const adminPassword = 'GhoharyLuxe2024!'; // CHANGE THIS to your desired password
 
         const credentials = {
             email: adminEmail,

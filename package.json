@@ -20,6 +20,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.22.1",
+    "redis": "^4.6.13",
     "stripe": "^14.0.0"
   },
   "devDependencies": {

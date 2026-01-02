@@ -14,33 +14,25 @@
     let currentPage = 1;
 
     // ===== LOAD PRODUCTS FROM SERVER API =====
-    function loadProducts() {
-        // Determine API URL based on environment
-        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        const API_URL = isLocalhost ? 'http://localhost:5000/api' : 'https://api.mohsenghohary.net/api';
-        
-        // Try to fetch from server
-        fetch(`${API_URL}/products`)
-            .then(response => response.json())
-            .then(adminProducts => {
-                console.log('[Collections] Products from server:', adminProducts);
-                console.log('[Collections] Number of products:', adminProducts.length);
-                
-                // Filter only visible products
-                allProducts = adminProducts.filter(p => p.visible !== false);
-                filteredProducts = [...allProducts];
-                renderProducts();
-            })
-            .catch(err => {
-                console.warn('[Collections] Server not available, using localStorage:', err);
-                // Fallback to localStorage if server unavailable
-                let adminProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
-                console.log('[Collections] Using localStorage fallback:', adminProducts);
-                
-                allProducts = adminProducts.filter(p => p.visible !== false);
-                filteredProducts = [...allProducts];
-                renderProducts();
-            });
+    async function loadProducts() {
+        try {
+            const response = await fetch('/api/products');
+            if (!response.ok) {
+                throw new Error('Failed to load products');
+            }
+            const adminProducts = await response.json();
+            console.log('[Collections] Products from API:', adminProducts);
+            
+            // Filter only visible products
+            allProducts = adminProducts.filter(p => p.visible !== false);
+            filteredProducts = [...allProducts];
+            renderProducts();
+        } catch (err) {
+            console.warn('[Collections] API not available:', err);
+            allProducts = [];
+            filteredProducts = [];
+            renderProducts();
+        }
     }
 
     // ===== RENDER PRODUCTS =====
@@ -89,10 +81,17 @@
             
             console.log('[Collections] Product:', product.name, 'Images:', product.images, 'Using:', productImage);
             
+            // Determine ribbon label based on category
+            let ribbonLabel = 'Custom';
+            const categoryLower = (product.category || '').toLowerCase();
+            if (categoryLower.includes('bridal')) ribbonLabel = 'Bridal';
+            else if (categoryLower.includes('evening')) ribbonLabel = 'Evening';
+            
             productCard.innerHTML = `
                 <a href="product.html?id=${product.id}" class="product-link">
                     <div class="product-image-wrapper">
                         <img src="${productImage}" alt="${product.name}" class="product-image" loading="lazy">
+                        <div class="product-ribbon">${ribbonLabel}</div>
                     </div>
                     <div class="product-info">
                         <h3 class="product-name">${product.name}</h3>
@@ -202,7 +201,7 @@
         const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
         const cartCount = document.querySelector('.cart-count');
         if (cartCount) {
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
             cartCount.textContent = totalItems;
             cartCount.style.display = totalItems > 0 ? 'flex' : 'none';
         }
