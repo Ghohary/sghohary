@@ -735,11 +735,12 @@
                         <th>Category</th>
                         <th>Price</th>
                         <th>Stock</th>
+                        <th>Visibility</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody id="productsTable">
-                    <tr><td colspan="6" style="text-align: center; color: #999;">Load products to view</td></tr>
+                    <tr><td colspan="7" style="text-align: center; color: #999;">Load products to view</td></tr>
                 </tbody>
             </table>
         </div>
@@ -863,13 +864,16 @@
         function renderProductsTable() {
             const tbody = document.getElementById('productsTable');
             if (products.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #999;">No products added yet</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #999;">No products added yet</td></tr>';
                 return;
             }
             
             tbody.innerHTML = products.map(p => {
                 const totalInventory = p.sizes ? p.sizes.reduce((sum, s) => sum + (s.inventory || 0), 0) : 0;
                 const priceDisplay = p.price === 'Price Upon Request' ? 'Price Upon Request' : `AED ${Number(p.price).toLocaleString()}`;
+                const isVisible = p.visible !== false; // Default to visible if not set
+                const visibilityText = isVisible ? '👁️ Visible' : '👁️‍🗨️ Hidden';
+                const visibilityClass = isVisible ? 'status-available' : 'status-out-of-stock';
                 
                 return `
                 <tr>
@@ -878,28 +882,55 @@
                     <td>${p.category}</td>
                     <td>${priceDisplay}</td>
                     <td><span class="status-badge ${totalInventory > 0 ? 'status-available' : 'status-out-of-stock'}">${totalInventory} items</span></td>
+                    <td><span class="status-badge ${visibilityClass} visibility-badge" data-product-id="${p.id}">${visibilityText}</span></td>
                     <td>
+                        <button class="btn-small visibility-btn" data-product-id="${p.id}" style="margin-right: 8px;">Toggle</button>
                         <button class="btn-small delete-btn" data-product-id="${p.id}">Delete</button>
                     </td>
                 </tr>
             `}).join('');
 
+            // Attach event listeners to visibility buttons
+            document.querySelectorAll('.visibility-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const productId = parseInt(this.getAttribute('data-product-id'));
+                    toggleProductVisibility(productId);
+                });
+            });
+
             // Attach event listeners to delete buttons
             document.querySelectorAll('.delete-btn').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     e.preventDefault();
+                    e.stopPropagation();
                     const productId = parseInt(this.getAttribute('data-product-id'));
-                    deleteProduct(productId);
+                    if (confirm('Are you sure you want to delete this product?')) {
+                        deleteProductNow(productId);
+                    }
                 });
             });
         }
 
-        function deleteProduct(productId) {
-            if (confirm('Are you sure you want to delete this product?')) {
+        function toggleProductVisibility(productId) {
+            const productIndex = products.findIndex(p => p.id === productId);
+            if (productIndex !== -1) {
+                products[productIndex].visible = !products[productIndex].visible;
+                localStorage.setItem('ghoharyProducts', JSON.stringify(products));
+                renderProductsTable();
+                const visibility = products[productIndex].visible ? 'visible' : 'hidden';
+                alert(`Product is now ${visibility}`);
+            }
+        }
+
+        function deleteProductNow(productId) {
+            try {
                 products = products.filter(p => p.id !== productId);
                 localStorage.setItem('ghoharyProducts', JSON.stringify(products));
                 renderProductsTable();
-                showAlert('Product deleted successfully', 'success');
+                alert('Product deleted successfully');
+            } catch (error) {
+                alert('Error deleting product: ' + error.message);
             }
         }
 
