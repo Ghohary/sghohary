@@ -29,7 +29,7 @@
             align-items: center;
             justify-content: flex-start;
             min-height: 100vh;
-            padding: var(--auth-padding-y) var(--auth-padding-x);
+            padding: 0 var(--auth-padding-x) var(--auth-padding-y) var(--auth-padding-x);
             margin: 0;
             width: 100%;
         }
@@ -37,6 +37,8 @@
         header {
             width: 100vw;
             margin-left: calc(-50vw + 50%);
+            margin-top: 0;
+            margin-bottom: var(--auth-padding-y);
             position: relative;
         }
 
