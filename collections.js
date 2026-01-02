@@ -13,8 +13,90 @@
     const itemsPerPage = 12;
     let currentPage = 1;
 
+    // ===== INITIALIZE SEED DATA IF EMPTY =====
+    function initializeSeedData() {
+        let stored = localStorage.getItem('ghoharyProducts');
+        
+        // Only initialize if localStorage is completely empty
+        if (!stored || stored === '[]' || JSON.parse(stored).length === 0) {
+            const seedProducts = [
+                {
+                    id: 1,
+                    name: 'Ethereal Lace Couture',
+                    category: 'Bridal Couture',
+                    price: 15000,
+                    sku: 'EL-001',
+                    description: 'Exquisite bridal gown with delicate lace details and flowing train. Perfect for the modern bride seeking timeless elegance.',
+                    sizes: [{size: '32', inventory: 2}, {size: '34', inventory: 3}, {size: '36', inventory: 2}, {size: '38', inventory: 1}],
+                    colors: ['White', 'Ivory', 'Champagne'],
+                    images: ['https://images.unsplash.com/photo-1594552072238-2d8e16ed7b2c?w=1200&h=1600'],
+                    visible: true,
+                    createdAt: new Date('2025-01-01').toISOString()
+                },
+                {
+                    id: 2,
+                    name: 'Crystal Romance',
+                    category: 'Bridal Couture',
+                    price: 18500,
+                    sku: 'CR-002',
+                    description: 'Stunning crystal-embellished bridal masterpiece with hand-sewn Swarovski crystals and silk organza base.',
+                    sizes: [{size: '34', inventory: 1}, {size: '36', inventory: 2}, {size: '38', inventory: 2}, {size: '40', inventory: 1}],
+                    colors: ['White', 'Ivory'],
+                    images: ['https://images.unsplash.com/photo-1595777707802-78f50c618403?w=1200&h=1600'],
+                    visible: true,
+                    createdAt: new Date('2025-01-02').toISOString()
+                },
+                {
+                    id: 3,
+                    name: 'Royal Silk Train',
+                    category: 'Bridal Couture',
+                    price: 22000,
+                    sku: 'RST-003',
+                    description: 'Majestic bridal gown with opulent silk train, featuring intricate beadwork and classic silhouette.',
+                    sizes: [{size: '36', inventory: 1}, {size: '38', inventory: 2}, {size: '40', inventory: 1}],
+                    colors: ['White', 'Ivory', 'Champagne'],
+                    images: ['https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&h=1600'],
+                    visible: true,
+                    createdAt: new Date('2025-01-03').toISOString()
+                },
+                {
+                    id: 4,
+                    name: 'Evening Elegance',
+                    category: 'Evening Wear',
+                    price: 12000,
+                    sku: 'EE-004',
+                    description: 'Sophisticated evening gown in luxurious silk with draped details and elegant neckline.',
+                    sizes: [{size: '32', inventory: 2}, {size: '34', inventory: 2}, {size: '36', inventory: 3}],
+                    colors: ['Black', 'Navy', 'Burgundy', 'Gold'],
+                    images: ['https://images.unsplash.com/photo-1612423284772-b4bfb91f5aa3?w=1200&h=1600'],
+                    visible: true,
+                    createdAt: new Date('2025-01-04').toISOString()
+                },
+                {
+                    id: 5,
+                    name: 'Champagne Dreams',
+                    category: 'Bridal Couture',
+                    price: 16500,
+                    sku: 'CD-005',
+                    description: 'Enchanting champagne-toned bridal gown with pearl accents and flowing cape detail.',
+                    sizes: [{size: '34', inventory: 1}, {size: '36', inventory: 2}, {size: '38', inventory: 2}],
+                    colors: ['Champagne', 'Ivory'],
+                    images: ['https://images.unsplash.com/photo-1552691581-03d0a2cc1dfe?w=1200&h=1600'],
+                    visible: true,
+                    createdAt: new Date('2025-01-05').toISOString()
+                }
+            ];
+            
+            localStorage.setItem('ghoharyProducts', JSON.stringify(seedProducts));
+            console.log('[Collections] Initialized seed data with 5 products');
+        }
+    }
+
     // ===== LOAD PRODUCTS FROM LOCALSTORAGE =====
     function loadProducts() {
+        // Initialize seed data if localStorage is empty
+        initializeSeedData();
+        
         // Get admin products
         let adminProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
         
