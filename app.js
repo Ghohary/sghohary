@@ -401,15 +401,6 @@
                 <a href="collections.html" class="continue-shopping">
                     Continue Shopping
                 </a>
-                
-                <div class="payment-icons">
-                    <p class="payment-text">We accept</p>
-                    <div class="payment-methods">
-                        <span class="payment-icon">💳</span>
-                        <span class="payment-icon">🏦</span>
-                        <span class="payment-icon">💰</span>
-                    </div>
-                </div>
             </div>
         `;
 
