@@ -1086,6 +1086,11 @@
 
         // Load initial data
         window.onload = () => {
+            // Clean up any placeholder products
+            let storedProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
+            storedProducts = storedProducts.filter(p => p.name !== 'Golden Elixir');
+            localStorage.setItem('ghoharyProducts', JSON.stringify(storedProducts));
+            
             // Load products on page load
             loadProducts();
         };
