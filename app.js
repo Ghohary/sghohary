@@ -335,8 +335,8 @@
 
         cartHTML += '</div>';
 
-        const tax = subtotal * 0.05;
-        const total = subtotal + tax;
+        const shippingCost = 120;
+        const total = subtotal + shippingCost;
 
         cartHTML += `
             <div class="cart-summary">
@@ -348,13 +348,8 @@
                 </div>
                 
                 <div class="summary-row">
-                    <span>VAT (5%)</span>
-                    <span>AED ${tax.toLocaleString()}</span>
-                </div>
-                
-                <div class="summary-row">
                     <span>Shipping</span>
-                    <span class="free-shipping">Free</span>
+                    <span>AED ${shippingCost.toLocaleString()}</span>
                 </div>
                 
                 <div class="summary-divider"></div>
@@ -472,8 +467,8 @@
 
         summaryHTML += '</div>';
 
-        const tax = subtotal * 0.05;
-        const total = subtotal + tax;
+        const shippingCost = 120;
+        const total = subtotal + shippingCost;
 
         summaryHTML += `
             <div class="summary-totals">
@@ -483,11 +478,7 @@
                 </div>
                 <div class="summary-row">
                     <span>Shipping</span>
-                    <span class="free-shipping">Free</span>
-                </div>
-                <div class="summary-row">
-                    <span>VAT (5%)</span>
-                    <span>AED ${tax.toLocaleString()}</span>
+                    <span>AED ${shippingCost.toLocaleString()}</span>
                 </div>
                 <div class="summary-divider"></div>
                 <div class="summary-row summary-total">
