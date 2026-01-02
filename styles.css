@@ -1130,7 +1130,7 @@ nav {
 /* Product Detail Page */
 .product-detail-section {
     padding: 0;
-    background: var(--cream);
+    background: var(--ivory);
     min-height: auto;
     width: 100vw;
     position: relative;
@@ -1170,7 +1170,7 @@ nav {
     gap: 0;
     margin-top: 0;
     align-items: stretch;
-    background: var(--cream);
+    background: var(--ivory);
     width: 100%;
 }
 
@@ -1214,7 +1214,7 @@ nav {
     gap: 0;
     padding: 0;
     min-height: auto;
-    background: var(--gray-50);
+    background: var(--champagne);
 }
 
 @media (min-width: 600px) {
@@ -1312,7 +1312,7 @@ nav {
     height: auto;
     min-height: 45vh;
     overflow: hidden;
-    background: var(--gray-50);
+    background: var(--champagne);
     margin-bottom: 0;
     box-shadow: none;
     border-radius: 0;
@@ -1717,32 +1717,40 @@ nav {
 }
 
 .price-currency {
-    font-size: 14px;
-    color: var(--text-muted);
+    font-size: clamp(28px, 6.5vw, 48px);
+    color: var(--text-dark);
     text-transform: uppercase;
-    letter-spacing: 0.35em;
-    font-weight: 500;
-    align-self: flex-end;
-    padding-bottom: 4px;
+    letter-spacing: 0.05em;
+    font-weight: 400;
+    font-family: 'Cormorant Garamond', serif;
+    white-space: nowrap;
 }
 
 @media (min-width: 480px) {
     .price-currency {
-        font-size: 15px;
+        font-size: clamp(32px, 7vw, 52px);
+        white-space: nowrap;
+    }
+}
+
+@media (min-width: 600px) {
+    .price-currency {
+        font-size: clamp(36px, 7.5vw, 56px);
+        white-space: nowrap;
     }
 }
 
 @media (min-width: 768px) {
     .price-currency {
-        font-size: 16px;
-        padding-bottom: 6px;
+        font-size: clamp(40px, 7.5vw, 60px);
+        white-space: nowrap;
     }
 }
 
 @media (min-width: 1024px) {
     .price-currency {
-        font-size: 17px;
-        padding-bottom: 8px;
+        font-size: clamp(44px, 8vw, 64px);
+        white-space: nowrap;
     }
 }
 
