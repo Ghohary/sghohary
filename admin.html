@@ -992,7 +992,20 @@
 
                 <div class="form-group">
                     <label>Product Images (up to 5) - Drag to Reorder</label>
-                    <input type="file" id="productImages" accept="image/*" multiple>
+                    <p style="font-size: 12px; color: #666; margin-bottom: 10px;">
+                        📷 <strong>How to add images:</strong><br>
+                        1. Upload your gown images to a free service like Imgur or Cloudinary<br>
+                        2. Copy the image URL (e.g., https://imgur.com/abc123.jpg)<br>
+                        3. Paste URLs below using the URL input field
+                    </p>
+                    <input type="file" id="productImages" accept="image/*" multiple style="display: none;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                        <input type="text" id="imageUrl1" placeholder="Image URL 1 (e.g., https://imgur.com/image.jpg)" style="padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px;">
+                        <input type="text" id="imageUrl2" placeholder="Image URL 2" style="padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px;">
+                        <input type="text" id="imageUrl3" placeholder="Image URL 3" style="padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px;">
+                        <input type="text" id="imageUrl4" placeholder="Image URL 4" style="padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px;">
+                        <input type="text" id="imageUrl5" placeholder="Image URL 5" style="padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px;">
+                    </div>
                     <div class="image-preview-wrapper">
                         <div class="image-preview-nav">
                             <button type="button" class="image-nav-btn" id="moveImageLeft" title="Move selected image left">←</button>
@@ -1498,6 +1511,21 @@
         async function handleAddProduct(e) {
             e.preventDefault();
 
+            // Collect image URLs from URL input fields
+            const imageUrls = [];
+            for (let i = 1; i <= 5; i++) {
+                const urlInput = document.getElementById(`imageUrl${i}`);
+                if (urlInput && urlInput.value.trim()) {
+                    imageUrls.push(urlInput.value.trim());
+                }
+            }
+            
+            // If image URLs were provided, use them instead of file uploads
+            if (imageUrls.length > 0) {
+                imageFiles = imageUrls;
+                console.log('[Admin] Using provided image URLs:', imageUrls);
+            }
+
             // Validate form
             const name = document.getElementById('productName').value;
             const category = document.getElementById('productCategory').value;
@@ -1541,10 +1569,9 @@
                         // Store existing URLs or uploaded image data URLs
                         const images = imageFiles.map((file, index) => {
                             if (typeof file === 'string') {
-                                return file; // Already a URL
-                            } else if (file instanceof File) {
-                                return imageDataURLs[index] || '';
+                                return file; // Already a URL - save it
                             }
+                            // Skip File objects - don't save base64 data URLs
                             return '';
                         }).filter(url => url);
                         
@@ -1571,12 +1598,10 @@
                         if (typeof file === 'string') {
                             console.log('[Admin] Image is already a URL:', file);
                             return file; // URL string
-                        } else if (file instanceof File) {
-                            const dataUrl = imageDataURLs[index] || '';
-                            console.log('[Admin] Using uploaded image data URL');
-                            return dataUrl;
                         }
-                        console.log('[Admin] Skipping invalid file:', file);
+                        // Skip File objects - don't save base64 data URLs
+                        // Tell user they need to use URLs instead
+                        console.log('[Admin] File upload not supported for storage - use image URLs instead');
                         return '';
                     }).filter(url => url);
                     

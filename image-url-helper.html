@@ -1,0 +1,76 @@
+<!-- Product Image URL Input Section - Simple Alternative to File Upload -->
+<div id="imageUrlSection" style="margin-bottom: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px;">
+    <h4>Add Product Images</h4>
+    <p style="font-size: 12px; color: #666; margin-bottom: 10px;">
+        <strong>Option 1:</strong> Provide image URLs (recommended)<br>
+        <strong>Option 2:</strong> Upload files (use file upload below)
+    </p>
+    
+    <div id="imageUrlInputs"></div>
+    
+    <button type="button" id="addImageUrlBtn" style="background: #6B9080; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px;">
+        + Add Image URL
+    </button>
+</div>
+
+<style>
+.image-url-input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.image-url-input-group input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.image-url-input-group button {
+    padding: 8px 12px;
+    background: #c41e3a;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.image-url-input-group button:hover {
+    background: #a01830;
+}
+</style>
+
+<script>
+// Handle image URL inputs
+const addImageUrlBtn = document.getElementById('addImageUrlBtn');
+const imageUrlInputs = document.getElementById('imageUrlInputs');
+let imageUrlCount = 0;
+
+addImageUrlBtn?.addEventListener('click', function() {
+    imageUrlCount++;
+    const group = document.createElement('div');
+    group.className = 'image-url-input-group';
+    group.innerHTML = `
+        <input type="url" class="image-url-input" placeholder="https://example.com/image.jpg" data-index="${imageUrlCount}">
+        <button type="button" class="remove-url-btn" data-index="${imageUrlCount}">Remove</button>
+    `;
+    imageUrlInputs.appendChild(group);
+    
+    // Add event listener to remove button
+    group.querySelector('.remove-url-btn').addEventListener('click', function() {
+        group.remove();
+    });
+});
+
+// Get image URLs when saving product
+function getImageUrlsFromInputs() {
+    const urlInputs = document.querySelectorAll('.image-url-input');
+    return Array.from(urlInputs)
+        .map(input => input.value.trim())
+        .filter(url => url.length > 0);
+}
+</script>
