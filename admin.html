@@ -1370,10 +1370,18 @@
             }
 
             // Clear images and store product ID for update
-            imageFiles = [];
+            imageFiles = product.images || []; // Load existing image URLs
+            imageDataURLs = {}; // Clear data URLs
             imagePreviewContainer.innerHTML = '';
             document.getElementById('imagePreview').innerHTML = '';
             document.getElementById('productImages').value = '';
+            
+            // Render existing images
+            if (product.images && product.images.length > 0) {
+                product.images.forEach((url, index) => {
+                    renderImageItem(url, index);
+                });
+            }
             
             // Store the product ID being edited
             document.getElementById('productForm').dataset.editingProductId = productId;
@@ -1512,9 +1520,16 @@
                     if (productIndex !== -1) {
                         const existingProduct = existingProducts[productIndex];
                         
-                        // Collect image data URLs from the preview
-                        const imageElements = document.querySelectorAll('.image-preview-item img');
-                        const images = Array.from(imageElements).map(img => img.src); // Get base64 or URLs
+                        // Only store image URLs, not base64 data
+                        const images = imageFiles.map(file => {
+                            if (typeof file === 'string') {
+                                return file; // Already a URL
+                            } else if (file instanceof File) {
+                                // For new files, generate a reference URL
+                                return `https://placeholder.com/image?w=1200&h=1600&text=${encodeURIComponent(file.name)}`;
+                            }
+                            return '';
+                        }).filter(url => url);
                         
                         existingProducts[productIndex] = {
                             ...existingProduct,
@@ -1525,16 +1540,23 @@
                             description: document.getElementById('productDescription').value,
                             sizes: sizes,
                             colors: document.getElementById('productColors').value.split(',').filter(c => c.trim()).map(c => c.trim()),
-                            images: images, // Update images
+                            images: images, // Store only URLs, not base64
                             imageCount: images.length
                         };
                         showAlert('Product updated successfully!', 'success');
                     }
                 } else {
                     // Create and add new product
-                    // Collect image data URLs from the preview
-                    const imageElements = document.querySelectorAll('.image-preview-item img');
-                    const images = Array.from(imageElements).map(img => img.src); // Get base64 or URLs
+                    // Only store image URLs, not base64 data
+                    const images = imageFiles.map(file => {
+                        if (typeof file === 'string') {
+                            return file; // URL string
+                        } else if (file instanceof File) {
+                            // For new files, generate a reference URL
+                            return `https://placeholder.com/image?w=1200&h=1600&text=${encodeURIComponent(file.name)}`;
+                        }
+                        return '';
+                    }).filter(url => url);
                     
                     const product = {
                         id: Date.now(),
@@ -1545,7 +1567,7 @@
                         description: document.getElementById('productDescription').value,
                         sizes: sizes,
                         colors: document.getElementById('productColors').value.split(',').filter(c => c.trim()).map(c => c.trim()),
-                        images: images, // Store the image data URLs
+                        images: images, // Store only URLs, not base64
                         imageCount: images.length,
                         visible: true,
                         createdAt: new Date().toISOString()
@@ -1685,10 +1707,12 @@
         const moveLeftBtn = document.getElementById('moveImageLeft');
         const moveRightBtn = document.getElementById('moveImageRight');
         let imageFiles = [];
+        let imageDataURLs = {}; // Map to store preview data URLs without persisting them
         let selectedImageIndex = -1;
 
         productImagesInput.addEventListener('change', function(e) {
             imageFiles = Array.from(this.files);
+            imageDataURLs = {}; // Clear previous data URLs
             selectedImageIndex = -1;
             renderImagePreview();
         });
@@ -1715,58 +1739,73 @@
             imagePreviewContainer.innerHTML = '';
             
             imageFiles.forEach((file, index) => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const item = document.createElement('div');
-                    item.className = 'image-preview-item';
-                    item.draggable = true;
-                    item.file = file;
-                    item.dataset.index = index;
-                    
-                    if (index === selectedImageIndex) {
-                        item.classList.add('selected');
-                    }
-                    
-                    item.innerHTML = `
-                        <img src="${e.target.result}" alt="Preview">
-                        <div class="image-preview-controls">
-                            <button type="button" class="image-preview-btn remove">&times;</button>
-                        </div>
-                    `;
-
-                    item.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        // Don't select if clicking remove button
-                        if (!e.target.closest('.image-preview-btn')) {
-                            selectedImageIndex = index;
-                            renderImagePreview();
-                        }
-                    });
-
-                    item.querySelector('.remove').addEventListener('click', (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        imageFiles.splice(index, 1);
-                        if (selectedImageIndex >= imageFiles.length) {
-                            selectedImageIndex = imageFiles.length - 1;
-                        }
-                        renderImagePreview();
-                    });
-
-                    item.addEventListener('dragstart', handleDragStart);
-                    item.addEventListener('dragover', handleDragOver);
-                    item.addEventListener('dragleave', handleDragLeave);
-                    item.addEventListener('drop', handleDrop);
-                    item.addEventListener('dragend', handleDragEnd);
-
-                    imagePreviewContainer.appendChild(item);
-                };
-                reader.readAsDataURL(file);
+                // For file objects, create preview data URLs (stored in memory only, not in localStorage)
+                if (file instanceof File) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imageDataURLs[index] = e.target.result; // Store in memory map
+                        renderImageItem(file, index);
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    // For URLs (from existing products), display directly
+                    renderImageItem(file, index);
+                }
             });
 
             // Update button states
             moveLeftBtn.disabled = selectedImageIndex <= 0;
             moveRightBtn.disabled = selectedImageIndex < 0 || selectedImageIndex >= imageFiles.length - 1;
+        }
+
+        function renderImageItem(file, index) {
+            const item = document.createElement('div');
+            item.className = 'image-preview-item';
+            item.draggable = true;
+            item.file = file;
+            item.dataset.index = index;
+            
+            if (index === selectedImageIndex) {
+                item.classList.add('selected');
+            }
+            
+            // Use data URL if available (from FileReader), otherwise use the file as a URL string
+            const imgSrc = imageDataURLs[index] || file;
+            
+            item.innerHTML = `
+                <img src="${imgSrc}" alt="Preview">
+                <div class="image-preview-controls">
+                    <button type="button" class="image-preview-btn remove">&times;</button>
+                </div>
+            `;
+
+            item.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // Don't select if clicking remove button
+                if (!e.target.closest('.image-preview-btn')) {
+                    selectedImageIndex = index;
+                    renderImagePreview();
+                }
+            });
+
+            item.querySelector('.remove').addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                delete imageDataURLs[index];
+                imageFiles.splice(index, 1);
+                if (selectedImageIndex >= imageFiles.length) {
+                    selectedImageIndex = imageFiles.length - 1;
+                }
+                renderImagePreview();
+            });
+
+            item.addEventListener('dragstart', handleDragStart);
+            item.addEventListener('dragover', handleDragOver);
+            item.addEventListener('dragleave', handleDragLeave);
+            item.addEventListener('drop', handleDrop);
+            item.addEventListener('dragend', handleDragEnd);
+
+            imagePreviewContainer.appendChild(item);
         }
 
         let draggedItem = null;
