@@ -1646,40 +1646,41 @@ nav {
 
 .product-price-detail {
     display: flex;
-    flex-direction: column;
-    gap: 6px;
+    flex-direction: row;
+    gap: 12px;
     margin-bottom: 28px;
     padding: 0;
     background: transparent;
     border-left: none;
     border-radius: 0;
     position: relative;
+    align-items: baseline;
 }
 
 @media (min-width: 480px) {
     .product-price-detail {
-        gap: 8px;
+        gap: 14px;
         margin-bottom: 32px;
     }
 }
 
 @media (min-width: 600px) {
     .product-price-detail {
-        gap: 8px;
+        gap: 14px;
         margin-bottom: 36px;
     }
 }
 
 @media (min-width: 768px) {
     .product-price-detail {
-        gap: 10px;
+        gap: 16px;
         margin-bottom: 40px;
     }
 }
 
 @media (min-width: 1024px) {
     .product-price-detail {
-        gap: 12px;
+        gap: 16px;
         margin-bottom: 48px;
     }
 }
@@ -1716,28 +1717,32 @@ nav {
 }
 
 .price-currency {
-    font-size: 10px;
+    font-size: 14px;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.35em;
     font-weight: 500;
+    align-self: flex-end;
+    padding-bottom: 4px;
 }
 
 @media (min-width: 480px) {
     .price-currency {
-        font-size: 11px;
+        font-size: 15px;
     }
 }
 
 @media (min-width: 768px) {
     .price-currency {
-        font-size: 11px;
+        font-size: 16px;
+        padding-bottom: 6px;
     }
 }
 
 @media (min-width: 1024px) {
     .price-currency {
-        font-size: 12px;
+        font-size: 17px;
+        padding-bottom: 8px;
     }
 }
 
