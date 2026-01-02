@@ -919,8 +919,6 @@
                 products[productIndex].visible = !products[productIndex].visible;
                 localStorage.setItem('ghoharyProducts', JSON.stringify(products));
                 renderProductsTable();
-                const visibility = products[productIndex].visible ? 'visible' : 'hidden';
-                alert(`Product is now ${visibility}`);
             }
         }
 
