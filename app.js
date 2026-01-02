@@ -7,12 +7,12 @@
 
     // ===== UTILITY FUNCTIONS =====
     
-    // Update cart count across all pages
-    function updateCartCount() {
+    // Update cart count across all pages - exposed globally
+    window.updateCartCount = function() {
         const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
         const cartCount = document.querySelector('.cart-count');
         if (cartCount) {
-            const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
+            const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
             cartCount.textContent = totalItems;
             cartCount.style.display = totalItems > 0 ? 'flex' : 'none';
         }

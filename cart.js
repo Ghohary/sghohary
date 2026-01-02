@@ -139,23 +139,26 @@
             cart.splice(index, 1);
             localStorage.setItem('ghoharyCart', JSON.stringify(cart));
             renderCart();
-            updateCartCount();
+            window.updateCartCount();
         }
     };
 
-    function updateCartCount() {
-        const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
-        const cartCount = document.querySelector('.cart-count');
-        if (cartCount) {
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            cartCount.textContent = totalItems;
-            cartCount.style.display = totalItems > 0 ? 'flex' : 'none';
-        }
+    // Use global updateCartCount if available, otherwise define locally
+    if (!window.updateCartCount) {
+        window.updateCartCount = function() {
+            const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
+            const cartCount = document.querySelector('.cart-count');
+            if (cartCount) {
+                const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                cartCount.textContent = totalItems;
+                cartCount.style.display = totalItems > 0 ? 'flex' : 'none';
+            }
+        };
     }
 
     // Initial render
     renderCart();
-    updateCartCount();
+    window.updateCartCount();
 
     console.log('Cart page loaded');
 })();

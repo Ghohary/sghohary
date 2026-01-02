@@ -17,6 +17,7 @@
                 // Re-initialize mobile menu functionality
                 initializeMobileMenu();
                 updateCartCount();
+                window.addEventListener('cartUpdated', updateCartCount);
             })
             .catch(error => console.error('Error loading header:', error));
     }
@@ -52,7 +53,7 @@
             
             if (totalItems > 0) {
                 cartCountElement.textContent = totalItems;
-                cartCountElement.style.display = 'inline-flex';
+                cartCountElement.style.display = 'flex';
             } else {
                 cartCountElement.style.display = 'none';
             }

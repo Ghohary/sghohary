@@ -325,6 +325,7 @@
     // ===== ADD TO CART =====
     const addToCartBtn = document.getElementById('addToCartBtn');
     
+    let modalTimeoutId = null;
     if (addToCartBtn) {
         addToCartBtn.addEventListener('click', function() {
             if (!selectedSize) {
@@ -332,13 +333,14 @@
                 return;
             }
 
+            const customizationField = document.getElementById('customization');
             const cartProduct = {
                 id: product.id,
                 name: product.name,
                 price: product.price,
                 size: selectedSize,
-                customization: document.getElementById('customization').value,
-                image: mainImage.src,
+                customization: customizationField ? customizationField.value : '',
+                image: mainImage ? mainImage.src : '',
                 quantity: 1
             };
 
@@ -360,32 +362,38 @@
             localStorage.setItem('ghoharyCart', JSON.stringify(cart));
 
             // Update cart count
-            updateCartCount();
+            window.updateCartCount();
+            window.dispatchEvent(new Event('cartUpdated'));
 
-            // Show success modal
+            // Show success modal (if present) and auto-hide after 10s
             const modal = document.getElementById('successModal');
-            if (modal) modal.style.display = 'flex';
-
-            // Add animation
-            this.innerHTML = '<span>✓ Added to Cart</span>';
-            setTimeout(() => {
-                this.innerHTML = '<span>Reserve This Gown</span>';
-            }, 2000);
+            if (modal) {
+                modal.style.display = 'flex';
+                if (modalTimeoutId) {
+                    clearTimeout(modalTimeoutId);
+                }
+                modalTimeoutId = setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 10000);
+            }
         });
     }
 
     // ===== UPDATE CART COUNT =====
-    function updateCartCount() {
-        const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
-        const cartCount = document.querySelector('.cart-count');
-        if (cartCount) {
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            cartCount.textContent = totalItems;
-            cartCount.style.display = totalItems > 0 ? 'flex' : 'none';
-        }
+    // Use global updateCartCount if available, otherwise define locally
+    if (!window.updateCartCount) {
+        window.updateCartCount = function() {
+            const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
+            const cartCount = document.querySelector('.cart-count');
+            if (cartCount) {
+                const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                cartCount.textContent = totalItems;
+                cartCount.style.display = totalItems > 0 ? 'flex' : 'none';
+            }
+        };
     }
 
-    updateCartCount();
+    window.updateCartCount();
 
     // ===== ZOOM FUNCTIONALITY =====
     const zoomBtn = document.querySelector('.zoom-btn');

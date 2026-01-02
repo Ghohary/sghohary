@@ -111,6 +111,21 @@ body {
     padding: 0;
 }
 
+body.product-page {
+    font-family: 'Montserrat', sans-serif;
+}
+
+body.product-page .product-title,
+body.product-page .price-currency,
+body.product-page .price-amount {
+    font-family: inherit;
+}
+
+body.product-page .btn,
+body.product-page .size-btn {
+    font-family: inherit;
+}
+
 /* Typography - Luxury */
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Cormorant Garamond', serif;
@@ -408,6 +423,19 @@ nav {
 
 .nav-icons {
     display: none;
+}
+
+@media (max-width: 1023px) {
+    .nav-icons {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+    }
+
+    .nav-icons .search-link,
+    .nav-icons a[aria-label="Account"] {
+        display: none;
+    }
 }
 
 @media (min-width: 1024px) {
@@ -1549,7 +1577,7 @@ nav {
 }
 
 .product-title {
-    font-size: clamp(28px, 7vw, 48px);
+    font-size: clamp(24px, 5.2vw, 42px);
     color: var(--text-dark);
     margin-bottom: 12px;
     letter-spacing: -0.01em;
@@ -1560,42 +1588,42 @@ nav {
 
 @media (min-width: 375px) {
     .product-title {
-        font-size: clamp(30px, 7.5vw, 52px);
+        font-size: clamp(26px, 5.6vw, 44px);
         margin-bottom: 14px;
     }
 }
 
 @media (min-width: 480px) {
     .product-title { 
-        font-size: clamp(34px, 8vw, 56px);
+        font-size: clamp(28px, 5.9vw, 46px);
         margin-bottom: 16px;
     }
 }
 
 @media (min-width: 600px) {
     .product-title { 
-        font-size: clamp(38px, 8vw, 60px);
+        font-size: clamp(30px, 6vw, 48px);
         margin-bottom: 18px;
     }
 }
 
 @media (min-width: 768px) {
     .product-title { 
-        font-size: clamp(42px, 7.5vw, 68px);
+        font-size: clamp(32px, 5.5vw, 50px);
         margin-bottom: 20px;
     }
 }
 
 @media (min-width: 1024px) {
     .product-title { 
-        font-size: clamp(48px, 8vw, 72px);
+        font-size: clamp(34px, 5.2vw, 52px);
         margin-bottom: 24px;
     }
 }
 
 @media (min-width: 1440px) {
     .product-title { 
-        font-size: clamp(52px, 8.5vw, 76px);
+        font-size: clamp(36px, 5vw, 56px);
         margin-bottom: 28px;
     }
 }
@@ -1654,7 +1682,7 @@ nav {
     border-left: none;
     border-radius: 0;
     position: relative;
-    align-items: baseline;
+    align-items: center;
 }
 
 @media (min-width: 480px) {
@@ -1717,76 +1745,78 @@ nav {
 }
 
 .price-currency {
-    font-size: clamp(28px, 6.5vw, 48px);
+    font-size: clamp(22px, 4.6vw, 34px);
     color: var(--text-dark);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.02em;
     font-weight: 400;
     font-family: 'Cormorant Garamond', serif;
     white-space: nowrap;
+    line-height: 1;
 }
 
 @media (min-width: 480px) {
     .price-currency {
-        font-size: clamp(32px, 7vw, 52px);
+        font-size: clamp(24px, 4.8vw, 36px);
         white-space: nowrap;
     }
 }
 
 @media (min-width: 600px) {
     .price-currency {
-        font-size: clamp(36px, 7.5vw, 56px);
+        font-size: clamp(26px, 4.6vw, 38px);
         white-space: nowrap;
     }
 }
 
 @media (min-width: 768px) {
     .price-currency {
-        font-size: clamp(40px, 7.5vw, 60px);
+        font-size: clamp(28px, 4.4vw, 40px);
         white-space: nowrap;
     }
 }
 
 @media (min-width: 1024px) {
     .price-currency {
-        font-size: clamp(44px, 8vw, 64px);
+        font-size: clamp(30px, 4.2vw, 42px);
         white-space: nowrap;
     }
 }
 
 .price-amount {
-    font-size: clamp(28px, 6.5vw, 48px);
+    font-size: clamp(22px, 4.6vw, 34px);
     color: var(--text-dark);
     font-weight: 400;
-    letter-spacing: -0.01em;
+    letter-spacing: 0.02em;
     font-family: 'Cormorant Garamond', serif;
     white-space: nowrap;
+    line-height: 1;
 }
 
 @media (min-width: 480px) {
     .price-amount {
-        font-size: clamp(32px, 7vw, 52px);
+        font-size: clamp(24px, 4.8vw, 36px);
         white-space: nowrap;
     }
 }
 
 @media (min-width: 600px) {
     .price-amount {
-        font-size: clamp(36px, 7.5vw, 56px);
+        font-size: clamp(26px, 4.6vw, 38px);
         white-space: nowrap;
     }
 }
 
 @media (min-width: 768px) {
     .price-amount {
-        font-size: clamp(40px, 7.5vw, 60px);
+        font-size: clamp(28px, 4.4vw, 40px);
         white-space: nowrap;
     }
 }
 
 @media (min-width: 1024px) {
     .price-amount {
-        font-size: clamp(44px, 8vw, 64px);
+        font-size: clamp(30px, 4.2vw, 42px);
         white-space: nowrap;
     }
 }
@@ -4169,4 +4199,3 @@ button, a {
     flex-direction: column;
     gap: var(--spacing-md);
 }
-
