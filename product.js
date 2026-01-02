@@ -106,37 +106,60 @@
 
     // Get product ID from URL
     const urlParams = new URLSearchParams(window.location.search);
-    const productId = urlParams.get('id');
+    const productIdParam = urlParams.get('id');
     
-    // Try to load product from localStorage (admin-created products)
+    // ALWAYS prioritize admin products from localStorage
     let product = null;
     const adminProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
+    const visibleAdminProducts = adminProducts.filter(p => p.visible !== false);
     
-    // Log for debugging
-    console.log('Requested product ID:', productId);
-    console.log('Admin products available:', adminProducts.length);
-    console.log('Admin product IDs:', adminProducts.map(p => p.id));
-    
-    if (productId) {
-        // Try exact match first
-        const adminProduct = adminProducts.find(p => p.id == productId);
-        
-        if (adminProduct && adminProduct.visible !== false) {
-            product = adminProduct;
-            console.log('Found admin product:', product.name);
-        } else {
-            // Fallback to hardcoded products only if it's a numeric ID
-            product = products[productId];
-            if (product) {
-                console.log('Using hardcoded product:', product.name);
-            }
-        }
+    console.log('Requested product ID:', productIdParam);
+    console.log('Admin products available:', visibleAdminProducts.length);
+    if (visibleAdminProducts.length > 0) {
+        console.log('Admin product IDs:', visibleAdminProducts.map(p => p.id));
     }
     
-    // If still no product, use first admin product as fallback
-    if (!product && adminProducts.length > 0) {
-        product = adminProducts[0];
-        console.log('No product found, using first admin product:', product.name);
+    // If there are admin products, use them exclusively
+    if (visibleAdminProducts.length > 0) {
+        if (productIdParam) {
+            // Try to find in admin products by ID (handle both string and numeric)
+            product = visibleAdminProducts.find(p => {
+                return p.id == productIdParam || p.id === parseInt(productIdParam) || p.id === productIdParam.toString();
+            });
+            
+            // If not found by ID, try by numeric index
+            if (!product) {
+                const index = parseInt(productIdParam);
+                if (!isNaN(index) && index > 0 && index <= visibleAdminProducts.length) {
+                    product = visibleAdminProducts[index - 1];
+                    console.log('Found product by numeric index:', product.name);
+                }
+            }
+            
+            if (product) {
+                console.log('Found admin product:', product.name);
+            }
+        }
+        
+        // If still no product, use the first admin product
+        if (!product) {
+            product = visibleAdminProducts[0];
+            console.log('No specific product found, using first admin product:', product.name);
+        }
+    } else {
+        // Only use hardcoded products if NO admin products exist
+        if (productIdParam) {
+            product = products[productIdParam];
+            if (product) {
+                console.log('No admin products, using hardcoded product:', product.name);
+            }
+        }
+        
+        // Fallback to first hardcoded product
+        if (!product) {
+            product = products['1'];
+            console.log('No products found, using default product:', product?.name);
+        }
     }
 
     if (!product) {
