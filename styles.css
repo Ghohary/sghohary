@@ -293,6 +293,16 @@ nav .mobile-menu-btn {
     margin-right: auto;
 }
 
+nav .logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+nav .nav-icons {
+    margin-left: auto;
+}
+
 @media (min-width: 768px) {
     nav { padding: clamp(24px, 3vh, 32px) var(--spacing-lg); min-height: 92px; }
 }
@@ -421,9 +431,24 @@ nav .mobile-menu-btn {
         height: auto;
         background: transparent;
         gap: 40px;
+        justify-self: start;
     }
     
     .nav-links a { font-size: 11px; }
+
+    .nav-icons {
+        justify-self: end;
+    }
+
+    nav {
+        position: relative;
+    }
+
+    .logo {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 }
 
 .nav-icons {
