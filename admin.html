@@ -949,7 +949,7 @@
                 return;
             }
 
-            // Create product object
+            // Create product object (WITHOUT storing images as base64)
             const product = {
                 id: Date.now(),
                 name: name,
@@ -962,25 +962,10 @@
                     inventory: 0
                 })),
                 colors: document.getElementById('productColors').value.split(',').filter(c => c.trim()).map(c => c.trim()),
-                images: [],
+                imageCount: document.querySelectorAll('.image-preview-item').length,
+                images: [], // We won't store actual image data
                 createdAt: new Date().toISOString()
             };
-
-            // Handle images (store as base64 or file paths)
-            const imageItems = document.querySelectorAll('.image-preview-item');
-            for (let item of imageItems) {
-                if (item.file) {
-                    const reader = new FileReader();
-                    const imagePromise = new Promise((resolve) => {
-                        reader.onload = function(e) {
-                            resolve(e.target.result);
-                        };
-                        reader.readAsDataURL(item.file);
-                    });
-                    const imageData = await imagePromise;
-                    product.images.push(imageData);
-                }
-            }
 
             try {
                 // Get existing products from localStorage
