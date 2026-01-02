@@ -1163,30 +1163,44 @@
         }
 
         let draggedItem = null;
+        let draggedIndex = null;
 
         function handleDragStart(e) {
             draggedItem = this;
+            draggedIndex = Array.from(imagePreviewContainer.children).indexOf(this);
             this.classList.add('dragging');
         }
 
         function handleDragOver(e) {
             e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
         }
 
         function handleDrop(e) {
             e.preventDefault();
-            if (draggedItem !== this) {
+            if (draggedItem && draggedItem !== this) {
                 const allItems = Array.from(imagePreviewContainer.children);
-                const draggedIndex = allItems.indexOf(draggedItem);
                 const targetIndex = allItems.indexOf(this);
                 
-                [imageFiles[draggedIndex], imageFiles[targetIndex]] = [imageFiles[targetIndex], imageFiles[draggedIndex]];
+                // Remove dragged item from array
+                const draggedFile = imageFiles[draggedIndex];
+                imageFiles.splice(draggedIndex, 1);
+                
+                // Insert at target position
+                if (draggedIndex < targetIndex) {
+                    imageFiles.splice(targetIndex - 1, 0, draggedFile);
+                } else {
+                    imageFiles.splice(targetIndex, 0, draggedFile);
+                }
+                
                 renderImagePreview();
             }
         }
 
         function handleDragEnd(e) {
             this.classList.remove('dragging');
+            draggedItem = null;
+            draggedIndex = null;
         }
     </script>
 </body>
