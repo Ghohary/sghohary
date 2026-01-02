@@ -2907,62 +2907,6 @@ nav .nav-icons {
     color: var(--text-dark);
 }
 
-.payment-icons {
-    margin-top: clamp(24px, 3.5vh, 36px);
-    padding-top: clamp(24px, 3.5vh, 36px);
-    border-top: 1px solid rgba(0, 0, 0, 0.08);
-    text-align: center;
-}
-
-.payment-text {
-    font-size: 11px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    margin-bottom: 20px;
-    font-weight: 500;
-}
-
-.payment-methods {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.payment-method {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    padding: 12px 14px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 2px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, var(--white) 100%);
-    transition: all 0.3s ease;
-    color: var(--text-mid);
-    font-size: 12px;
-    cursor: pointer;
-}
-
-.payment-method:hover {
-    border-color: rgba(0, 0, 0, 0.2);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    color: var(--text-dark);
-    background: var(--white);
-}
-
-.payment-method svg {
-    width: 32px;
-    height: 20px;
-    flex-shrink: 0;
-    color: var(--text-muted);
-    transition: color 0.3s ease;
-}
-
-.payment-method:hover svg {
-    color: var(--text-dark);
-}
-
 /* Empty Cart */
 .empty-cart {
     display: flex;

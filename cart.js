@@ -128,33 +128,6 @@
                 <a href="collections.html" class="continue-shopping">
                     Continue Shopping
                 </a>
-                
-                <div class="payment-icons">
-                    <p class="payment-text">Accepted Payment Methods</p>
-                    <div class="payment-methods">
-                        <div class="payment-method">
-                            <svg width="40" height="25" viewBox="0 0 40 25" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <rect x="2" y="2" width="36" height="21" rx="2" ry="2"></rect>
-                                <line x1="2" y1="8" x2="38" y2="8"></line>
-                            </svg>
-                            <span>Card</span>
-                        </div>
-                        <div class="payment-method">
-                            <svg width="40" height="25" viewBox="0 0 40 25" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <path d="M5 8c0-1.657 1.343-3 3-3h24c1.657 0 3 1.343 3 3v9c0 1.657-1.343 3-3 3H8c-1.657 0-3-1.343-3-3V8z"></path>
-                                <circle cx="20" cy="14.5" r="3"></circle>
-                            </svg>
-                            <span>Bank Transfer</span>
-                        </div>
-                        <div class="payment-method">
-                            <svg width="40" height="25" viewBox="0 0 40 25" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <path d="M20 2c9.941 0 18 4.477 18 10s-8.059 10-18 10S2 17.523 2 12s8.059-10 18-10z"></path>
-                                <path d="M6 12v3c0 5.523 8.059 10 18 10s18-4.477 18-10v-3"></path>
-                            </svg>
-                            <span>Wire Transfer</span>
-                        </div>
-                    </div>
-                </div>
             </div>
         `;
 
