@@ -375,10 +375,16 @@
             font-size: clamp(11px, 1.6vw, 12px);
             margin-right: clamp(12px, 2vw, 16px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            background: #1A1A1A;
+            color: #FFFFFF;
+            border: none;
+            cursor: pointer;
+            display: inline-block;
         }
 
         .btn-small:hover {
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            background: #000000;
         }
 
         /* Premium Tables */
@@ -1046,26 +1052,8 @@
 
         // Load initial data
         window.onload = () => {
-            if (!authToken) {
-                const email = prompt('Admin Email:');
-                const password = prompt('Password:');
-                if (email && password) {
-                    fetch(`${API_BASE}/auth/login`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email, password })
-                    })
-                    .then(r => r.json())
-                    .then(d => {
-                        authToken = d.token;
-                        localStorage.setItem('adminToken', authToken);
-                        loadProducts();
-                    })
-                    .catch(e => alert('Login failed: ' + e.message));
-                }
-            } else {
-                loadProducts();
-            }
+            // Load products on page load
+            loadProducts();
         };
 
         // Size Button Selection
