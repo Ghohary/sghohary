@@ -780,7 +780,7 @@
 
             const formData = new FormData();
             formData.append('name', document.getElementById('productName').value);
-            formData.append('sku', document.getElementById('productSku').value || `SKU-${Date.now()}`);
+            formData.append('sku', document.getElementById('productSku').value);
             formData.append('category', document.getElementById('productCategory').value);
             
             const priceValue = document.getElementById('productPrice').value;
