@@ -180,6 +180,8 @@
     // ===== SIZE SELECTION =====
     const sizeSelector = document.querySelector('.size-selector');
     const sizeBtns = document.querySelectorAll('.size-btn');
+    const inventoryStatus = document.getElementById('inventoryStatus');
+    const inventoryText = inventoryStatus?.querySelector('.inventory-text');
     let selectedSize = null;
 
     // If product has sizes array from admin, render them dynamically
@@ -200,11 +202,44 @@
                 btn.className = 'size-btn';
                 btn.dataset.size = size;
                 btn.textContent = size;
+                
+                // Store inventory data on button if available
+                const sizeData = product.sizes.find(s => {
+                    if (typeof s === 'string') return s === size;
+                    if (s && typeof s === 'object') return s.size === size;
+                    return false;
+                });
+                
+                if (sizeData && typeof sizeData === 'object' && sizeData.inventory !== undefined) {
+                    btn.dataset.inventory = sizeData.inventory;
+                }
+                
                 btn.addEventListener('click', function(e) {
                     e.preventDefault();
                     document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
                     this.classList.add('selected');
                     selectedSize = this.dataset.size;
+                    
+                    // Display inventory information
+                    if (inventoryStatus && inventoryText) {
+                        const inventory = parseInt(this.dataset.inventory) || 0;
+                        
+                        if (inventory > 10) {
+                            inventoryText.innerHTML = `<span class="in-stock">✓ In Stock</span> — ${inventory} available`;
+                            inventoryStatus.classList.remove('low-stock', 'out-of-stock');
+                            inventoryStatus.classList.add('in-stock');
+                        } else if (inventory > 0 && inventory <= 10) {
+                            inventoryText.innerHTML = `<span class="low-stock">⚠ Limited Stock</span> — Only ${inventory} available`;
+                            inventoryStatus.classList.remove('in-stock', 'out-of-stock');
+                            inventoryStatus.classList.add('low-stock');
+                        } else {
+                            inventoryText.innerHTML = `<span class="out-of-stock">✕ Out of Stock</span> — Contact us for custom options`;
+                            inventoryStatus.classList.remove('in-stock', 'low-stock');
+                            inventoryStatus.classList.add('out-of-stock');
+                        }
+                        
+                        inventoryStatus.style.display = 'block';
+                    }
                 });
                 sizeSelector.appendChild(btn);
             });
@@ -217,6 +252,11 @@
                 sizeBtns.forEach(b => b.classList.remove('selected'));
                 this.classList.add('selected');
                 selectedSize = this.dataset.size;
+                
+                // Hide inventory for hardcoded products
+                if (inventoryStatus) {
+                    inventoryStatus.style.display = 'none';
+                }
             });
         });
     }
