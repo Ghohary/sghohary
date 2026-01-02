@@ -17,217 +17,343 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f5f5;
-            color: #333;
+            font-family: 'Montserrat', 'Cormorant Garamond', sans-serif;
+            background: #FFFFFF;
+            color: var(--text-dark);
+            font-weight: 300;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
+            padding: clamp(40px, 8vw, 60px) clamp(20px, 5vw, 40px);
         }
 
+        /* Header Section */
+        .admin-header {
+            margin-bottom: clamp(48px, 8vh, 64px);
+            padding-bottom: clamp(32px, 5vh, 48px);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .admin-header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(36px, 6vw, 48px);
+            font-weight: 300;
+            letter-spacing: 0.12em;
+            color: var(--text-dark);
+            margin-bottom: clamp(12px, 2vh, 16px);
+        }
+
+        .admin-header p {
+            font-size: var(--text-base);
+            color: var(--text-mid);
+            letter-spacing: 0.08em;
+        }
+
+        /* Tabs */
         .tabs {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #ddd;
+            gap: clamp(24px, 4vw, 48px);
+            margin-bottom: clamp(48px, 8vh, 64px);
+            border-bottom: 1px solid var(--gray-200);
+            overflow-x: auto;
+            padding-bottom: clamp(20px, 3vh, 24px);
         }
 
         .tab-btn {
-            padding: 12px 20px;
+            padding: clamp(12px, 2vh, 16px) 0;
             border: none;
             background: none;
             cursor: pointer;
-            font-size: 16px;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
+            font-size: clamp(14px, 2vw, 16px);
+            color: var(--text-light);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border-bottom: 2px solid transparent;
+            transition: all 0.4s ease;
+            font-weight: 400;
+            position: relative;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-dark);
         }
 
         .tab-btn.active {
-            border-bottom-color: #D4AF37;
-            color: #D4AF37;
+            color: var(--text-dark);
+            border-bottom-color: var(--text-dark);
         }
 
+        /* Tab Content */
         .tab-content {
             display: none;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .tab-content.active {
             display: block;
         }
 
+        .tab-content h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(28px, 4vw, 36px);
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            margin-bottom: clamp(32px, 5vh, 48px);
+            color: var(--text-dark);
+        }
+
+        .tab-content h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(20px, 3vw, 28px);
+            font-weight: 300;
+            letter-spacing: 0.08em;
+            margin: clamp(40px, 6vh, 56px) 0 clamp(24px, 4vh, 32px) 0;
+            color: var(--text-dark);
+        }
+
+        /* Stats Grid */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: clamp(24px, 4vw, 32px);
+            margin-bottom: clamp(48px, 8vh, 64px);
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: clamp(32px, 5vw, 48px);
+            border: 1px solid var(--gray-200);
+            border-radius: 0;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--text-dark);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-number {
+            font-size: clamp(36px, 7vw, 56px);
+            font-weight: 300;
+            color: var(--text-dark);
+            letter-spacing: -0.02em;
+        }
+
+        .stat-label {
+            font-size: clamp(11px, 1.8vw, 13px);
+            color: var(--text-muted);
+            margin-top: clamp(12px, 2vh, 16px);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-weight: 400;
+        }
+
+        /* Form Styles */
+        form {
+            background: var(--white);
+            padding: clamp(40px, 6vw, 56px);
+            border: 1px solid var(--gray-200);
+            border-radius: 0;
+        }
+
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: clamp(28px, 4vh, 36px);
         }
 
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-            color: #2c1810;
+            font-size: clamp(12px, 1.8vw, 14px);
+            color: var(--text-dark);
+            margin-bottom: clamp(12px, 2vh, 16px);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 400;
         }
 
         input, textarea, select {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
+            padding: clamp(16px, 3vw, 20px);
+            border: 1px solid var(--gray-300);
+            background: var(--white);
+            color: var(--text-dark);
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(14px, 2vw, 16px);
+            transition: all 0.3s ease;
+            border-radius: 0;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--text-dark);
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
         }
 
         textarea {
             resize: vertical;
-            min-height: 100px;
-        }
-
-        button {
-            background: #D4AF37;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        button:hover {
-            background: #c4a327;
-            transform: translateY(-2px);
+            min-height: clamp(120px, 20vh, 200px);
         }
 
         .form-row {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: clamp(24px, 4vw, 32px);
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th {
-            background: #f9f9f9;
-            padding: 12px;
-            text-align: left;
-            font-weight: 600;
-            color: #2c1810;
-            border-bottom: 2px solid #ddd;
-        }
-
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #eee;
-        }
-
-        tr:hover {
-            background: #fafafa;
-        }
-
-        .alert {
-            padding: 12px 16px;
-            border-radius: 4px;
-            margin-bottom: 15px;
-        }
-
-        .alert.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .alert.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
+        /* Buttons */
+        button {
+            background: var(--text-dark);
+            color: var(--white);
+            padding: clamp(16px, 3vh, 20px) clamp(32px, 5vw, 48px);
+            border: none;
+            border-radius: 0;
+            cursor: pointer;
+            font-size: clamp(12px, 1.8vw, 14px);
             font-weight: 500;
             text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .status-available {
-            background: #d4edda;
-            color: #155724;
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
         }
 
-        .status-out-of-stock {
-            background: #f8d7da;
-            color: #721c24;
+        button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
         }
 
         .btn-small {
-            padding: 6px 12px;
-            font-size: 12px;
-            margin-right: 5px;
+            padding: clamp(10px, 1.8vh, 12px) clamp(16px, 3vw, 20px);
+            font-size: clamp(11px, 1.6vw, 12px);
+            margin-right: clamp(8px, 1.5vw, 12px);
         }
 
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: clamp(32px, 5vh, 48px);
         }
 
-        .stat-card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        thead {
+            background: var(--white);
         }
 
-        .stat-number {
-            font-size: 32px;
-            font-weight: bold;
-            color: #D4AF37;
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: #666;
-            margin-top: 5px;
+        th {
+            padding: clamp(20px, 3vh, 24px) clamp(16px, 2vw, 20px);
+            text-align: left;
+            font-weight: 500;
+            color: var(--text-dark);
+            border-bottom: 1px solid var(--gray-200);
+            font-size: clamp(12px, 1.8vw, 14px);
             text-transform: uppercase;
+            letter-spacing: 0.08em;
         }
 
-        .hidden {
-            display: none;
+        td {
+            padding: clamp(16px, 2.5vh, 20px) clamp(16px, 2vw, 20px);
+            border-bottom: 1px solid var(--gray-100);
+            font-size: clamp(13px, 2vw, 15px);
         }
 
-        .multi-input {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
+        tbody tr {
+            transition: all 0.3s ease;
         }
 
-        .multi-input input {
-            flex: 1;
+        tbody tr:hover {
+            background: var(--gray-50);
         }
 
-        .btn-add {
-            background: #D4AF37;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+        /* Alerts */
+        .alert {
+            padding: clamp(16px, 2.5vh, 20px) clamp(20px, 3vw, 24px);
+            margin-bottom: clamp(20px, 3vh, 28px);
+            border-left: 3px solid;
+            background: var(--white);
+            border-radius: 0;
+            font-size: clamp(13px, 2vw, 14px);
         }
 
+        .alert.success {
+            border-left-color: #10B981;
+            color: #047857;
+            background: #F0FDF4;
+        }
+
+        .alert.error {
+            border-left-color: #EF4444;
+            color: #991B1B;
+            background: #FEF2F2;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: clamp(8px, 1.5vh, 10px) clamp(12px, 2vw, 16px);
+            border-radius: 0;
+            font-size: clamp(11px, 1.6vw, 12px);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border: 1px solid;
+        }
+
+        .status-available {
+            background: #F0FDF4;
+            border-color: #10B981;
+            color: #047857;
+        }
+
+        .status-out-of-stock {
+            background: #FEF2F2;
+            border-color: #EF4444;
+            color: #991B1B;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
+            .container {
+                padding: clamp(24px, 5vw, 32px);
+            }
+
             .form-row {
                 grid-template-columns: 1fr;
             }
@@ -236,12 +362,16 @@
                 grid-template-columns: repeat(2, 1fr);
             }
 
+            .tabs {
+                gap: clamp(16px, 3vw, 24px);
+            }
+
             table {
                 font-size: 12px;
             }
 
             td, th {
-                padding: 8px;
+                padding: clamp(12px, 2vh, 16px);
             }
         }
     </style>
@@ -250,13 +380,18 @@
     <header></header>
 
     <div class="container">
+        <div class="admin-header">
+            <h1>Administration</h1>
+            <p>Manage your curated collection and operations</p>
+        </div>
+
         <div id="alertContainer"></div>
 
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('products')">Products</button>
             <button class="tab-btn" onclick="switchTab('orders')">Orders</button>
             <button class="tab-btn" onclick="switchTab('inventory')">Inventory</button>
-            <button class="tab-btn" onclick="switchTab('prices')">Bulk Price Update</button>
+            <button class="tab-btn" onclick="switchTab('prices')">Bulk Pricing</button>
         </div>
 
         <!-- PRODUCTS TAB -->
