@@ -2,15 +2,14 @@
 // Users can add their own products through the admin panel
 window.SEED_PRODUCTS = [];
 
-// Initialize products on first visit
+// Initialize products on first visit only
 window.initializeSeedData = function() {
-    // Always set to empty products on initialization (fresh start)
-    const existingProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
-    
-    // Only override if we have old products to clear
-    if (existingProducts.length > 0) {
+    // Only set empty products if ghoharyProducts key doesn't exist yet
+    if (!localStorage.getItem('ghoharyProducts')) {
         localStorage.setItem('ghoharyProducts', JSON.stringify(window.SEED_PRODUCTS));
-        console.log('[Seed] Cleared old products - starting fresh');
+        console.log('[Seed] First visit - initialized empty products array');
+    } else {
+        console.log('[Seed] Products already exist - skipping initialization');
     }
 };
 
