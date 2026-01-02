@@ -136,11 +136,18 @@
 
         // Render visible products
         productsToShow.forEach((product, index) => {
-            const category = product.category ? product.category.toLowerCase().replace(/\s+/g, '') : 'custom';
+            // Determine filter category value based on product category
+            let filterCategory = 'custom';
+            if (product.category) {
+                const cat = product.category.toLowerCase();
+                if (cat.includes('bridal')) filterCategory = 'bridal';
+                else if (cat.includes('evening')) filterCategory = 'evening';
+                else if (cat.includes('custom')) filterCategory = 'custom';
+            }
             
             const productCard = document.createElement('div');
             productCard.className = 'product-card fade-in';
-            productCard.dataset.category = category;
+            productCard.dataset.category = filterCategory;
             productCard.dataset.date = product.createdAt || Date.now();
             
             // Get first image or use placeholder
@@ -201,8 +208,10 @@
                 filteredProducts = [...allProducts];
             } else {
                 filteredProducts = allProducts.filter(product => {
-                    const category = (product.category || '').toLowerCase().replace(/\s+/g, '');
-                    return category === currentFilter;
+                    const category = (product.category || '').toLowerCase();
+                    const filter = currentFilter.toLowerCase();
+                    // Check if category contains the filter keyword
+                    return category.includes(filter);
                 });
             }
 
