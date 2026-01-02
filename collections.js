@@ -15,7 +15,9 @@
 
     // ===== LOAD PRODUCTS FROM SERVER API =====
     function loadProducts() {
-        const API_URL = 'http://localhost:5000/api';
+        // Determine API URL based on environment
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const API_URL = isLocalhost ? 'http://localhost:5000/api' : 'https://api.mohsenghohary.net/api';
         
         // Try to fetch from server
         fetch(`${API_URL}/products`)

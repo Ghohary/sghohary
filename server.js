@@ -11,7 +11,20 @@ const PORT = process.env.PORT || 5000;
 const DB_FILE = path.join(__dirname, 'server-db.json');
 
 // Middleware
-app.use(cors());
+const corsOptions = {
+    origin: [
+        'http://localhost:8000',
+        'http://localhost:3000',
+        'http://localhost:5000',
+        'https://mohsenghohary.net',
+        'https://www.mohsenghohary.net'
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type']
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.static('.')); // Serve static files
 
