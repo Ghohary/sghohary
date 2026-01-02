@@ -32,42 +32,6 @@
             min-height: 100vh;
         }
 
-        /* Luxury Header */
-        .admin-header {
-            margin-bottom: clamp(64px, 12vh, 96px);
-            padding-bottom: clamp(48px, 8vh, 64px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-            position: relative;
-        }
-
-        .admin-header::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.1) 50%, transparent 100%);
-        }
-
-        .admin-header h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: clamp(36px, 5vw, 48px);
-            font-weight: 300;
-            letter-spacing: 0.15em;
-            color: #1A1A1A;
-            margin-bottom: clamp(16px, 3vh, 24px);
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-        }
-
-        .admin-header p {
-            font-size: clamp(14px, 2vw, 16px);
-            color: #666666;
-            letter-spacing: 0.12em;
-            font-weight: 300;
-            text-transform: uppercase;
-        }
-
         /* Premium Tabs */
         .tabs {
             display: flex;
@@ -519,10 +483,6 @@
                 padding: clamp(40px, 6vw, 48px);
             }
 
-            .admin-header h1 {
-                font-size: clamp(36px, 8vw, 48px);
-            }
-
             .form-row {
                 grid-template-columns: 1fr;
             }
@@ -549,11 +509,6 @@
     <header></header>
 
     <div class="container">
-        <div class="admin-header">
-            <h1>Administration</h1>
-            <p>Manage your curated collection and operations</p>
-        </div>
-
         <div id="alertContainer"></div>
 
         <div class="tabs">
