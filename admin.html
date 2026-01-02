@@ -1149,7 +1149,7 @@
         async function loadProducts() {
             try {
                 // Load products from localStorage
-                let products = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
+                products = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
                 
                 // MIGRATION: Clean up old base64 images and convert to URLs
                 let needsUpdate = false;
@@ -1180,7 +1180,7 @@
                     localStorage.setItem('ghoharyProducts', JSON.stringify(products));
                 }
                 
-                products = products;
+                // products is already assigned above (not re-assigning)
                 
                 document.getElementById('totalProducts').textContent = products.length;
                 
@@ -1410,7 +1410,7 @@
             // Render existing images
             if (product.images && product.images.length > 0) {
                 product.images.forEach((url, index) => {
-                    renderImageItem(url, index);
+                    renderImageItem(url, index, url); // Pass URL as both file and imgSrc
                 });
             }
             
@@ -1787,12 +1787,13 @@
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         imageDataURLs[index] = e.target.result; // Store in memory map
-                        renderImageItem(file, index);
+                        // Now render the item with the data URL available
+                        renderImageItem(file, index, e.target.result);
                     };
                     reader.readAsDataURL(file);
                 } else {
                     // For URLs (from existing products), display directly
-                    renderImageItem(file, index);
+                    renderImageItem(file, index, file); // Pass URL as imgSrc
                 }
             });
 
@@ -1801,7 +1802,7 @@
             moveRightBtn.disabled = selectedImageIndex < 0 || selectedImageIndex >= imageFiles.length - 1;
         }
 
-        function renderImageItem(file, index) {
+        function renderImageItem(file, index, imgSrc) {
             const item = document.createElement('div');
             item.className = 'image-preview-item';
             item.draggable = true;
@@ -1812,9 +1813,7 @@
                 item.classList.add('selected');
             }
             
-            // Use data URL if available (from FileReader), otherwise use the file as a URL string
-            const imgSrc = imageDataURLs[index] || file;
-            
+            // Use the provided imgSrc (data URL or URL string)
             item.innerHTML = `
                 <img src="${imgSrc}" alt="Preview">
                 <div class="image-preview-controls">
