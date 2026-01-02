@@ -288,6 +288,11 @@ nav {
     min-height: 80px;
 }
 
+nav .mobile-menu-btn {
+    order: -1;
+    margin-right: auto;
+}
+
 @media (min-width: 768px) {
     nav { padding: clamp(24px, 3vh, 32px) var(--spacing-lg); min-height: 92px; }
 }
