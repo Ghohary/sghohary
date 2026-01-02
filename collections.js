@@ -13,32 +13,36 @@
     const itemsPerPage = 12;
     let currentPage = 1;
 
-    // ===== LOAD PRODUCTS FROM LOCALSTORAGE =====
+    // ===== LOAD PRODUCTS FROM CENTRAL DATABASE =====
     function loadProducts() {
-        // Get admin products
-        let adminProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
-        
-        console.log('[Collections] Admin products from localStorage:', adminProducts);
-        console.log('[Collections] Number of products:', adminProducts.length);
-        console.log('[Collections] LocalStorage keys:', Object.keys(localStorage));
-        
-        // If no products found, log all localStorage content for debugging
-        if (adminProducts.length === 0) {
-            console.warn('[Collections] No products found! Checking all localStorage:');
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                console.log(`[Collections] ${key}:`, localStorage.getItem(key));
-            }
-        }
-        
-        // Filter only visible products
-        allProducts = adminProducts.filter(p => p.visible !== false);
-        
-        // Use ONLY admin products - no fallback stock images
-        // If no admin products exist, collections will show empty message
-        
-        filteredProducts = [...allProducts];
-        renderProducts();
+        // First, try to load from central database file
+        fetch('products-db.json')
+            .then(response => response.json())
+            .then(data => {
+                let adminProducts = data.products || [];
+                
+                console.log('[Collections] Products from central database:', adminProducts);
+                console.log('[Collections] Number of products:', adminProducts.length);
+                
+                // If no products in central DB, try localStorage as fallback
+                if (adminProducts.length === 0) {
+                    adminProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
+                    console.log('[Collections] Fallback to localStorage:', adminProducts);
+                }
+                
+                // Filter only visible products
+                allProducts = adminProducts.filter(p => p.visible !== false);
+                filteredProducts = [...allProducts];
+                renderProducts();
+            })
+            .catch(err => {
+                console.error('[Collections] Error loading from central DB, using localStorage:', err);
+                // Fallback to localStorage if fetch fails
+                let adminProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
+                allProducts = adminProducts.filter(p => p.visible !== false);
+                filteredProducts = [...allProducts];
+                renderProducts();
+            });
     }
 
     // ===== RENDER PRODUCTS =====
