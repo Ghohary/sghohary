@@ -19,6 +19,17 @@
         let adminProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
         
         console.log('[Collections] Admin products from localStorage:', adminProducts);
+        console.log('[Collections] Number of products:', adminProducts.length);
+        console.log('[Collections] LocalStorage keys:', Object.keys(localStorage));
+        
+        // If no products found, log all localStorage content for debugging
+        if (adminProducts.length === 0) {
+            console.warn('[Collections] No products found! Checking all localStorage:');
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                console.log(`[Collections] ${key}:`, localStorage.getItem(key));
+            }
+        }
         
         // Filter only visible products
         allProducts = adminProducts.filter(p => p.visible !== false);
