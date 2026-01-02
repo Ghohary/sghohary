@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Products</title>
+</head>
+<body>
+    <h1>Products in localStorage</h1>
+    <pre id="output"></pre>
+    <script>
+        const products = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
+        document.getElementById('output').textContent = JSON.stringify(products, null, 2);
+        
+        if (products.length === 0) {
+            document.getElementById('output').textContent = 'No products found in localStorage';
+        } else {
+            document.getElementById('output').innerHTML = `<strong>${products.length} products found:</strong><br>` + JSON.stringify(products, null, 2);
+        }
+    </script>
+</body>
+</html>

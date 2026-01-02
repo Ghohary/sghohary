@@ -178,36 +178,42 @@
     });
 
     // ===== SIZE SELECTION =====
+    const sizeSelector = document.querySelector('.size-selector');
     const sizeBtns = document.querySelectorAll('.size-btn');
-    const sizeContainer = document.querySelector('.size-options');
     let selectedSize = null;
 
     // If product has sizes array from admin, render them dynamically
     if (product.sizes && Array.isArray(product.sizes) && product.sizes.length > 0) {
-        if (sizeContainer) {
-            sizeContainer.innerHTML = '';
-            const sizesArray = Array.isArray(product.sizes[0]) ? product.sizes : 
-                              (product.sizes[0] && typeof product.sizes[0] === 'object' 
-                                  ? product.sizes.map(s => s.size) 
-                                  : product.sizes);
+        if (sizeSelector) {
+            sizeSelector.innerHTML = '';
+            
+            // Extract size values from admin product format [{size, inventory}, ...]
+            const sizesArray = product.sizes.map(s => {
+                if (typeof s === 'string') return s;
+                if (s && typeof s === 'object' && s.size) return s.size;
+                return s;
+            });
             
             sizesArray.forEach(size => {
                 const btn = document.createElement('button');
+                btn.type = 'button';
                 btn.className = 'size-btn';
                 btn.dataset.size = size;
                 btn.textContent = size;
-                btn.addEventListener('click', function() {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
                     document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
                     this.classList.add('selected');
                     selectedSize = this.dataset.size;
                 });
-                sizeContainer.appendChild(btn);
+                sizeSelector.appendChild(btn);
             });
         }
     } else {
         // Use existing hardcoded size buttons
         sizeBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
                 sizeBtns.forEach(b => b.classList.remove('selected'));
                 this.classList.add('selected');
                 selectedSize = this.dataset.size;
