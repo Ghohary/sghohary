@@ -227,13 +227,22 @@
 
             const customizationField = document.getElementById('customization');
             
-            // Store only essential data to minimize localStorage usage
+            // Store essential data + product name/price as fallback for cart display
             const cartProduct = {
                 id: product.id,
+                name: product.name,  // Store name as fallback
+                price: product.price, // Store price as fallback
                 size: selectedSize,
                 customization: customizationField ? customizationField.value : '',
                 quantity: 1
             };
+            
+            console.log('[Product] Adding to cart:', {
+                productId: product.id,
+                productName: product.name,
+                productPrice: product.price,
+                cartItem: cartProduct
+            });
 
             // Get cart from localStorage
             let cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
