@@ -7,6 +7,7 @@
 
     function renderCart() {
         const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
+        const products = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
 
         if (cart.length === 0) {
             cartContent.style.display = 'none';
@@ -21,18 +22,31 @@
         let cartHTML = '<div class="cart-items">';
 
         cart.forEach((item, index) => {
-            const itemTotal = item.price * item.quantity;
+            // Find product details from products array
+            const product = products.find(p => p.id === item.id);
+            
+            if (!product) {
+                console.warn(`Product ${item.id} not found in products array`);
+                return; // Skip if product not found
+            }
+            
+            const itemTotal = product.price * item.quantity;
             subtotal += itemTotal;
+            
+            // Get first image from product
+            const productImage = product.images && product.images.length > 0 
+                ? product.images[0] 
+                : '/placeholder.jpg';
 
             cartHTML += `
                 <div class="cart-item" data-index="${index}">
                     <div class="cart-item-image">
-                        <img src="${item.image}" alt="${item.name}">
+                        <img src="${productImage}" alt="${product.name}">
                     </div>
                     <div class="cart-item-details">
-                        <h3 class="cart-item-name">${item.name}</h3>
+                        <h3 class="cart-item-name">${product.name}</h3>
                         <p class="cart-item-meta">Size: ${item.size}</p>
-                        ${item.customization !== 'standard' ? `<p class="cart-item-meta">Customization: ${item.customization}</p>` : ''}
+                        ${item.customization ? `<p class="cart-item-meta">Customization: ${item.customization}</p>` : ''}
                         
                         <div class="cart-item-actions-mobile">
                             <div class="quantity-selector">

@@ -7,25 +7,32 @@
 
     // ===== UTILITY FUNCTIONS =====
     
-    // Clean up storage - remove base64 image data to prevent quota issues
+    // Clean up storage - remove bloated old cart data to prevent quota issues
     window.cleanupStorage = function() {
         try {
             const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
-            const cleaned = cart.map(item => {
-                // Remove base64 image data (data URI)
-                if (item.image && item.image.startsWith('data:')) {
-                    item.image = '';
-                }
-                return item;
-            });
-            localStorage.setItem('ghoharyCart', JSON.stringify(cleaned));
-            console.log('[Cleanup] Removed base64 images from cart');
+            
+            // Filter out items with bloated fields and keep only essential data
+            const cleaned = cart
+                .map(item => ({
+                    id: item.id,
+                    size: item.size,
+                    customization: item.customization || '',
+                    quantity: item.quantity || 1
+                }))
+                .filter(item => item.id) // Remove any invalid items
+                .slice(-50); // Keep only last 50 items
+            
+            if (cleaned.length !== cart.length) {
+                localStorage.setItem('ghoharyCart', JSON.stringify(cleaned));
+                console.log('[Cleanup] Optimized cart storage');
+            }
         } catch (e) {
             console.error('[Cleanup] Error cleaning storage:', e);
         }
     }
 
-    // Call cleanup on page load to ensure we don't have old base64 data
+    // Call cleanup on page load to ensure we don't have bloated data
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', window.cleanupStorage);
     } else {

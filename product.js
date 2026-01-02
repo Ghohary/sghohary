@@ -226,13 +226,12 @@
             }
 
             const customizationField = document.getElementById('customization');
+            
+            // Store only essential data to minimize localStorage usage
             const cartProduct = {
                 id: product.id,
-                name: product.name,
-                price: product.price,
                 size: selectedSize,
                 customization: customizationField ? customizationField.value : '',
-                image: mainImage ? mainImage.src : '',
                 quantity: 1
             };
 
@@ -250,25 +249,24 @@
                 cart.push(cartProduct);
             }
 
-            // Trim large images from cart to prevent quota exceeded
-            // Keep only the first 100 items and remove image data URIs that are too large
-            cart = cart.slice(-100).map(item => {
-                // If image is a data URI (base64), remove it to save space
-                if (item.image && item.image.startsWith('data:')) {
-                    item.image = '';
-                }
-                return item;
-            });
+            // Keep cart lean - store only last 50 items
+            cart = cart.slice(-50);
 
             // Save to localStorage
             try {
                 localStorage.setItem('ghoharyCart', JSON.stringify(cart));
             } catch (e) {
                 if (e.name === 'QuotaExceededError') {
-                    // If still over quota, clear old items
-                    cart = cart.slice(-5); // Keep only last 5 items
-                    localStorage.setItem('ghoharyCart', JSON.stringify(cart));
-                    alert('Cart storage was full. Kept your 5 most recent items.');
+                    console.error('[Cart] Storage quota exceeded. Clearing old data...');
+                    // Clear old cart data completely and try again
+                    try {
+                        localStorage.removeItem('ghoharyCart');
+                        localStorage.setItem('ghoharyCart', JSON.stringify([cartProduct]));
+                        alert('Cart was full. Starting fresh with this item.');
+                    } catch (e2) {
+                        alert('Storage quota full. Cannot add items.');
+                        console.error('[Cart] Failed to save even after clearing:', e2);
+                    }
                 } else {
                     throw e;
                 }

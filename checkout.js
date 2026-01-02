@@ -67,6 +67,7 @@
     // Render order summary
     function renderOrderSummary() {
         const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
+        const products = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
         
         if (cart.length === 0) {
             window.location.href = 'cart.html';
@@ -78,15 +79,28 @@
         let summaryHTML = '<div class="summary-items">';
 
         cart.forEach(item => {
-            const itemTotal = item.price * item.quantity;
+            // Find product details from products array
+            const product = products.find(p => p.id === item.id);
+            
+            if (!product) {
+                console.warn(`Product ${item.id} not found in products array`);
+                return;
+            }
+            
+            const itemTotal = product.price * item.quantity;
             subtotal += itemTotal;
             totalQuantity += item.quantity;
+            
+            // Get first image from product
+            const productImage = product.images && product.images.length > 0 
+                ? product.images[0] 
+                : '/placeholder.jpg';
 
             summaryHTML += `
                 <div class="summary-item">
-                    <img src="${item.image}" alt="${item.name}" class="summary-item-image">
+                    <img src="${productImage}" alt="${product.name}" class="summary-item-image">
                     <div class="summary-item-details">
-                        <h4>${item.name}</h4>
+                        <h4>${product.name}</h4>
                         <p>Size: ${item.size} × ${item.quantity}</p>
                     </div>
                     <div class="summary-item-price">
