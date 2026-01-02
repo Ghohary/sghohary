@@ -80,15 +80,23 @@
 
         cart.forEach(item => {
             // Find product details from products array
-            const product = products.find(p => p.id === item.id);
+            // Match IDs as numbers since Date.now() returns number
+            const product = products.find(p => {
+                const itemId = item.id;
+                const productId = p.id;
+                return itemId == productId || Number(itemId) === Number(productId);
+            });
+            
+            console.log('[Checkout] Looking for product ID:', item.id, 'Found:', product?.name);
             
             if (!product) {
-                console.warn(`Product ${item.id} not found in products array`);
+                console.warn(`Product ${item.id} not found in products array. Available IDs:`, products.map(p => p.id));
                 return;
             }
             
             // Ensure price is a number, default to 0 if not set
             const productPrice = parseFloat(product.price) || 0;
+            console.log('[Checkout] Product:', product.name, 'Price:', productPrice, 'Quantity:', item.quantity);
             const itemTotal = productPrice * item.quantity;
             subtotal += itemTotal;
             totalQuantity += item.quantity;

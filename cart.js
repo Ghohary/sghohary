@@ -26,12 +26,17 @@
 
         cart.forEach((item, index) => {
             // Find product details from products array
-            const product = products.find(p => p.id === item.id);
+            // Match IDs as numbers since Date.now() returns number
+            const product = products.find(p => {
+                const itemId = item.id;
+                const productId = p.id;
+                return itemId == productId || Number(itemId) === Number(productId);
+            });
             
-            console.log(`[Cart] Item ${item.id}:`, { item, product });
+            console.log(`[Cart] Item ID ${item.id}:`, { item, product });
             
             if (!product) {
-                console.warn(`Product ${item.id} not found in products array`);
+                console.warn(`Product ${item.id} not found in products array. Available IDs:`, products.map(p => p.id));
                 return; // Skip if product not found
             }
             
