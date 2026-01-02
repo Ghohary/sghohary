@@ -4,14 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="description" content="Login or Sign Up - GHOHARY Haute Couture">
-    <meta name="google-signin-client_id" content="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com">
     <title>Login / Sign Up | GHOHARY</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="header-loader.js"></script>
     <style>
         :root {
@@ -239,53 +237,38 @@
             color: var(--gray-600);
         }
 
-        .auth-divider {
-            display: flex;
-            align-items: center;
-            gap: clamp(12px, 2.5vw, 18px);
-            margin: clamp(28px, 4.5vh, 40px) 0;
-            color: var(--text-muted);
-            font-size: clamp(11px, 1.9vw, 12px);
+        .google-btn {
+            width: 100%;
+            padding: clamp(16px, 3.2vw, 20px) clamp(28px, 5.5vw, 36px);
+            background: white;
+            color: var(--text-dark);
+            border: 1px solid var(--gray-300);
+            border-radius: 2px;
+            font-size: clamp(14px, 2.4vw, 16px);
+            font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-        }
-
-        .auth-divider::before,
-        .auth-divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--gray-200);
-        }
-
-        .google-signin-wrapper {
-            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+            margin: clamp(14px, 3vh, 24px) 0 0 0;
+            min-height: 60px;
             display: flex;
+            align-items: center;
             justify-content: center;
-            margin: clamp(20px, 3.5vh, 28px) 0;
+            gap: 12px;
         }
 
-        .google-signin-wrapper > div {
-            transform: scale(1.15);
-            transform-origin: center;
+        .google-btn:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        @supports (-webkit-appearance: none) {
-            .google-signin-wrapper > div {
-                transform: scale(1.0);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .google-signin-wrapper > div {
-                transform: scale(0.95);
-            }
-        }
-
-        @media (min-width: 768px) {
-            .google-signin-wrapper > div {
-                transform: scale(1.2);
-            }
+        .google-btn svg {
+            width: 20px;
+            height: 20px;
         }
 
         @media (max-width: 480px) {
@@ -352,15 +335,13 @@
 
                 <button type="submit" class="auth-submit">Sign In</button>
 
-                <div class="auth-divider">Or</div>
-
-                <div class="google-signin-wrapper">
-                    <div id="g_id_onload"
-                         data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
-                         data-callback="handleGoogleSignIn">
-                    </div>
-                    <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline"></div>
-                </div>
+                <button type="button" class="google-btn" onclick="loginWithGoogle()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <text x="12" y="15" text-anchor="middle" font-size="10" font-weight="bold" fill="currentColor">G</text>
+                    </svg>
+                    Sign In with Google
+                </button>
 
                 <div class="auth-footer">
                     New to GHOHARY? <a href="#" onclick="switchTab('signup'); return false;">Create an account</a>
@@ -398,15 +379,13 @@
 
                 <button type="submit" class="auth-submit">Create Account</button>
 
-                <div class="auth-divider">Or</div>
-
-                <div class="google-signin-wrapper">
-                    <div id="g_id_onload_signup"
-                         data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
-                         data-callback="handleGoogleSignUp">
-                    </div>
-                    <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline"></div>
-                </div>
+                <button type="button" class="google-btn" onclick="loginWithGoogle()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <text x="12" y="15" text-anchor="middle" font-size="10" font-weight="bold" fill="currentColor">G</text>
+                    </svg>
+                    Sign Up with Google
+                </button>
 
                 <div class="auth-footer">
                     Already have an account? <a href="#" onclick="switchTab('login'); return false;">Sign in</a>
@@ -561,96 +540,29 @@
             window.location.href = 'index.html';
         }
 
-        // Google Sign-In Handler
-        function handleGoogleSignIn(response) {
-            try {
-                // Decode JWT token to get user info
-                const base64Url = response.credential.split('.')[1];
-                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-                const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
-                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-                }).join(''));
-                
-                const googleUser = JSON.parse(jsonPayload);
-                
-                // Get users from localStorage
-                let users = JSON.parse(localStorage.getItem('ghoharyUsers') || '[]');
-                let user = users.find(u => u.email.toLowerCase() === googleUser.email.toLowerCase());
+        // Simple Google Login Demo
+        function loginWithGoogle() {
+            // Demo: Create a demo Google user
+            const demoGoogleUser = {
+                email: 'demo.google@example.com',
+                firstName: 'Demo',
+                lastName: 'User',
+                phone: '',
+                address: '',
+                city: '',
+                emirate: '',
+                isGoogleAccount: true
+            };
 
-                if (!user) {
-                    // Create new user from Google info
-                    user = {
-                        email: googleUser.email,
-                        firstName: googleUser.given_name || '',
-                        lastName: googleUser.family_name || '',
-                        phone: '',
-                        address: '',
-                        city: '',
-                        emirate: '',
-                        googleId: googleUser.sub,
-                        createdAt: new Date().toISOString(),
-                        isGoogleAccount: true
-                    };
-                    users.push(user);
-                    localStorage.setItem('ghoharyUsers', JSON.stringify(users));
-                    console.log('New Google user created:', googleUser.email);
-                } else {
-                    // Update existing user with Google ID if not set
-                    if (!user.googleId) {
-                        user.googleId = googleUser.sub;
-                        user.isGoogleAccount = true;
-                        users[users.findIndex(u => u.email === user.email)] = user;
-                        localStorage.setItem('ghoharyUsers', JSON.stringify(users));
-                    }
-                }
-
-                // Login successful
-                localStorage.setItem('ghoharyCurrentUser', JSON.stringify({
-                    email: user.email,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    phone: user.phone || '',
-                    address: user.address || '',
-                    city: user.city || '',
-                    emirate: user.emirate || '',
-                    isGoogleAccount: true
-                }));
-
-                window.location.href = 'index.html';
-            } catch (error) {
-                console.error('Google Sign-In error:', error);
-                document.getElementById('loginError').textContent = 'Google sign-in failed. Please try again.';
-                document.getElementById('loginError').classList.add('show');
-            }
+            // Save to localStorage
+            localStorage.setItem('ghoharyCurrentUser', JSON.stringify(demoGoogleUser));
+            
+            // Show success message
+            alert('Logged in as: ' + demoGoogleUser.firstName + ' ' + demoGoogleUser.lastName);
+            
+            // Redirect to home
+            window.location.href = 'index.html';
         }
-
-        // Google Sign-Up Handler (same as Sign-In for Google)
-        function handleGoogleSignUp(response) {
-            handleGoogleSignIn(response);
-        }
-
-        // Render Google buttons when page loads
-        window.addEventListener('load', () => {
-            if (window.google && window.google.accounts && window.google.accounts.id) {
-                // For login form
-                try {
-                    window.google.accounts.id.initialize({
-                        client_id: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com',
-                        callback: handleGoogleSignIn
-                    });
-                    window.google.accounts.id.renderButton(
-                        document.querySelector('.g_id_signin'),
-                        { 
-                            theme: 'outline', 
-                            size: 'large',
-                            text: 'signin_with'
-                        }
-                    );
-                } catch (e) {
-                    console.log('Google Sign-In not fully configured. Replace YOUR_GOOGLE_CLIENT_ID with your actual Google Client ID.');
-                }
-            }
-        });
     </script>
 </body>
 </html>
