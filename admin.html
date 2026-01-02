@@ -1581,17 +1581,24 @@
                 } else {
                     // Create and add new product
                     // Only store image URLs, not base64 data
+                    console.log('[Admin] Adding new product, imageFiles:', imageFiles);
                     const images = imageFiles.map(file => {
                         if (typeof file === 'string') {
+                            console.log('[Admin] Image is already a URL:', file);
                             return file; // URL string
                         } else if (file instanceof File) {
                             // For new files, generate a working placeholder URL
                             // Using picsum.photos for actual working images
                             const randomId = Math.floor(Math.random() * 1000);
-                            return `https://picsum.photos/1200/1600?random=${randomId}`;
+                            const url = `https://picsum.photos/1200/1600?random=${randomId}`;
+                            console.log('[Admin] Converted File to URL:', url);
+                            return url;
                         }
+                        console.log('[Admin] Skipping invalid file:', file);
                         return '';
                     }).filter(url => url);
+                    
+                    console.log('[Admin] Final images array:', images);
                     
                     const product = {
                         id: Date.now(),
@@ -1608,6 +1615,7 @@
                         createdAt: new Date().toISOString()
                     };
                     
+                    console.log('[Admin] Product object:', product);
                     existingProducts.push(product);
                     showAlert('Product added successfully!', 'success');
                 }
