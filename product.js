@@ -197,9 +197,15 @@
     const mainImage = document.getElementById('mainImage');
     const thumbnails = document.querySelectorAll('.thumbnail');
 
+    console.log('[Product Page] Product object:', product);
+    console.log('[Product Page] Product images:', product.images);
+    
     if (mainImage && product.images && product.images.length > 0) {
+        console.log('[Product Page] Setting main image to:', product.images[0]);
         mainImage.src = product.images[0];
         mainImage.alt = product.name;
+    } else {
+        console.log('[Product Page] No images to display - images:', product.images);
     }
 
     if (thumbnails.length > 0 && product.images && product.images.length > 0) {

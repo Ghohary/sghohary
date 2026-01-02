@@ -1163,9 +1163,10 @@
                             // Replace base64 images and broken placeholders with working URLs
                             p.images = p.images.map((img, idx) => {
                                 if (typeof img === 'string' && (img.startsWith('data:') || img.includes('placeholder.com'))) {
-                                    // Replace with working image URL
-                                    const randomId = Math.floor(Math.random() * 1000);
-                                    return `https://picsum.photos/1200/1600?random=${randomId}`;
+                                    // Replace with working image URL using stable ID based on product ID
+                                    // Use product ID + image index to ensure consistent images
+                                    const stableId = (p.id * 100) + idx; // Unique but stable
+                                    return `https://picsum.photos/1200/1600?random=${stableId}`;
                                 }
                                 return img;
                             });
@@ -1556,10 +1557,10 @@
                             if (typeof file === 'string') {
                                 return file; // Already a URL
                             } else if (file instanceof File) {
-                                // For new files, generate a working placeholder URL
-                                // Using picsum.photos for actual working images
-                                const randomId = Math.floor(Math.random() * 1000);
-                                return `https://picsum.photos/1200/1600?random=${randomId}`;
+                                // For new files, generate a stable placeholder URL
+                                // Use file name hash to ensure consistent images
+                                const stableId = file.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+                                return `https://picsum.photos/1200/1600?random=${stableId}`;
                             }
                             return '';
                         }).filter(url => url);
@@ -1582,15 +1583,17 @@
                     // Create and add new product
                     // Only store image URLs, not base64 data
                     console.log('[Admin] Adding new product, imageFiles:', imageFiles);
+                    console.log('[Admin] imageFiles types:', imageFiles.map(f => typeof f + ' ' + (f instanceof File ? 'File' : f instanceof String ? 'String' : 'Other')));
+                    
                     const images = imageFiles.map(file => {
                         if (typeof file === 'string') {
                             console.log('[Admin] Image is already a URL:', file);
                             return file; // URL string
                         } else if (file instanceof File) {
-                            // For new files, generate a working placeholder URL
-                            // Using picsum.photos for actual working images
-                            const randomId = Math.floor(Math.random() * 1000);
-                            const url = `https://picsum.photos/1200/1600?random=${randomId}`;
+                            // For new files, generate a stable placeholder URL
+                            // Use file name hash to ensure consistent images
+                            const stableId = file.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+                            const url = `https://picsum.photos/1200/1600?random=${stableId}`;
                             console.log('[Admin] Converted File to URL:', url);
                             return url;
                         }
@@ -1599,6 +1602,7 @@
                     }).filter(url => url);
                     
                     console.log('[Admin] Final images array:', images);
+                    console.log('[Admin] Images array length:', images.length);
                     
                     const product = {
                         id: Date.now(),

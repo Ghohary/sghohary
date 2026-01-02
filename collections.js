@@ -18,6 +18,8 @@
         // Get admin products
         let adminProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
         
+        console.log('[Collections] Admin products from localStorage:', adminProducts);
+        
         // Filter only visible products
         allProducts = adminProducts.filter(p => p.visible !== false);
         
@@ -154,6 +156,8 @@
             const productImage = product.images && product.images[0] 
                 ? product.images[0] 
                 : 'https://images.unsplash.com/photo-1594552072238-2d8e16ed7b2c?w=800&h=1200&fit=crop';
+            
+            console.log('[Collections] Product:', product.name, 'Images:', product.images, 'Using:', productImage);
             
             productCard.innerHTML = `
                 <a href="product.html?id=${product.id}" class="product-link">
