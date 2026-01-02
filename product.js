@@ -15,6 +15,7 @@
     console.log('Admin products available:', visibleAdminProducts.length);
     if (visibleAdminProducts.length > 0) {
         console.log('Admin product IDs:', visibleAdminProducts.map(p => p.id));
+        console.log('Full admin products:', JSON.stringify(visibleAdminProducts, null, 2));
     }
     
     // Use ONLY admin products
