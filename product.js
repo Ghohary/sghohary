@@ -361,8 +361,24 @@
             // Save to localStorage
             localStorage.setItem('ghoharyCart', JSON.stringify(cart));
 
-            // Update cart count
-            window.updateCartCount();
+            // Update cart count - use direct function call
+            const updateBadge = () => {
+                const cartCountElement = document.querySelector('.cart-count');
+                if (cartCountElement) {
+                    const cartData = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
+                    const totalItems = cartData.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                    cartCountElement.textContent = totalItems;
+                    cartCountElement.style.display = totalItems > 0 ? 'flex' : 'none';
+                }
+            };
+            
+            updateBadge();
+            
+            // Also call window.updateCartCount if available
+            if (window.updateCartCount) {
+                window.updateCartCount();
+            }
+            
             window.dispatchEvent(new Event('cartUpdated'));
 
             // Show success modal (if present) and auto-hide after 10s

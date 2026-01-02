@@ -129,7 +129,19 @@
             
             localStorage.setItem('ghoharyCart', JSON.stringify(cart));
             renderCart();
-            updateCartCount();
+            
+            // Update cart count
+            const updateBadge = () => {
+                const cartCountElement = document.querySelector('.cart-count');
+                if (cartCountElement) {
+                    const cartData = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
+                    const totalItems = cartData.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                    cartCountElement.textContent = totalItems;
+                    cartCountElement.style.display = totalItems > 0 ? 'flex' : 'none';
+                }
+            };
+            updateBadge();
+            if (window.updateCartCount) window.updateCartCount();
         }
     };
 
@@ -139,7 +151,19 @@
             cart.splice(index, 1);
             localStorage.setItem('ghoharyCart', JSON.stringify(cart));
             renderCart();
-            window.updateCartCount();
+            
+            // Update cart count
+            const updateBadge = () => {
+                const cartCountElement = document.querySelector('.cart-count');
+                if (cartCountElement) {
+                    const cartData = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
+                    const totalItems = cartData.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                    cartCountElement.textContent = totalItems;
+                    cartCountElement.style.display = totalItems > 0 ? 'flex' : 'none';
+                }
+            };
+            updateBadge();
+            if (window.updateCartCount) window.updateCartCount();
         }
     };
 
