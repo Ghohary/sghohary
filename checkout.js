@@ -74,11 +74,13 @@
         }
 
         let subtotal = 0;
+        let totalQuantity = 0;
         let summaryHTML = '<div class="summary-items">';
 
         cart.forEach(item => {
             const itemTotal = item.price * item.quantity;
             subtotal += itemTotal;
+            totalQuantity += item.quantity;
 
             summaryHTML += `
                 <div class="summary-item">
@@ -96,8 +98,9 @@
 
         summaryHTML += '</div>';
 
-        const shippingCost = 120;
-        const total = subtotal + shippingCost;
+        const shippingPerItem = 120;
+        const totalShipping = totalQuantity * shippingPerItem;
+        const total = subtotal + totalShipping;
 
         summaryHTML += `
             <div class="summary-totals">
@@ -106,8 +109,8 @@
                     <span>AED ${subtotal.toLocaleString()}</span>
                 </div>
                 <div class="summary-row">
-                    <span>Shipping</span>
-                    <span>AED ${shippingCost.toLocaleString()}</span>
+                    <span>Shipping (120 AED × ${totalQuantity} items)</span>
+                    <span>AED ${totalShipping.toLocaleString()}</span>
                 </div>
                 <div class="summary-divider"></div>
                 <div class="summary-row summary-total">

@@ -289,11 +289,13 @@
         if (emptyCart) emptyCart.style.display = 'none';
 
         let subtotal = 0;
+        let totalQuantity = 0;
         let cartHTML = '<div class="cart-items">';
 
         cart.forEach((item, index) => {
             const itemTotal = (item.price || 0) * (item.quantity || 1);
             subtotal += itemTotal;
+            totalQuantity += (item.quantity || 1);
 
             cartHTML += `
                 <div class="cart-item" data-index="${index}">
@@ -335,8 +337,9 @@
 
         cartHTML += '</div>';
 
-        const shippingCost = 120;
-        const total = subtotal + shippingCost;
+        const shippingPerItem = 120;
+        const totalShipping = totalQuantity * shippingPerItem;
+        const total = subtotal + totalShipping;
 
         cartHTML += `
             <div class="cart-summary">
@@ -348,8 +351,8 @@
                 </div>
                 
                 <div class="summary-row">
-                    <span>Shipping</span>
-                    <span>AED ${shippingCost.toLocaleString()}</span>
+                    <span>Shipping (120 AED × ${totalQuantity} items)</span>
+                    <span>AED ${totalShipping.toLocaleString()}</span>
                 </div>
                 
                 <div class="summary-divider"></div>
@@ -445,11 +448,13 @@
         }
 
         let subtotal = 0;
+        let totalQuantity = 0;
         let summaryHTML = '<div class="summary-items">';
 
         cart.forEach(item => {
             const itemTotal = (item.price || 0) * (item.quantity || 1);
             subtotal += itemTotal;
+            totalQuantity += (item.quantity || 1);
 
             summaryHTML += `
                 <div class="summary-item">
@@ -467,8 +472,9 @@
 
         summaryHTML += '</div>';
 
-        const shippingCost = 120;
-        const total = subtotal + shippingCost;
+        const shippingPerItem = 120;
+        const totalShipping = totalQuantity * shippingPerItem;
+        const total = subtotal + totalShipping;
 
         summaryHTML += `
             <div class="summary-totals">
@@ -477,8 +483,8 @@
                     <span>AED ${subtotal.toLocaleString()}</span>
                 </div>
                 <div class="summary-row">
-                    <span>Shipping</span>
-                    <span>AED ${shippingCost.toLocaleString()}</span>
+                    <span>Shipping (120 AED × ${totalQuantity} items)</span>
+                    <span>AED ${totalShipping.toLocaleString()}</span>
                 </div>
                 <div class="summary-divider"></div>
                 <div class="summary-row summary-total">
