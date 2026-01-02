@@ -1256,18 +1256,27 @@
             if (draggedItem && draggedItem !== this) {
                 const allItems = Array.from(imagePreviewContainer.children);
                 const targetIndex = allItems.indexOf(this);
+                const rect = this.getBoundingClientRect();
+                const containerRect = imagePreviewContainer.getBoundingClientRect();
+                
+                // Determine if dropping on left or right half
+                const dropX = e.clientX - containerRect.left;
+                const itemCenterX = rect.left - containerRect.left + rect.width / 2;
+                const insertBefore = dropX < itemCenterX;
                 
                 // Remove dragged item from array
                 const draggedFile = imageFiles[draggedIndex];
                 imageFiles.splice(draggedIndex, 1);
                 
-                // Insert at target position
+                // Insert at appropriate position
+                let newIndex = targetIndex;
                 if (draggedIndex < targetIndex) {
-                    imageFiles.splice(targetIndex - 1, 0, draggedFile);
+                    newIndex = insertBefore ? targetIndex - 1 : targetIndex;
                 } else {
-                    imageFiles.splice(targetIndex, 0, draggedFile);
+                    newIndex = insertBefore ? targetIndex : targetIndex + 1;
                 }
                 
+                imageFiles.splice(newIndex, 0, draggedFile);
                 renderImagePreview();
             }
         }
