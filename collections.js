@@ -16,10 +16,97 @@
     // ===== LOAD PRODUCTS FROM LOCALSTORAGE =====
     function loadProducts() {
         // Get admin products
-        const adminProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
+        let adminProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
         
         // Filter only visible products
         allProducts = adminProducts.filter(p => p.visible !== false);
+        
+        // If no admin products, use fallback hardcoded products
+        if (allProducts.length === 0) {
+            allProducts = [
+                {
+                    id: 1,
+                    name: 'Ethereal Lace',
+                    price: 25000,
+                    category: 'Bridal Couture',
+                    images: ['https://images.unsplash.com/photo-1594552072238-2d8e16ed7b2c?w=800&h=1200&fit=crop'],
+                    visible: true,
+                    createdAt: Date.now() - 86400000
+                },
+                {
+                    id: 2,
+                    name: 'Crystal Romance',
+                    price: 28000,
+                    category: 'Bridal Couture',
+                    images: ['https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800&h=1200&fit=crop'],
+                    visible: true,
+                    createdAt: Date.now() - 86400000
+                },
+                {
+                    id: 3,
+                    name: 'Royal Silk Train',
+                    price: 32000,
+                    category: 'Bridal Couture',
+                    images: ['https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=800&h=1200&fit=crop'],
+                    visible: true,
+                    createdAt: Date.now() - 86400000
+                },
+                {
+                    id: 4,
+                    name: 'Champagne Elegance',
+                    price: 16000,
+                    category: 'Evening Wear',
+                    images: ['https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&h=1200&fit=crop'],
+                    visible: true,
+                    createdAt: Date.now() - 86400000
+                },
+                {
+                    id: 5,
+                    name: 'Pearl Embellished',
+                    price: 28500,
+                    category: 'Bridal Couture',
+                    images: ['https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=1200&fit=crop'],
+                    visible: true,
+                    createdAt: Date.now() - 86400000
+                },
+                {
+                    id: 6,
+                    name: 'Bespoke Creation',
+                    price: 35000,
+                    category: 'Custom Design',
+                    images: ['https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=800&h=1200&fit=crop'],
+                    visible: true,
+                    createdAt: Date.now() - 86400000
+                },
+                {
+                    id: 7,
+                    name: 'Golden Hour',
+                    price: 19500,
+                    category: 'Evening Wear',
+                    images: ['https://images.unsplash.com/photo-1591604021695-0c69b7c05981?w=800&h=1200&fit=crop'],
+                    visible: true,
+                    createdAt: Date.now() - 86400000
+                },
+                {
+                    id: 8,
+                    name: 'Cathedral Dreams',
+                    price: 30000,
+                    category: 'Bridal Couture',
+                    images: ['https://images.unsplash.com/photo-1596783074918-c84cb06531ca?w=800&h=1200&fit=crop'],
+                    visible: true,
+                    createdAt: Date.now() - 86400000
+                },
+                {
+                    id: 9,
+                    name: 'Couture Atelier',
+                    price: 40000,
+                    category: 'Custom Design',
+                    images: ['https://images.unsplash.com/photo-1624626699269-7a8a2d0f7d0e?w=800&h=1200&fit=crop'],
+                    visible: true,
+                    createdAt: Date.now() - 86400000
+                }
+            ];
+        }
         
         filteredProducts = [...allProducts];
         renderProducts();
@@ -27,9 +114,20 @@
 
     // ===== RENDER PRODUCTS =====
     function renderProducts() {
-        // Clear grid except load more container
+        // Clear existing product cards
         const items = productsGrid.querySelectorAll('.product-card');
         items.forEach(item => item.remove());
+
+        // If no products, show message
+        if (filteredProducts.length === 0) {
+            const emptyMsg = document.createElement('div');
+            emptyMsg.style.gridColumn = '1 / -1';
+            emptyMsg.style.textAlign = 'center';
+            emptyMsg.style.padding = '50px 20px';
+            emptyMsg.innerHTML = '<p style="font-size: 18px; color: var(--text-muted);">No products found in this category.</p>';
+            productsGrid.appendChild(emptyMsg);
+            return;
+        }
 
         // Paginate products
         const startIndex = 0;
@@ -67,11 +165,11 @@
                 </a>
             `;
             
+            productsGrid.appendChild(productCard);
+            
             setTimeout(() => {
                 productCard.classList.add('visible');
             }, index * 50);
-            
-            productsGrid.insertBefore(productCard, loadMoreBtn?.parentElement);
         });
 
         // Update load more button visibility
