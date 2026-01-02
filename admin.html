@@ -1052,6 +1052,22 @@
                     <tr><td colspan="7" style="text-align: center; color: #999;">Load products to view</td></tr>
                 </tbody>
             </table>
+
+            <h3 style="margin-top: 40px;">Data Management</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: clamp(24px, 4vw, 32px);">
+                <form id="exportForm" style="background: var(--white); padding: clamp(32px, 6vw, 48px); border: 1px solid rgba(0, 0, 0, 0.08); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);">
+                    <h4 style="font-size: clamp(16px, 2vw, 18px); margin-bottom: 16px; color: #1A1A1A;">Export Products</h4>
+                    <p style="font-size: 13px; color: #666; margin-bottom: 20px;">Download your products as a JSON file for backup or transfer.</p>
+                    <button type="button" id="exportBtn" style="width: 100%; background: #5C4B4B; margin: 0;">Export Data</button>
+                </form>
+
+                <form id="importForm" style="background: var(--white); padding: clamp(32px, 6vw, 48px); border: 1px solid rgba(0, 0, 0, 0.08); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);">
+                    <h4 style="font-size: clamp(16px, 2vw, 18px); margin-bottom: 16px; color: #1A1A1A;">Import Products</h4>
+                    <p style="font-size: 13px; color: #666; margin-bottom: 20px;">Upload a JSON file to import products from another device.</p>
+                    <input type="file" id="importFile" accept=".json" style="margin-bottom: 16px;">
+                    <button type="button" id="importBtn" style="width: 100%; background: #5C4B4B; margin: 0;">Import Data</button>
+                </form>
+            </div>
         </div>
 
         <!-- ORDERS TAB -->
@@ -1886,6 +1902,89 @@
             
             draggedItem = null;
             draggedIndex = null;
+        }
+
+        // ===== EXPORT/IMPORT FUNCTIONALITY =====
+        const exportBtn = document.getElementById('exportBtn');
+        const importBtn = document.getElementById('importBtn');
+        const importFile = document.getElementById('importFile');
+
+        if (exportBtn) {
+            exportBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                try {
+                    const productsData = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
+                    const dataStr = JSON.stringify(productsData, null, 2);
+                    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                    const url = URL.createObjectURL(dataBlob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `ghohary-products-${new Date().toISOString().split('T')[0]}.json`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                    showAlert('Products exported successfully!', 'success');
+                } catch (error) {
+                    showAlert('Error exporting products: ' + error.message, 'error');
+                }
+            });
+        }
+
+        if (importBtn) {
+            importBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (!importFile.files || importFile.files.length === 0) {
+                    showAlert('Please select a file to import', 'error');
+                    return;
+                }
+
+                const file = importFile.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        
+                        if (!Array.isArray(importedData)) {
+                            showAlert('Invalid file format. Expected an array of products.', 'error');
+                            return;
+                        }
+
+                        // Merge imported products with existing ones
+                        const existingProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
+                        const mergedProducts = [...existingProducts];
+
+                        importedData.forEach(importedProduct => {
+                            // Check if product with same ID exists
+                            const existingIndex = mergedProducts.findIndex(p => p.id === importedProduct.id);
+                            if (existingIndex !== -1) {
+                                // Update existing
+                                mergedProducts[existingIndex] = importedProduct;
+                            } else {
+                                // Add new
+                                mergedProducts.push(importedProduct);
+                            }
+                        });
+
+                        // Save merged data
+                        localStorage.setItem('ghoharyProducts', JSON.stringify(mergedProducts));
+                        products = mergedProducts;
+                        
+                        // Clear import input
+                        importFile.value = '';
+                        
+                        // Refresh display
+                        renderProductsTable();
+                        
+                        showAlert(`Successfully imported ${importedData.length} product(s)!`, 'success');
+                    } catch (error) {
+                        showAlert('Error importing products: ' + error.message, 'error');
+                    }
+                };
+
+                reader.readAsText(file);
+            });
         }
     </script>
 </body>
