@@ -1715,6 +1715,32 @@ nav {
     }
 }
 
+.price-currency {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.35em;
+    font-weight: 500;
+}
+
+@media (min-width: 480px) {
+    .price-currency {
+        font-size: 11px;
+    }
+}
+
+@media (min-width: 768px) {
+    .price-currency {
+        font-size: 11px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .price-currency {
+        font-size: 12px;
+    }
+}
+
 .price-amount {
     font-size: clamp(28px, 6.5vw, 48px);
     color: var(--text-dark);

@@ -187,7 +187,7 @@
     const priceEl = document.querySelector('.price-amount');
     if (priceEl) {
         if (typeof product.price === 'number') {
-            priceEl.textContent = `AED ${product.price.toLocaleString()}`;
+            priceEl.textContent = product.price.toLocaleString();
         } else {
             priceEl.textContent = product.price || 'Price Upon Request';
         }
