@@ -1,52 +1,121 @@
-// Stripe Payment Processing Server
-// This server handles payment intent creation and webhook processing
+// GHOHARY Backend Server
+// Handles products, users, appointments, and orders
 
 const express = require('express');
 const cors = require('cors');
-const dotenv = require('dotenv');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-
-dotenv.config();
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
+const PORT = process.env.PORT || 3001;
+const DB_FILE = path.join(__dirname, 'server-db.json');
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.static('.')); // Serve static files
 
-const PORT = process.env.PORT || 5000;
+// Initialize database
+function initializeDB() {
+    if (!fs.existsSync(DB_FILE)) {
+        const initialData = {
+            products: [],
+            users: [],
+            appointments: [],
+            orders: [],
+            lastUpdated: new Date().toISOString()
+        };
+        fs.writeFileSync(DB_FILE, JSON.stringify(initialData, null, 2));
+        console.log('[DB] Initialized new database');
+    }
+}
 
-// Endpoint to create a payment intent
-app.post('/create-payment-intent', async (req, res) => {
+// Read database
+function readDB() {
     try {
-        const { amount, currency = 'aed', metadata = {} } = req.body;
+        const data = fs.readFileSync(DB_FILE, 'utf8');
+        return JSON.parse(data);
+    } catch (err) {
+        console.error('[DB] Error reading:', err);
+        return { products: [], users: [], appointments: [], orders: [], lastUpdated: new Date().toISOString() };
+    }
+}
 
-        if (!amount || amount <= 0) {
-            return res.status(400).json({ error: 'Invalid amount' });
-        }
+// Write database
+function writeDB(data) {
+    try {
+        data.lastUpdated = new Date().toISOString();
+        fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
+    } catch (err) {
+        console.error('[DB] Error writing:', err);
+    }
+}
 
-        // Create payment intent
-        const paymentIntent = await stripe.paymentIntents.create({
-            amount: Math.round(amount * 100), // Stripe expects amount in cents
-            currency: currency.toLowerCase(),
-            metadata: {
-                ...metadata,
-                timestamp: new Date().toISOString()
-            }
-        });
+// ===== PRODUCTS API =====
+app.get('/api/products', (req, res) => {
+    const db = readDB();
+    res.json(db.products);
+});
 
-        res.json({
-            clientSecret: paymentIntent.client_secret,
-            paymentIntentId: paymentIntent.id
-        });
-    } catch (error) {
-        console.error('Payment Intent Error:', error);
-        res.status(500).json({ 
-            error: error.message || 'Failed to create payment intent'
-        });
+app.get('/api/products/:id', (req, res) => {
+    const db = readDB();
+    const product = db.products.find(p => p.id == req.params.id);
+    if (product) {
+        res.json(product);
+    } else {
+        res.status(404).json({ error: 'Not found' });
     }
 });
+
+app.post('/api/products', (req, res) => {
+    const db = readDB();
+    const newProduct = {
+        id: Date.now(),
+        ...req.body,
+        createdAt: new Date().toISOString()
+    };
+    db.products.push(newProduct);
+    writeDB(db);
+    res.json(newProduct);
+});
+
+app.put('/api/products/:id', (req, res) => {
+    const db = readDB();
+    const index = db.products.findIndex(p => p.id == req.params.id);
+    if (index !== -1) {
+        db.products[index] = { ...db.products[index], ...req.body };
+        writeDB(db);
+        res.json(db.products[index]);
+    } else {
+        res.status(404).json({ error: 'Not found' });
+    }
+});
+
+app.delete('/api/products/:id', (req, res) => {
+    const db = readDB();
+    const index = db.products.findIndex(p => p.id == req.params.id);
+    if (index !== -1) {
+        const deleted = db.products.splice(index, 1);
+        writeDB(db);
+        res.json(deleted[0]);
+    } else {
+        res.status(404).json({ error: 'Not found' });
+    }
+});
+
+// Health check
+app.get('/api/health', (req, res) => {
+    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// Start server
+initializeDB();
+app.listen(PORT, () => {
+    console.log(`\n🎀 GHOHARY Server running on http://localhost:${PORT}`);
+    console.log(`📦 Database file: ${DB_FILE}`);
+    console.log(`✅ API ready at http://localhost:${PORT}/api/\n`);
+});
+
 
 // Endpoint to confirm payment (for additional validation)
 app.post('/confirm-payment', async (req, res) => {

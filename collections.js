@@ -13,22 +13,16 @@
     const itemsPerPage = 12;
     let currentPage = 1;
 
-    // ===== LOAD PRODUCTS FROM CENTRAL DATABASE =====
+    // ===== LOAD PRODUCTS FROM SERVER API =====
     function loadProducts() {
-        // First, try to load from central database file
-        fetch('products-db.json')
+        const API_URL = 'http://localhost:3001/api';
+        
+        // Try to fetch from server
+        fetch(`${API_URL}/products`)
             .then(response => response.json())
-            .then(data => {
-                let adminProducts = data.products || [];
-                
-                console.log('[Collections] Products from central database:', adminProducts);
+            .then(adminProducts => {
+                console.log('[Collections] Products from server:', adminProducts);
                 console.log('[Collections] Number of products:', adminProducts.length);
-                
-                // If no products in central DB, try localStorage as fallback
-                if (adminProducts.length === 0) {
-                    adminProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
-                    console.log('[Collections] Fallback to localStorage:', adminProducts);
-                }
                 
                 // Filter only visible products
                 allProducts = adminProducts.filter(p => p.visible !== false);
@@ -36,9 +30,11 @@
                 renderProducts();
             })
             .catch(err => {
-                console.error('[Collections] Error loading from central DB, using localStorage:', err);
-                // Fallback to localStorage if fetch fails
+                console.warn('[Collections] Server not available, using localStorage:', err);
+                // Fallback to localStorage if server unavailable
                 let adminProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
+                console.log('[Collections] Using localStorage fallback:', adminProducts);
+                
                 allProducts = adminProducts.filter(p => p.visible !== false);
                 filteredProducts = [...allProducts];
                 renderProducts();
