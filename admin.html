@@ -879,10 +879,19 @@
                     <td>${priceDisplay}</td>
                     <td><span class="status-badge ${totalInventory > 0 ? 'status-available' : 'status-out-of-stock'}">${totalInventory} items</span></td>
                     <td>
-                        <button class="btn-small" onclick="deleteProduct(${p.id})">Delete</button>
+                        <button class="btn-small delete-btn" data-product-id="${p.id}">Delete</button>
                     </td>
                 </tr>
             `}).join('');
+
+            // Attach event listeners to delete buttons
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const productId = parseInt(this.getAttribute('data-product-id'));
+                    deleteProduct(productId);
+                });
+            });
         }
 
         function deleteProduct(productId) {
