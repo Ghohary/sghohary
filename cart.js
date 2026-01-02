@@ -9,6 +9,9 @@
         const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
         const products = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
 
+        console.log('[Cart] Cart items:', cart);
+        console.log('[Cart] Available products:', products);
+
         if (cart.length === 0) {
             cartContent.style.display = 'none';
             emptyCart.style.display = 'flex';
@@ -25,6 +28,8 @@
             // Find product details from products array
             const product = products.find(p => p.id === item.id);
             
+            console.log(`[Cart] Item ${item.id}:`, { item, product });
+            
             if (!product) {
                 console.warn(`Product ${item.id} not found in products array`);
                 return; // Skip if product not found
@@ -37,6 +42,8 @@
             const productImage = product.images && product.images.length > 0 
                 ? product.images[0] 
                 : '/placeholder.jpg';
+            
+            console.log(`[Cart] Product image for ${product.name}:`, productImage);
 
             cartHTML += `
                 <div class="cart-item" data-index="${index}">
