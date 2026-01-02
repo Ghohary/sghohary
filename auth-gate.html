@@ -104,11 +104,11 @@
         }
 
         .auth-form {
-            display: none;
+            display: none !important;
         }
 
         .auth-form.active {
-            display: block;
+            display: block !important;
         }
 
         .form-group {
@@ -313,13 +313,23 @@
                 <button type="submit" class="auth-submit">Create Account</button>
 
                 <div class="auth-footer">
-                    Already have an account? <a href="#" onclick="switchTab('signin'); return false;" style="color: var(--text-dark); text-decoration: none; font-weight: 500;">Sign in</a>
+                    Already have an account? <a href="#" onclick="switchTab('login'); return false;" style="color: var(--text-dark); text-decoration: none; font-weight: 500;">Sign in</a>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
+        // Initialize - ensure login form is shown by default
+        window.addEventListener('load', () => {
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            if (loginForm && signupForm) {
+                loginForm.classList.add('active');
+                signupForm.classList.remove('active');
+            }
+        });
+
         // Tab switching
         function switchTab(tab) {
             document.querySelectorAll('.auth-tab-btn').forEach(btn => {

@@ -1866,7 +1866,7 @@ nav {
 
 /* Checkout Page */
 .checkout-section {
-    padding: var(--spacing-xl) 0;
+    padding: clamp(40px, 8vh, 80px) 0;
 }
 
 .checkout-steps {
@@ -1927,8 +1927,8 @@ nav {
 
 /* Forms */
 .form-section {
-    margin-bottom: var(--spacing-xl);
-    padding-bottom: var(--spacing-xl);
+    margin-bottom: clamp(30px, 5vh, 40px);
+    padding-bottom: clamp(30px, 5vh, 40px);
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
@@ -1963,9 +1963,9 @@ nav {
 
 .form-group label {
     display: block;
-    font-size: 12px;
+    font-size: clamp(11px, 1.8vw, 12px);
     color: var(--text-dark);
-    margin-bottom: 10px;
+    margin-bottom: clamp(8px, 1.5vh, 10px);
     text-transform: uppercase;
     letter-spacing: 0.1em;
     font-weight: 400;
@@ -1975,13 +1975,15 @@ nav {
 .form-group select,
 .form-group textarea {
     width: 100%;
-    padding: 16px 20px;
-    font-size: 14px;
+    padding: clamp(12px, 2.5vw, 20px) clamp(16px, 3vw, 20px);
+    font-size: clamp(13px, 2vw, 14px);
     border: 1px solid rgba(0, 0, 0, 0.1);
     background: var(--white);
     font-family: 'Montserrat', sans-serif;
     transition: all 0.3s ease;
     color: var(--text-dark);
+    min-height: 44px;
+    box-sizing: border-box;
 }
 
 .form-group input::placeholder,
@@ -2025,10 +2027,12 @@ nav {
     display: flex;
     align-items: center;
     gap: 18px;
-    padding: 18px 20px;
+    padding: clamp(14px, 2.5vw, 20px);
     border: 2px solid rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     background: var(--white);
+    min-height: 44px;
+    box-sizing: border-box;
 }
 
 .payment-option-content:hover {
@@ -2049,7 +2053,7 @@ nav {
 /* Order Summary Sidebar */
 .order-summary-sidebar {
     background: linear-gradient(180deg, var(--white) 0%, var(--gray-50) 100%);
-    padding: var(--spacing-xl);
+    padding: clamp(20px, 4vh, 40px);
     position: sticky;
     top: 100px;
     max-height: calc(100vh - 120px);
@@ -2060,8 +2064,8 @@ nav {
 .summary-items {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-md);
-    margin-bottom: var(--spacing-lg);
+    gap: clamp(16px, 3vh, 24px);
+    margin-bottom: clamp(20px, 4vh, 30px);
 }
 
 .summary-item {
