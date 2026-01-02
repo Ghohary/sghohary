@@ -87,7 +87,9 @@
                 return;
             }
             
-            const itemTotal = product.price * item.quantity;
+            // Ensure price is a number, default to 0 if not set
+            const productPrice = parseFloat(product.price) || 0;
+            const itemTotal = productPrice * item.quantity;
             subtotal += itemTotal;
             totalQuantity += item.quantity;
             

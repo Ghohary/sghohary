@@ -4,11 +4,13 @@ window.SEED_PRODUCTS = [];
 
 // Initialize products on first visit
 window.initializeSeedData = function() {
-    // Only initialize if no products exist
+    // Always set to empty products on initialization (fresh start)
     const existingProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
-    if (existingProducts.length === 0) {
+    
+    // Only override if we have old products to clear
+    if (existingProducts.length > 0) {
         localStorage.setItem('ghoharyProducts', JSON.stringify(window.SEED_PRODUCTS));
-        console.log('[Seed] Initialized with custom products');
+        console.log('[Seed] Cleared old products - starting fresh');
     }
 };
 

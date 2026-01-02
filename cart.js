@@ -35,7 +35,9 @@
                 return; // Skip if product not found
             }
             
-            const itemTotal = product.price * item.quantity;
+            // Ensure price is a number, default to 0 if not set
+            const productPrice = parseFloat(product.price) || 0;
+            const itemTotal = productPrice * item.quantity;
             subtotal += itemTotal;
             
             // Get first image from product
@@ -43,7 +45,7 @@
                 ? product.images[0] 
                 : '/placeholder.jpg';
             
-            console.log(`[Cart] Product image for ${product.name}:`, productImage);
+            console.log(`[Cart] Product price for ${product.name}:`, productPrice);
 
             cartHTML += `
                 <div class="cart-item" data-index="${index}">
