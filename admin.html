@@ -534,41 +534,58 @@
         /* Image Preview Container */
         .image-preview-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: clamp(12px, 2vw, 16px);
-            margin-top: clamp(16px, 3vh, 20px);
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: clamp(16px, 2.5vw, 24px);
+            margin-top: clamp(20px, 4vh, 28px);
+            padding: clamp(16px, 3vw, 24px);
+            background: rgba(212, 175, 55, 0.03);
+            border: 1px solid rgba(212, 175, 55, 0.15);
         }
 
         .image-preview-item {
             position: relative;
             width: 100%;
             aspect-ratio: 1;
-            background: #F5F5F5;
-            border: 2px solid rgba(0, 0, 0, 0.1);
-            border-radius: 0;
+            background: #FFFFFF;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            border-radius: 2px;
             overflow: hidden;
             cursor: grab;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
         }
 
         .image-preview-item:hover {
             border-color: var(--gold);
-            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.25);
+            transform: translateY(-2px);
         }
 
         .image-preview-item.dragging {
-            opacity: 0.7;
+            opacity: 1;
             cursor: grabbing;
-            background: rgba(212, 175, 55, 0.1);
-            border-color: var(--gold);
-            box-shadow: 0 8px 24px rgba(212, 175, 55, 0.3);
-            transform: scale(1.02);
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.05));
+            border: 2px solid var(--gold);
+            box-shadow: 0 12px 32px rgba(212, 175, 55, 0.4);
+            transform: scale(1.05) rotate(2deg);
+            z-index: 1000;
+        }
+
+        .image-preview-item.drag-over {
+            background: rgba(212, 175, 55, 0.08);
+            border: 2px dashed var(--gold);
+            box-shadow: inset 0 0 0 2px var(--gold);
         }
 
         .image-preview-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: opacity 0.2s ease;
+        }
+
+        .image-preview-item.dragging img {
+            opacity: 0.95;
         }
 
         .image-preview-controls {
@@ -577,36 +594,53 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 100%);
             display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: clamp(8px, 1.5vw, 12px);
+            gap: clamp(10px, 1.5vw, 14px);
+            backdrop-filter: blur(2px);
         }
 
         .image-preview-item:hover .image-preview-controls {
             display: flex;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
 
         .image-preview-btn {
-            padding: 8px 14px;
+            padding: 10px 16px;
             background: var(--gold);
             color: #1A1A1A;
             border: none;
             border-radius: 0;
             cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 11px;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            transition: all 0.3s ease;
+            letter-spacing: 0.15em;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .image-preview-btn:hover {
             background: #FFFFFF;
             color: #1A1A1A;
-            transform: scale(1.05);
+            transform: scale(1.08);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .image-preview-btn:active {
+            transform: scale(0.96);
         }
 
         /* Responsive Design */
@@ -1153,6 +1187,7 @@
 
                     item.addEventListener('dragstart', handleDragStart);
                     item.addEventListener('dragover', handleDragOver);
+                    item.addEventListener('dragleave', handleDragLeave);
                     item.addEventListener('drop', handleDrop);
                     item.addEventListener('dragend', handleDragEnd);
 
@@ -1169,15 +1204,30 @@
             draggedItem = this;
             draggedIndex = Array.from(imagePreviewContainer.children).indexOf(this);
             this.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.innerHTML);
         }
 
         function handleDragOver(e) {
             e.preventDefault();
             e.dataTransfer.dropEffect = 'move';
+            
+            // Visual feedback for drop position
+            if (this !== draggedItem) {
+                this.classList.add('drag-over');
+            }
+        }
+
+        function handleDragLeave(e) {
+            if (this !== draggedItem) {
+                this.classList.remove('drag-over');
+            }
         }
 
         function handleDrop(e) {
             e.preventDefault();
+            this.classList.remove('drag-over');
+            
             if (draggedItem && draggedItem !== this) {
                 const allItems = Array.from(imagePreviewContainer.children);
                 const targetIndex = allItems.indexOf(this);
@@ -1199,6 +1249,12 @@
 
         function handleDragEnd(e) {
             this.classList.remove('dragging');
+            
+            // Remove drag-over effect from all items
+            document.querySelectorAll('.image-preview-item').forEach(item => {
+                item.classList.remove('drag-over');
+            });
+            
             draggedItem = null;
             draggedIndex = null;
         }
