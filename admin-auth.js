@@ -212,15 +212,16 @@
                         <p>Secure Administration Portal</p>
                     </div>
 
-                    <form id="adminLoginForm" class="admin-login-form">
+                    <form id="adminLoginForm" class="admin-login-form" autocomplete="off">
                         <div class="admin-login-group">
                             <label for="adminEmail">Email Address</label>
                             <input 
                                 type="email" 
                                 id="adminEmail" 
-                                name="email" 
+                                name="adminEmail" 
                                 placeholder="admin@ghohary.com"
                                 required
+                                autocomplete="off"
                             >
                         </div>
 
@@ -229,9 +230,10 @@
                             <input 
                                 type="password" 
                                 id="adminPassword" 
-                                name="password" 
+                                name="adminPassword" 
                                 placeholder="••••••••••••"
                                 required
+                                autocomplete="off"
                             >
                         </div>
 
