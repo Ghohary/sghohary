@@ -67,24 +67,26 @@
         });
     }
 
-    // Update cart count
-    function updateCartCount() {
-        const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
-        const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-        const cartCountBadge = document.querySelector('.cart-count');
-        if (cartCountBadge) {
-            if (totalItems > 0) {
-                cartCountBadge.textContent = totalItems;
-                cartCountBadge.style.display = 'flex';
-            } else {
-                cartCountBadge.style.display = 'none';
+    // Update cart count - expose globally if not already defined
+    if (!window.updateCartCount) {
+        window.updateCartCount = function() {
+            const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
+            const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            const cartCountBadge = document.querySelector('.cart-count');
+            if (cartCountBadge) {
+                if (totalItems > 0) {
+                    cartCountBadge.textContent = totalItems;
+                    cartCountBadge.style.display = 'flex';
+                } else {
+                    cartCountBadge.style.display = 'none';
+                }
             }
-        }
+        };
     }
 
     // Update cart count on page load
-    updateCartCount();
+    window.updateCartCount();
 
     // Listen for cart changes
-    window.addEventListener('cartUpdated', updateCartCount);
+    window.addEventListener('cartUpdated', window.updateCartCount);
 </script>
