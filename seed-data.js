@@ -8,7 +8,7 @@ window.initializeSeedData = function() {
     const existingProducts = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
     if (existingProducts.length === 0) {
         localStorage.setItem('ghoharyProducts', JSON.stringify(window.SEED_PRODUCTS));
-        console.log('[Seed] Initialized with 7 default products');
+        console.log('[Seed] Initialized with custom products');
     }
 };
 
