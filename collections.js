@@ -36,11 +36,9 @@
         const items = productsGrid.querySelectorAll('.product-card');
         items.forEach(item => item.remove());
 
-        // Filter products with images only
-        const productsWithImages = filteredProducts.filter(p => p.images && p.images.length > 0 && p.images[0]);
-
+        // Use all filtered products (don't filter out those without images)
         // If no products, show message
-        if (productsWithImages.length === 0) {
+        if (filteredProducts.length === 0) {
             const emptyMsg = document.createElement('div');
             emptyMsg.style.gridColumn = '1 / -1';
             emptyMsg.style.textAlign = 'center';
@@ -53,7 +51,7 @@
         // Paginate products
         const startIndex = 0;
         const endIndex = currentPage * itemsPerPage;
-        const productsToShow = productsWithImages.slice(startIndex, endIndex);
+        const productsToShow = filteredProducts.slice(startIndex, endIndex);
 
         // Render visible products
         productsToShow.forEach((product, index) => {
@@ -71,8 +69,10 @@
             productCard.dataset.category = filterCategory;
             productCard.dataset.date = product.createdAt || Date.now();
             
-            // Get first image
-            const productImage = product.images[0];
+            // Get first image or use placeholder
+            const productImage = (product.images && product.images.length > 0) 
+                ? product.images[0] 
+                : '/placeholder.jpg';
             
             console.log('[Collections] Product:', product.name, 'Images:', product.images, 'Using:', productImage);
             
@@ -102,7 +102,7 @@
 
         // Update load more button visibility
         if (loadMoreBtn) {
-            if (endIndex >= productsWithImages.length) {
+            if (endIndex >= filteredProducts.length) {
                 loadMoreBtn.innerHTML = '<span>All Gowns Loaded</span>';
                 loadMoreBtn.disabled = true;
                 loadMoreBtn.style.opacity = '0.5';
