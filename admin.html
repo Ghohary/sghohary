@@ -411,6 +411,91 @@
             background: #B91C1C;
         }
 
+        /* Action Menu */
+        .action-menu-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .action-menu-btn {
+            padding: 6px;
+            background: transparent;
+            color: var(--text-dark);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .action-menu-btn:hover {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--gold);
+        }
+
+        .action-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #FFFFFF;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 2px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            min-width: 180px;
+            z-index: 1000;
+            margin-top: 4px;
+            overflow: hidden;
+        }
+
+        .action-menu.active {
+            display: block !important;
+        }
+
+        .action-item {
+            display: flex;
+            align-items: center;
+            gap: clamp(8px, 1.5vw, 12px);
+            padding: clamp(10px, 1.5vh, 12px) clamp(14px, 2vw, 16px);
+            background: transparent;
+            border: none;
+            color: #1A1A1A;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            font-size: clamp(12px, 1.6vw, 13px);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .action-item:hover {
+            background: rgba(212, 175, 55, 0.08);
+            color: var(--gold);
+        }
+
+        .action-item svg {
+            flex-shrink: 0;
+        }
+
+        .edit-action:hover {
+            background: rgba(212, 175, 55, 0.08);
+        }
+
+        .duplicate-action:hover {
+            background: rgba(212, 175, 55, 0.08);
+        }
+
+        .delete-action {
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            color: #DC2626;
+        }
+
+        .delete-action:hover {
+            background: rgba(220, 38, 38, 0.08);
+            color: #B91C1C;
+        }
+
         /* Premium Tables */
         table {
             width: 100%;
@@ -1102,8 +1187,41 @@
                         <span class="visibility-icon" data-product-id="${p.id}" title="Click to toggle visibility" style="cursor: pointer; padding: 8px; display: inline-block; color: var(--text-dark);">${visibilityIcon}</span>
                     </td>
                     <td>
-                        <button class="btn-small edit-btn" data-product-id="${p.id}">Edit</button>
-                        <button class="btn-small delete-btn" data-product-id="${p.id}">Delete</button>
+                        <div class="action-menu-container">
+                            <button class="action-menu-btn" data-product-id="${p.id}" title="Product actions">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="5" r="1"></circle>
+                                    <circle cx="12" cy="12" r="1"></circle>
+                                    <circle cx="12" cy="19" r="1"></circle>
+                                </svg>
+                            </button>
+                            <div class="action-menu" style="display: none;">
+                                <button class="action-item edit-action" data-product-id="${p.id}">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg>
+                                    Edit
+                                </button>
+                                <button class="action-item duplicate-action" data-product-id="${p.id}">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1"></path>
+                                        <path d="M16 3h6v6"></path>
+                                        <path d="M16 3l4 4"></path>
+                                    </svg>
+                                    Duplicate
+                                </button>
+                                <button class="action-item delete-action" data-product-id="${p.id}">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                                    </svg>
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             `}).join('');
@@ -1118,8 +1236,71 @@
                 });
             });
 
-            // Attach event listeners to delete buttons
-            document.querySelectorAll('.delete-btn').forEach(btn => {
+            // Attach event listeners to action menu buttons
+            document.querySelectorAll('.action-menu-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const menu = this.nextElementSibling;
+                    const allMenus = document.querySelectorAll('.action-menu');
+                    
+                    // Close all other menus
+                    allMenus.forEach(m => {
+                        if (m !== menu) {
+                            m.classList.remove('active');
+                            m.style.display = 'none';
+                        }
+                    });
+                    
+                    // Toggle this menu
+                    if (menu.classList.contains('active')) {
+                        menu.classList.remove('active');
+                        menu.style.display = 'none';
+                    } else {
+                        menu.classList.add('active');
+                        menu.style.display = 'block';
+                    }
+                });
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.action-menu-container')) {
+                    document.querySelectorAll('.action-menu').forEach(menu => {
+                        menu.classList.remove('active');
+                        menu.style.display = 'none';
+                    });
+                }
+            });
+
+            // Attach event listeners to edit actions
+            document.querySelectorAll('.edit-action').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const productId = parseInt(this.getAttribute('data-product-id'));
+                    editProduct(productId);
+                    // Close menu
+                    this.closest('.action-menu').classList.remove('active');
+                    this.closest('.action-menu').style.display = 'none';
+                });
+            });
+
+            // Attach event listeners to duplicate actions
+            document.querySelectorAll('.duplicate-action').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const productId = parseInt(this.getAttribute('data-product-id'));
+                    duplicateProduct(productId);
+                    // Close menu
+                    this.closest('.action-menu').classList.remove('active');
+                    this.closest('.action-menu').style.display = 'none';
+                });
+            });
+
+            // Attach event listeners to delete actions
+            document.querySelectorAll('.delete-action').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
@@ -1127,16 +1308,9 @@
                     if (confirm('Are you sure you want to delete this product?')) {
                         deleteProductNow(productId);
                     }
-                });
-            });
-
-            // Attach event listeners to edit buttons
-            document.querySelectorAll('.edit-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const productId = parseInt(this.getAttribute('data-product-id'));
-                    editProduct(productId);
+                    // Close menu
+                    this.closest('.action-menu').classList.remove('active');
+                    this.closest('.action-menu').style.display = 'none';
                 });
             });
         }
@@ -1203,6 +1377,33 @@
             const originalText = submitBtn.textContent;
             submitBtn.textContent = 'Update Product';
             submitBtn.dataset.originalText = originalText;
+        }
+
+        function duplicateProduct(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            try {
+                // Create a new product with copied data
+                const newProduct = {
+                    ...product,
+                    id: Date.now(),
+                    name: product.name + ' (Copy)',
+                    sku: product.sku ? product.sku + '-COPY' : '',
+                    createdAt: new Date().toISOString()
+                };
+
+                // Add to products array
+                products.push(newProduct);
+
+                // Save to localStorage
+                localStorage.setItem('ghoharyProducts', JSON.stringify(products));
+
+                showAlert('Product duplicated successfully!', 'success');
+                renderProductsTable();
+            } catch (error) {
+                showAlert('Error duplicating product: ' + error.message, 'error');
+            }
         }
 
         function deleteProductNow(productId) {
