@@ -7,6 +7,31 @@
 
     // ===== UTILITY FUNCTIONS =====
     
+    // Clean up storage - remove base64 image data to prevent quota issues
+    window.cleanupStorage = function() {
+        try {
+            const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
+            const cleaned = cart.map(item => {
+                // Remove base64 image data (data URI)
+                if (item.image && item.image.startsWith('data:')) {
+                    item.image = '';
+                }
+                return item;
+            });
+            localStorage.setItem('ghoharyCart', JSON.stringify(cleaned));
+            console.log('[Cleanup] Removed base64 images from cart');
+        } catch (e) {
+            console.error('[Cleanup] Error cleaning storage:', e);
+        }
+    }
+
+    // Call cleanup on page load to ensure we don't have old base64 data
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', window.cleanupStorage);
+    } else {
+        window.cleanupStorage();
+    }
+
     // Update cart count across all pages - exposed globally
     window.updateCartCount = function() {
         const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');

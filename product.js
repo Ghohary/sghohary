@@ -250,8 +250,29 @@
                 cart.push(cartProduct);
             }
 
+            // Trim large images from cart to prevent quota exceeded
+            // Keep only the first 100 items and remove image data URIs that are too large
+            cart = cart.slice(-100).map(item => {
+                // If image is a data URI (base64), remove it to save space
+                if (item.image && item.image.startsWith('data:')) {
+                    item.image = '';
+                }
+                return item;
+            });
+
             // Save to localStorage
-            localStorage.setItem('ghoharyCart', JSON.stringify(cart));
+            try {
+                localStorage.setItem('ghoharyCart', JSON.stringify(cart));
+            } catch (e) {
+                if (e.name === 'QuotaExceededError') {
+                    // If still over quota, clear old items
+                    cart = cart.slice(-5); // Keep only last 5 items
+                    localStorage.setItem('ghoharyCart', JSON.stringify(cart));
+                    alert('Cart storage was full. Kept your 5 most recent items.');
+                } else {
+                    throw e;
+                }
+            }
 
             // Update cart count - use direct function call
             const updateBadge = () => {
