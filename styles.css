@@ -1195,22 +1195,7 @@ nav .nav-icons {
 
 
 .product-ribbon {
-    position: absolute;
-    top: clamp(8px, 2vw, 12px);
-    right: clamp(-28px, -5vw, -32px);
-    background: linear-gradient(135deg, var(--brown-dark) 0%, var(--brown) 100%);
-    color: var(--cream);
-    padding: clamp(6px, 1.5vw, 8px) clamp(40px, 8vw, 48px);
-    font-size: clamp(8px, 1.2vw, 12px);
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    font-family: 'Montserrat', sans-serif;
-    transform: rotate(45deg);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    z-index: 15;
-    transition: all 0.3s ease;
-    white-space: nowrap;
+    display: none;
 }
 
 .product-card:hover .product-ribbon {

@@ -91,7 +91,6 @@
                 <a href="product.html?id=${product.id}" class="product-link">
                     <div class="product-image-wrapper">
                         <img src="${productImage}" alt="${product.name}" class="product-image" loading="lazy">
-                        <div class="product-ribbon">${ribbonLabel}</div>
                     </div>
                     <div class="product-info">
                         <h3 class="product-name">${product.name}</h3>
