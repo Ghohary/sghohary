@@ -5,6 +5,36 @@
 (function() {
     'use strict';
 
+    // ===== PAGE TRANSITION SETUP =====
+    // Add page transition overlay to body
+    if (!document.querySelector('.page-transition')) {
+        const transitionOverlay = document.createElement('div');
+        transitionOverlay.className = 'page-transition';
+        document.body.appendChild(transitionOverlay);
+    }
+
+    // Handle page transitions on link clicks
+    document.addEventListener('click', function(e) {
+        const link = e.target.closest('a');
+        if (link && link.href && !link.target && !link.href.includes('#')) {
+            const isExternal = link.hostname !== window.location.hostname;
+            const isDownload = link.download;
+            
+            if (!isExternal && !isDownload) {
+                // Internal navigation - add transition
+                e.preventDefault();
+                
+                // Fade out current page
+                document.body.style.animation = 'pageExit 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
+                
+                // Navigate after fade out
+                setTimeout(() => {
+                    window.location.href = link.href;
+                }, 300);
+            }
+        }
+    }, true);
+
     // ===== UTILITY FUNCTIONS =====
     
     // Clean up storage - remove bloated old cart data to prevent quota issues
