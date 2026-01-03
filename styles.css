@@ -937,30 +937,6 @@ nav .nav-icons {
     }
 }
 
-.breadcrumb {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-bottom: 20px;
-    letter-spacing: 0.1em;
-}
-
-.breadcrumb a {
-    color: var(--gray-700);
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.breadcrumb a:hover {
-    color: var(--gray-900);
-}
-
-.breadcrumb span:not(:last-child) {
-    color: var(--gray-500);
-}
-
 .page-title {
     color: var(--text-dark);
     margin-bottom: 20px;
@@ -2546,82 +2522,6 @@ nav .nav-icons {
     }
 }
 
-.product-meta {
-    padding-top: 12px;
-    border-top: 1px solid rgba(107, 84, 67, 0.12);
-    margin-top: 16px;
-    font-size: 10px;
-    color: var(--text-mid);
-}
-
-@media (min-width: 375px) {
-    .product-meta {
-        padding-top: 14px;
-        margin-top: 18px;
-        font-size: 10px;
-    }
-}
-
-@media (min-width: 480px) {
-    .product-meta {
-        padding-top: 15px;
-        margin-top: 20px;
-        font-size: 11px;
-    }
-}
-
-@media (min-width: 600px) {
-    .product-meta {
-        padding-top: 16px;
-        margin-top: 24px;
-        font-size: 11px;
-    }
-}
-
-@media (min-width: 768px) {
-    .product-meta {
-        padding-top: 18px;
-        margin-top: 28px;
-        font-size: 12px;
-    }
-}
-
-@media (min-width: 1024px) {
-    .product-meta {
-        padding-top: 20px;
-        margin-top: 36px;
-        font-size: 12px;
-    }
-}
-
-@media (min-width: 1440px) {
-    .product-meta {
-        padding-top: 24px;
-        margin-top: 40px;
-        font-size: 13px;
-    }
-}
-
-.meta-item {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 18px 0;
-    font-size: 13px;
-    color: var(--text-light);
-    border-bottom: 1px solid rgba(107, 84, 67, 0.08);
-    letter-spacing: 0.3px;
-}
-
-.meta-item:last-child {
-    border-bottom: none;
-}
-
-.meta-item svg {
-    stroke: var(--brown);
-    flex-shrink: 0;
-    width: 24px;
-    height: 24px;
 }
 
 /* Related Products */

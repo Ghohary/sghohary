@@ -52,10 +52,6 @@
         return;
     }
 
-    // Update breadcrumb
-    const breadcrumb = document.querySelector('.breadcrumb span:last-child');
-    if (breadcrumb) breadcrumb.textContent = product.name;
-
     // Update product title
     const titleEl = document.querySelector('.product-title');
     if (titleEl) titleEl.textContent = product.name;
