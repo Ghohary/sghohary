@@ -77,22 +77,48 @@
     // Update images
     const mainImage = document.getElementById('mainImage');
     const thumbnails = document.querySelectorAll('.thumbnail');
+    const images = Array.isArray(product.images) ? product.images.filter(Boolean) : [];
+    let currentIndex = 0;
+
+    function getMainImageUrl(imageUrl) {
+        if (!imageUrl) return imageUrl;
+        if (imageUrl.includes('unsplash.com') && imageUrl.includes('w=200&h=300')) {
+            return imageUrl.replace('w=200&h=300', 'w=1200&h=1600');
+        }
+        return imageUrl;
+    }
+
+    function setMainImage(index) {
+        if (!mainImage || images.length === 0) return;
+        currentIndex = (index + images.length) % images.length;
+        const imageUrl = images[currentIndex];
+        mainImage.src = getMainImageUrl(imageUrl);
+        mainImage.alt = product.name;
+        mainImage.classList.remove('zoomed');
+        mainImage.style.cursor = 'zoom-in';
+
+        if (thumbnails.length > 0) {
+            thumbnails.forEach(t => t.classList.remove('active'));
+            if (thumbnails[currentIndex]) {
+                thumbnails[currentIndex].classList.add('active');
+            }
+        }
+    }
 
     console.log('[Product Page] Product object:', product);
     console.log('[Product Page] Product images:', product.images);
     
-    if (mainImage && product.images && product.images.length > 0) {
-        console.log('[Product Page] Setting main image to:', product.images[0]);
-        mainImage.src = product.images[0];
-        mainImage.alt = product.name;
+    if (mainImage && images.length > 0) {
+        console.log('[Product Page] Setting main image to:', images[0]);
+        setMainImage(0);
     } else {
         console.log('[Product Page] No images to display - images:', product.images);
     }
 
-    if (thumbnails.length > 0 && product.images && product.images.length > 0) {
+    if (thumbnails.length > 0 && images.length > 0) {
         thumbnails.forEach((thumb, index) => {
-            if (product.images[index]) {
-                const imageUrl = product.images[index];
+            if (images[index]) {
+                const imageUrl = images[index];
                 // Only modify unsplash URLs, leave admin images as-is
                 if (imageUrl.includes('unsplash.com')) {
                     thumb.src = imageUrl.replace('w=1200&h=1600', 'w=200&h=300');
@@ -108,22 +134,27 @@
     }
 
     // ===== IMAGE GALLERY =====
-    thumbnails.forEach(thumb => {
+    thumbnails.forEach((thumb, index) => {
         thumb.addEventListener('click', function() {
-            thumbnails.forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Get the full resolution image
-            const thumbSrc = this.src;
-            if (thumbSrc.includes('unsplash.com')) {
-                // For unsplash URLs, replace the dimensions
-                mainImage.src = thumbSrc.replace('w=200&h=300', 'w=1200&h=1600');
-            } else {
-                // For admin images, use as-is
-                mainImage.src = thumbSrc;
-            }
+            setMainImage(index);
         });
     });
+
+    const prevBtn = document.querySelector('.image-prev');
+    const nextBtn = document.querySelector('.image-next');
+    if (prevBtn && nextBtn) {
+        if (images.length <= 1) {
+            prevBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
+        } else {
+            prevBtn.addEventListener('click', function() {
+                setMainImage(currentIndex - 1);
+            });
+            nextBtn.addEventListener('click', function() {
+                setMainImage(currentIndex + 1);
+            });
+        }
+    }
 
     // ===== SIZE SELECTION =====
     const sizeSelector = document.querySelector('.size-selector');
@@ -173,15 +204,15 @@
                         const inventory = parseInt(this.dataset.inventory) || 0;
                         
                         if (inventory > 10) {
-                            inventoryText.innerHTML = `<span class="in-stock">✓ In Stock</span> — ${inventory} available`;
+                            inventoryText.innerHTML = `<span class="in-stock">In Stock</span> · ${inventory} available`;
                             inventoryStatus.classList.remove('low-stock', 'out-of-stock');
                             inventoryStatus.classList.add('in-stock');
                         } else if (inventory > 0 && inventory <= 10) {
-                            inventoryText.innerHTML = `<span class="low-stock">⚠ Limited Stock</span> — Only ${inventory} available`;
+                            inventoryText.innerHTML = `<span class="low-stock">Limited Availability</span> · ${inventory} remaining`;
                             inventoryStatus.classList.remove('in-stock', 'out-of-stock');
                             inventoryStatus.classList.add('low-stock');
                         } else {
-                            inventoryText.innerHTML = `<span class="out-of-stock">✕ Out of Stock</span> — Contact us for custom options`;
+                            inventoryText.innerHTML = `<span class="out-of-stock">Made to Order</span> · Contact us for custom options`;
                             inventoryStatus.classList.remove('in-stock', 'low-stock');
                             inventoryStatus.classList.add('out-of-stock');
                         }
@@ -343,9 +374,8 @@
     }
 
     // ===== ZOOM FUNCTIONALITY =====
-    const zoomBtn = document.querySelector('.zoom-btn');
-    if (zoomBtn && mainImage) {
-        zoomBtn.addEventListener('click', function() {
+    if (mainImage) {
+        mainImage.addEventListener('click', function() {
             mainImage.classList.toggle('zoomed');
             if (mainImage.classList.contains('zoomed')) {
                 mainImage.style.cursor = 'zoom-out';

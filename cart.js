@@ -95,26 +95,22 @@
         cartHTML += '</div>';
 
         // Cart Summary
-        const tax = subtotal * 0.05; // 5% VAT
-        const total = subtotal + tax;
+        const storedCountry = (localStorage.getItem('ghoharyShippingCountry') || 'UAE').toLowerCase();
+        const isUaeAddress = storedCountry === 'uae' || storedCountry === 'united arab emirates';
+        const total = subtotal;
 
         cartHTML += `
             <div class="cart-summary">
                 <h3 class="summary-title">Order Summary</h3>
                 
                 <div class="summary-row">
-                    <span>Subtotal</span>
+                    <span>${isUaeAddress ? 'Subtotal (incl. VAT)' : 'Subtotal (VAT exempt)'}</span>
                     <span>AED ${subtotal.toLocaleString()}</span>
                 </div>
                 
                 <div class="summary-row">
-                    <span>VAT (5%)</span>
-                    <span>AED ${tax.toLocaleString()}</span>
-                </div>
-                
-                <div class="summary-row">
                     <span>Shipping</span>
-                    <span class="free-shipping">Free</span>
+                    <span class="free-shipping">Complimentary</span>
                 </div>
                 
                 <div class="summary-divider"></div>

@@ -395,6 +395,15 @@
     </div>
 
     <script>
+        function getRedirectTarget() {
+            const params = new URLSearchParams(window.location.search);
+            const target = params.get('redirect') || 'index.html';
+            if (target.startsWith('http') || target.startsWith('//')) {
+                return 'index.html';
+            }
+            return target;
+        }
+
         // Initialize - ensure login form is shown by default
         window.addEventListener('load', () => {
             const loginForm = document.getElementById('loginForm');
@@ -461,7 +470,7 @@
                 emirate: user.emirate || ''
             }));
 
-            window.location.href = 'index.html';
+            window.location.href = getRedirectTarget();
         });
 
         // Signup form
@@ -531,13 +540,13 @@
                 emirate: newUser.emirate
             }));
 
-            window.location.href = 'index.html';
+            window.location.href = getRedirectTarget();
         });
 
         // Check if already logged in
         const currentUser = JSON.parse(localStorage.getItem('ghoharyCurrentUser') || 'null');
         if (currentUser && currentUser.email) {
-            window.location.href = 'index.html';
+            window.location.href = getRedirectTarget();
         }
 
         // Simple Google Login Demo
@@ -561,7 +570,7 @@
             alert('Logged in as: ' + demoGoogleUser.firstName + ' ' + demoGoogleUser.lastName);
             
             // Redirect to home
-            window.location.href = 'index.html';
+            window.location.href = getRedirectTarget();
         }
     </script>
 </body>

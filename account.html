@@ -9,7 +9,11 @@
     <!-- Auth Check -->
     <script>
         const currentUser = JSON.parse(localStorage.getItem('ghoharyCurrentUser') || 'null');
-        if (!currentUser || !currentUser.email) window.location.href = 'auth-gate.html';
+        const params = new URLSearchParams(window.location.search);
+        const checkoutSuccess = params.get('checkout') === 'success' || params.get('order') === 'success';
+        if ((!currentUser || !currentUser.email) && !checkoutSuccess) {
+            window.location.href = 'auth-gate.html';
+        }
     </script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -83,7 +87,18 @@
                     <!-- Orders Tab -->
                     <div class="account-tab active" id="ordersTab">
                         <h2 class="tab-title">My Orders</h2>
-                        <!-- Orders loaded here by JavaScript -->
+                        <div class="orders-container" id="ordersContainer">
+                            <div class="empty-state">
+                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                                    <path d="M9 2L6.46 9H2l5.91 4.287L5.82 21 12 16.44 18.18 21l-2.09-7.713L22 9h-4.46L15 2H9z"/>
+                                </svg>
+                                <h3>No orders yet</h3>
+                                <p>Your orders will appear here once you complete a purchase</p>
+                                <a href="collections.html" class="btn btn-primary">
+                                    <span>Browse Collections</span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Appointments Tab -->

@@ -43,7 +43,7 @@ export default async function handler(req, res) {
             mode: 'payment',
             line_items: formattedItems,
             customer_email: email,
-            success_url: `${origin}/account.html?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
+            success_url: `${origin}/success.html?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${origin}/checkout.html?canceled=true`,
             metadata: {
                 customerName: customerName || '',

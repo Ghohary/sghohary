@@ -28,12 +28,14 @@
                 <div class="product-images">
                     <div class="main-image-container">
                         <img src="" alt="" class="main-product-image" id="mainImage">
-                        <button class="zoom-btn" aria-label="Zoom image">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="11" cy="11" r="8"></circle>
-                                <path d="m21 21-4.35-4.35"></path>
-                                <line x1="11" y1="8" x2="11" y2="14"></line>
-                                <line x1="8" y1="11" x2="14" y2="11"></line>
+                        <button class="image-nav image-prev" type="button" aria-label="Previous image">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M15 18l-6-6 6-6"></path>
+                            </svg>
+                        </button>
+                        <button class="image-nav image-next" type="button" aria-label="Next image">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 6l6 6-6 6"></path>
                             </svg>
                         </button>
                     </div>
@@ -81,7 +83,7 @@
                     <!-- Action Buttons -->
                     <div class="product-actions">
                         <button class="btn btn-primary btn-add-to-cart" id="addToCartBtn">
-                            <span>Reserve This Gown</span>
+                            <span>Add to Bag</span>
                         </button>
                         <button class="btn btn-secondary" onclick="window.location.href='collections.html'">
                             <span>Continue Browsing</span>
@@ -169,8 +171,8 @@
                     <path d="M9 12l2 2 4-4"/>
                 </svg>
             </div>
-            <h3>Added to Cart!</h3>
-            <p>Your gown reservation has been added to your cart.</p>
+            <h3>Reservation Confirmed</h3>
+            <p>Your selection has been reserved and saved to your bag.</p>
             <div class="modal-actions">
                 <button class="btn btn-secondary" onclick="document.getElementById('successModal').style.display='none'">
                     <span>Continue Shopping</span>

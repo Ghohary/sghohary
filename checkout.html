@@ -58,10 +58,19 @@
                 <div class="checkout-form">
                     <h1 class="page-title">Checkout</h1>
 
+                    <div class="checkout-login-cta">
+                        <span>Have an account?</span>
+                        <button type="button" class="btn btn-secondary" id="checkoutLoginBtn">Log In</button>
+                    </div>
+
                     <form id="checkoutForm">
                         <!-- Contact Information -->
                         <div class="form-section">
                             <h3 class="form-section-title">Contact Information</h3>
+                            <div class="form-group">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" required>
+                            </div>
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="firstName">First Name *</label>
@@ -73,10 +82,6 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="email">Email Address *</label>
-                                <input type="email" id="email" required>
-                            </div>
-                            <div class="form-group">
                                 <label for="phone">Phone Number *</label>
                                 <input type="tel" id="phone" required placeholder="+971">
                             </div>
@@ -86,26 +91,38 @@
                         <div class="form-section">
                             <h3 class="form-section-title">Delivery Information</h3>
                             <div class="form-group">
+                                <label for="country">Country *</label>
+                                <select id="country" required>
+                                    <option value="uae">United Arab Emirates</option>
+                                    <option value="international">International</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label for="address">Street Address *</label>
-                                <input type="text" id="address" required>
+                                <input type="text" id="address" required autocomplete="off">
+                            </div>
+                            <div class="form-group checkbox-group">
+                                <label for="saveAddress">
+                                    <input type="checkbox" id="saveAddress">
+                                    Save this address for future orders
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="addressLine2">Address Line 2 (Optional)</label>
+                                <input type="text" id="addressLine2" placeholder="Apartment, suite, floor">
+                            </div>
+                            <div class="form-group">
+                                <label for="city">City *</label>
+                                <input type="text" id="city" required>
                             </div>
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="city">City *</label>
-                                    <input type="text" id="city" required>
+                                    <label for="state">State / Emirate *</label>
+                                    <input type="text" id="state" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="emirate">Emirate *</label>
-                                    <select id="emirate" required>
-                                        <option value="">Select Emirate</option>
-                                        <option value="dubai">Dubai</option>
-                                        <option value="abudhabi">Abu Dhabi</option>
-                                        <option value="sharjah">Sharjah</option>
-                                        <option value="ajman">Ajman</option>
-                                        <option value="rak">Ras Al Khaimah</option>
-                                        <option value="fujairah">Fujairah</option>
-                                        <option value="uaq">Umm Al Quwain</option>
-                                    </select>
+                                    <label for="zip">Zip / Postal Code *</label>
+                                    <input type="text" id="zip" required>
                                 </div>
                             </div>
                             <div class="form-group">

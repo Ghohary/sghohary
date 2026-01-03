@@ -586,7 +586,9 @@
                     setTimeout(() => {
                         localStorage.removeItem('ghoharyCart');
                         
-                        const orderNumber = 'GH' + Date.now().toString().slice(-8);
+                        const currentCount = parseInt(localStorage.getItem('ghoharyOrderCounter') || '0', 10) + 1;
+                        localStorage.setItem('ghoharyOrderCounter', currentCount.toString());
+                        const orderNumber = `GH313-${currentCount}`;
                         localStorage.setItem('lastOrder', JSON.stringify({
                             orderNumber,
                             customerName: firstName.value,
@@ -603,32 +605,66 @@
 
     // Finalize Stripe Checkout on return
     const checkoutParams = new URLSearchParams(window.location.search);
-    if (checkoutParams.get('checkout') === 'success') {
+    const checkoutSuccess = checkoutParams.get('checkout') === 'success' || checkoutParams.get('order') === 'success';
+    const checkoutSessionId = checkoutParams.get('session_id');
+    if (checkoutSuccess) {
         const pendingOrderRaw = localStorage.getItem('ghoharyPendingOrder');
         if (pendingOrderRaw) {
             const pendingOrder = JSON.parse(pendingOrderRaw);
-            const orderNumber = 'GH' + Date.now().toString().slice(-8);
+            let currentUser = JSON.parse(localStorage.getItem('ghoharyCurrentUser') || 'null');
+            if ((!currentUser || !currentUser.email) && pendingOrder.customer?.email) {
+                const guestUser = {
+                    email: pendingOrder.customer.email,
+                    firstName: pendingOrder.customer.firstName || '',
+                    lastName: pendingOrder.customer.lastName || '',
+                    phone: pendingOrder.customer.phone || '',
+                    address: pendingOrder.customer.address || '',
+                    city: pendingOrder.customer.city || '',
+                    emirate: pendingOrder.customer.emirate || ''
+                };
+                localStorage.setItem('ghoharyCurrentUser', JSON.stringify(guestUser));
+                currentUser = guestUser;
+            }
+            const ownerEmail = currentUser?.email || pendingOrder.customer.email || '';
+            const currentCount = parseInt(localStorage.getItem('ghoharyOrderCounter') || '0', 10) + 1;
+            localStorage.setItem('ghoharyOrderCounter', currentCount.toString());
+            const orderNumber = `GH313-${currentCount}`;
+            const isUaeAddress = pendingOrder.customer?.country === 'uae';
+            const normalizedSubtotal = Number(pendingOrder.subtotal || 0);
+            const normalizedShipping = isUaeAddress ? 0 : Number(pendingOrder.totalShipping || 0);
+            const normalizedTotal = normalizedSubtotal ? (normalizedSubtotal + normalizedShipping) : Number(pendingOrder.orderTotal || 0);
             const orderData = {
                 orderNumber,
-                paymentId: checkoutParams.get('session_id') || 'stripe_checkout',
+                paymentId: checkoutSessionId || 'stripe_checkout',
+                sessionId: checkoutSessionId || '',
                 customerName: `${pendingOrder.customer.firstName} ${pendingOrder.customer.lastName || ''}`.trim(),
-                email: pendingOrder.customer.email,
+                ownerEmail: ownerEmail,
+                email: pendingOrder.customer.email || ownerEmail,
                 address: pendingOrder.customer.address,
                 city: pendingOrder.customer.city,
                 emirate: pendingOrder.customer.emirate,
                 phone: pendingOrder.customer.phone,
                 paymentMethod: 'stripe_checkout',
-                orderTotal: pendingOrder.orderTotal,
+                orderTotal: normalizedTotal,
+                subtotal: normalizedSubtotal || Number(pendingOrder.orderTotal || 0),
+                totalShipping: normalizedShipping,
+                items: pendingOrder.items || [],
                 date: new Date().toISOString()
             };
 
-            localStorage.removeItem('ghoharyCart');
-            localStorage.removeItem('ghoharyPendingOrder');
-            localStorage.setItem('lastOrder', JSON.stringify(orderData));
-
             let orders = JSON.parse(localStorage.getItem('ghoharyOrders') || '[]');
-            orders.push(orderData);
-            localStorage.setItem('ghoharyOrders', JSON.stringify(orders));
+            const existing = checkoutSessionId
+                ? orders.find(order => order.sessionId === checkoutSessionId)
+                : null;
+
+            if (!existing) {
+                orders.push(orderData);
+                localStorage.setItem('ghoharyOrders', JSON.stringify(orders));
+                localStorage.setItem('lastOrder', JSON.stringify(orderData));
+                localStorage.removeItem('ghoharyCart');
+            }
+
+            localStorage.removeItem('ghoharyPendingOrder');
         }
     }
 
@@ -838,8 +874,8 @@
         renderCart();
     }
 
-    // Render order summary if on checkout page
-    if (orderSummary) {
+    // Render order summary if on checkout page and not handled by checkout.js
+    if (orderSummary && !window.CHECKOUT_PAGE_HANDLED) {
         renderOrderSummary();
     }
 

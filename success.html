@@ -171,12 +171,20 @@
 
             <div class="order-details">
                 <div class="order-detail-row">
+                    <span class="order-detail-label">Order Number</span>
+                    <span class="order-detail-value" id="orderNumber">Preparing...</span>
+                </div>
+                <div class="order-detail-row">
                     <span class="order-detail-label">Order Status</span>
                     <span class="order-detail-value">Processing</span>
                 </div>
                 <div class="order-detail-row">
                     <span class="order-detail-label">Session ID</span>
                     <span class="order-detail-value" id="sessionId">Loading...</span>
+                </div>
+                <div class="order-detail-row">
+                    <span class="order-detail-label">Total</span>
+                    <span class="order-detail-value" id="orderTotal">Calculating...</span>
                 </div>
                 <div class="order-detail-row">
                     <span class="order-detail-label">Email Confirmation</span>
@@ -204,6 +212,24 @@
             // Get session ID from URL
             const urlParams = new URLSearchParams(window.location.search);
             const sessionId = urlParams.get('session_id');
+            const orders = JSON.parse(localStorage.getItem('ghoharyOrders') || '[]');
+            const latestOrder = orders[orders.length - 1];
+
+            const orderNumberEl = document.getElementById('orderNumber');
+            const orderTotalEl = document.getElementById('orderTotal');
+
+            if (latestOrder && orderNumberEl) {
+                orderNumberEl.textContent = latestOrder.orderNumber || 'Pending';
+            } else if (orderNumberEl) {
+                orderNumberEl.textContent = 'Pending';
+            }
+
+            if (latestOrder && orderTotalEl) {
+                const totalValue = Number(latestOrder.orderTotal || 0);
+                orderTotalEl.textContent = totalValue ? `AED ${totalValue.toLocaleString()}` : 'Pending';
+            } else if (orderTotalEl) {
+                orderTotalEl.textContent = 'Pending';
+            }
 
             if (sessionId) {
                 document.getElementById('sessionId').textContent = sessionId.substring(0, 20) + '...';
