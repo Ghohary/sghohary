@@ -10,13 +10,6 @@
     if (!document.querySelector('.page-transition')) {
         const transitionOverlay = document.createElement('div');
         transitionOverlay.className = 'page-transition';
-        
-        // Create rotating GHOHARY text
-        const text = document.createElement('div');
-        text.className = 'transition-text';
-        text.textContent = 'GHOHARY';
-        
-        transitionOverlay.appendChild(text);
         document.body.appendChild(transitionOverlay);
     }
 
@@ -28,22 +21,20 @@
             const isDownload = link.download;
             
             if (!isExternal && !isDownload) {
-                // Internal navigation - add elegant transition
+                // Internal navigation - seamless elegant transition
                 e.preventDefault();
                 
                 const transition = document.querySelector('.page-transition');
                 
-                // Show transition overlay
+                // Fade out
                 transition.style.opacity = '1';
                 transition.style.pointerEvents = 'auto';
+                document.body.style.animation = 'pageExit 0.4s ease-in forwards';
                 
-                // Trigger beautiful exit animation
-                document.body.style.animation = 'pageExit 0.3s cubic-bezier(0.43, 0.13, 0.23, 0.96) forwards';
-                
-                // Navigate
+                // Navigate after fade out
                 setTimeout(() => {
                     window.location.href = link.href;
-                }, 250);
+                }, 400);
             }
         }
     }, true);
