@@ -11,7 +11,9 @@
         return;
     }
 
-    const API_URL = window.location.origin;
+    const API_URL = window.location.origin.includes('localhost:8000') 
+        ? 'http://localhost:3001'
+        : window.location.origin;
 
     // DOM Elements
     const orderSummary = document.getElementById('orderSummary');
@@ -104,26 +106,46 @@
         submitBtn.innerHTML = '<span>Redirecting to Stripe...</span>';
 
         try {
-            const orderTotal = parseFloat(sessionStorage.getItem('orderTotal') || '0');
-            if (orderTotal <= 0) {
-                throw new Error('Invalid order total');
+            const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
+            
+            if (cart.length === 0) {
+                throw new Error('Your cart is empty');
             }
 
-            const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
-            const lineItems = cart.map(item => ({
-                name: item.name || 'GHOHARY Item',
-                amount: Math.round(Number(item.price || 0) * 100),
-                quantity: Number(item.quantity || 1),
-                image: item.image || ''
-            })).filter(item => item.amount > 0);
+            // Get products to lookup actual prices
+            const products = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
+            
+            const lineItems = cart.map(item => {
+                // Try to get price from products database first
+                const product = products.find(p => p.id == item.id);
+                const price = product ? parseFloat(product.price) : parseFloat(item.price || 0);
+                
+                if (isNaN(price) || price <= 0) {
+                    throw new Error(`Invalid price for ${item.name}`);
+                }
+
+                return {
+                    name: item.name || 'GHOHARY Item',
+                    amount: Math.round(price * 100), // Convert AED to cents
+                    quantity: Number(item.quantity || 1),
+                    size: item.size,
+                    image: item.image || ''
+                };
+            }).filter(item => item.amount > 0);
 
             if (lineItems.length === 0) {
                 throw new Error('No valid items found in cart');
             }
 
+            // Calculate total with shipping
+            const subtotal = lineItems.reduce((sum, item) => sum + (item.amount * item.quantity), 0) / 100;
+            const shippingPerItem = 120;
+            const totalShipping = lineItems.reduce((sum, item) => sum + item.quantity, 0) * shippingPerItem;
+            const orderTotal = Math.round((subtotal + totalShipping) * 100); // in cents for Stripe
+
             localStorage.setItem('ghoharyPendingOrder', JSON.stringify({
                 customer,
-                orderTotal,
+                orderTotal: orderTotal / 100, // Store in AED
                 cart,
                 createdAt: new Date().toISOString()
             }));
@@ -135,23 +157,27 @@
                     lineItems,
                     customerName: `${customer.firstName} ${customer.lastName || ''}`.trim(),
                     email: customer.email,
-                    amount: orderTotal
+                    amount: orderTotal / 100 // Send amount in AED
                 })
             });
 
             if (!response.ok) {
-                throw new Error('Failed to start checkout');
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error || 'Failed to start checkout');
             }
 
-            const { url } = await response.json();
+            const data = await response.json();
+            const { url } = data;
+            
             if (!url) {
-                throw new Error('Checkout URL missing');
+                throw new Error('Checkout URL missing from server');
             }
 
             window.location.href = url;
         } catch (error) {
             console.error('Payment Error:', error);
-            showError(error.message || 'Payment processing failed');
+            console.error('Error message:', error.message);
+            showError(error.message || 'Payment processing failed. Please try again.');
             submitBtn.disabled = false;
             submitBtn.innerHTML = '<span>Proceed to Secure Payment</span>';
         }
