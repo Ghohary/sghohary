@@ -11,16 +11,12 @@
         const transitionOverlay = document.createElement('div');
         transitionOverlay.className = 'page-transition';
         
-        // Create rotating diamond
-        const diamond = document.createElement('div');
-        diamond.className = 'transition-diamond';
-        diamond.innerHTML = `
-            <div class="diamond-outer">
-                <div class="diamond-inner"></div>
-            </div>
-        `;
+        // Create rotating GHOHARY text
+        const text = document.createElement('div');
+        text.className = 'transition-text';
+        text.textContent = 'GHOHARY';
         
-        transitionOverlay.appendChild(diamond);
+        transitionOverlay.appendChild(text);
         document.body.appendChild(transitionOverlay);
     }
 
@@ -42,12 +38,12 @@
                 transition.style.pointerEvents = 'auto';
                 
                 // Trigger beautiful exit animation
-                document.body.style.animation = 'pageExit 0.5s cubic-bezier(0.43, 0.13, 0.23, 0.96) forwards';
+                document.body.style.animation = 'pageExit 0.3s cubic-bezier(0.43, 0.13, 0.23, 0.96) forwards';
                 
-                // Show diamond and navigate
+                // Navigate
                 setTimeout(() => {
                     window.location.href = link.href;
-                }, 500);
+                }, 250);
             }
         }
     }, true);
