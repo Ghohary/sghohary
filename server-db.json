@@ -2,6 +2,24 @@
   "products": [],
   "users": [],
   "appointments": [],
-  "orders": [],
-  "lastUpdated": "2026-01-02T16:00:33.535Z"
+  "orders": [
+    {
+      "id": "cs_live_a1q4MXYc99abVs6KDM16BFnt8GrDKJ9WMIWPOoZ8CFky6y2GcebBwoW1oS",
+      "email": "test@example.com",
+      "customerName": "Test Customer",
+      "amount": 50000,
+      "status": "pending",
+      "items": [
+        {
+          "name": "Bridal Gown",
+          "amount": 50000,
+          "quantity": 1,
+          "size": "4",
+          "image": "https://via.placeholder.com/500x700"
+        }
+      ],
+      "createdAt": "2026-01-03T08:30:42.775Z"
+    }
+  ],
+  "lastUpdated": "2026-01-03T08:30:42.787Z"
 }

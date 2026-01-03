@@ -359,9 +359,10 @@
         let cartHTML = '<div class="cart-items">';
 
         cart.forEach((item, index) => {
-            const itemTotal = (item.price || 0) * (item.quantity || 1);
+            const quantity = Number(item.quantity || 1);
+            const itemTotal = (item.price || 0) * quantity;
             subtotal += itemTotal;
-            totalQuantity += (item.quantity || 1);
+            totalQuantity += quantity;
 
             cartHTML += `
                 <div class="cart-item" data-index="${index}">
@@ -376,7 +377,7 @@
                         <div class="cart-item-actions-mobile">
                             <div class="quantity-selector">
                                 <button class="qty-btn" data-index="${index}" data-change="-1">−</button>
-                                <span class="qty-value">${item.quantity || 1}</span>
+                                <span class="qty-value">${quantity}</span>
                                 <button class="qty-btn" data-index="${index}" data-change="1">+</button>
                             </div>
                             <button class="remove-btn" data-index="${index}">Remove</button>
@@ -388,7 +389,7 @@
                     <div class="cart-item-actions">
                         <div class="quantity-selector">
                             <button class="qty-btn" data-index="${index}" data-change="-1">−</button>
-                            <span class="qty-value">${item.quantity || 1}</span>
+                            <span class="qty-value">${quantity}</span>
                             <button class="qty-btn" data-index="${index}" data-change="1">+</button>
                         </div>
                         <button class="remove-btn" data-index="${index}">
@@ -467,7 +468,8 @@
         const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
         
         if (cart[index]) {
-            cart[index].quantity += change;
+            const currentQty = Number(cart[index].quantity || 1);
+            cart[index].quantity = currentQty + change;
             
             if (cart[index].quantity <= 0) {
                 cart.splice(index, 1);
@@ -480,13 +482,11 @@
     }
 
     function removeItem(index) {
-        if (confirm('Remove this item from your cart?')) {
-            const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
-            cart.splice(index, 1);
-            localStorage.setItem('ghoharyCart', JSON.stringify(cart));
-            renderCart();
-            updateCartCount();
-        }
+        const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
+        cart.splice(index, 1);
+        localStorage.setItem('ghoharyCart', JSON.stringify(cart));
+        renderCart();
+        updateCartCount();
     }
 
     // ===== CHECKOUT PAGE =====
@@ -554,49 +554,82 @@
         orderSummary.innerHTML = summaryHTML;
     }
 
-    // Payment method toggle
-    const paymentOptions = document.querySelectorAll('input[name="payment"]');
-    paymentOptions.forEach(option => {
-        option.addEventListener('change', function() {
-            if (cardDetails) {
-                cardDetails.style.display = this.value === 'card' ? 'block' : 'none';
-            }
+    if (!window.CHECKOUT_PAGE_HANDLED) {
+        // Payment method toggle
+        const paymentOptions = document.querySelectorAll('input[name="payment"]');
+        paymentOptions.forEach(option => {
+            option.addEventListener('change', function() {
+                if (cardDetails) {
+                    cardDetails.style.display = this.value === 'card' ? 'block' : 'none';
+                }
+            });
         });
-    });
 
-    // Checkout form submission
-    if (checkoutForm) {
-        checkoutForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+        // Checkout form submission
+        if (checkoutForm) {
+            checkoutForm.addEventListener('submit', function(e) {
+                e.preventDefault();
 
-            const firstName = document.getElementById('firstName');
-            const email = document.getElementById('email');
+                const firstName = document.getElementById('firstName');
+                const email = document.getElementById('email');
 
-            if (!firstName || !firstName.value || !email || !email.value) {
-                alert('Please fill in all required fields');
-                return;
-            }
+                if (!firstName || !firstName.value || !email || !email.value) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
 
-            const submitBtn = checkoutForm.querySelector('button[type="submit"]');
-            if (submitBtn) {
-                submitBtn.innerHTML = '<span>Processing...</span>';
-                submitBtn.disabled = true;
+                const submitBtn = checkoutForm.querySelector('button[type="submit"]');
+                if (submitBtn) {
+                    submitBtn.innerHTML = '<span>Processing...</span>';
+                    submitBtn.disabled = true;
 
-                setTimeout(() => {
-                    localStorage.removeItem('ghoharyCart');
-                    
-                    const orderNumber = 'GH' + Date.now().toString().slice(-8);
-                    localStorage.setItem('lastOrder', JSON.stringify({
-                        orderNumber,
-                        customerName: firstName.value,
-                        email: email.value,
-                        date: new Date().toISOString()
-                    }));
+                    setTimeout(() => {
+                        localStorage.removeItem('ghoharyCart');
+                        
+                        const orderNumber = 'GH' + Date.now().toString().slice(-8);
+                        localStorage.setItem('lastOrder', JSON.stringify({
+                            orderNumber,
+                            customerName: firstName.value,
+                            email: email.value,
+                            date: new Date().toISOString()
+                        }));
 
-                    window.location.href = 'account.html?order=success';
-                }, 2000);
-            }
-        });
+                        window.location.href = 'account.html?order=success';
+                    }, 2000);
+                }
+            });
+        }
+    }
+
+    // Finalize Stripe Checkout on return
+    const checkoutParams = new URLSearchParams(window.location.search);
+    if (checkoutParams.get('checkout') === 'success') {
+        const pendingOrderRaw = localStorage.getItem('ghoharyPendingOrder');
+        if (pendingOrderRaw) {
+            const pendingOrder = JSON.parse(pendingOrderRaw);
+            const orderNumber = 'GH' + Date.now().toString().slice(-8);
+            const orderData = {
+                orderNumber,
+                paymentId: checkoutParams.get('session_id') || 'stripe_checkout',
+                customerName: `${pendingOrder.customer.firstName} ${pendingOrder.customer.lastName || ''}`.trim(),
+                email: pendingOrder.customer.email,
+                address: pendingOrder.customer.address,
+                city: pendingOrder.customer.city,
+                emirate: pendingOrder.customer.emirate,
+                phone: pendingOrder.customer.phone,
+                paymentMethod: 'stripe_checkout',
+                orderTotal: pendingOrder.orderTotal,
+                date: new Date().toISOString()
+            };
+
+            localStorage.removeItem('ghoharyCart');
+            localStorage.removeItem('ghoharyPendingOrder');
+            localStorage.setItem('lastOrder', JSON.stringify(orderData));
+
+            let orders = JSON.parse(localStorage.getItem('ghoharyOrders') || '[]');
+            orders.push(orderData);
+            localStorage.setItem('ghoharyOrders', JSON.stringify(orders));
+        }
     }
 
     // Card number formatting
@@ -800,8 +833,8 @@
     // Update cart count on page load
     updateCartCount();
 
-    // Render cart if on cart page
-    if (cartContent) {
+    // Render cart if on cart page and not handled by cart.js
+    if (cartContent && !window.CART_PAGE_HANDLED) {
         renderCart();
     }
 

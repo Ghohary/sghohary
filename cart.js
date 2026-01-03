@@ -2,6 +2,8 @@
 (function() {
     'use strict';
 
+    window.CART_PAGE_HANDLED = true;
+
     const cartContent = document.getElementById('cartContent');
     const emptyCart = document.getElementById('emptyCart');
 
@@ -46,7 +48,8 @@
                 console.warn(`Product ${item.id} not found in products array. Using fallback data from cart.`, item);
             }
             
-            const itemTotal = productPrice * item.quantity;
+            const quantity = Number(item.quantity || 1);
+            const itemTotal = productPrice * quantity;
             subtotal += itemTotal;
             
             console.log(`[Cart] Product price for ${productName}:`, productPrice);
@@ -63,11 +66,11 @@
                         
                         <div class="cart-item-actions-mobile">
                             <div class="quantity-selector">
-                                <button class="qty-btn" onclick="updateQuantity(${index}, -1)">−</button>
-                                <span class="qty-value">${item.quantity}</span>
-                                <button class="qty-btn" onclick="updateQuantity(${index}, 1)">+</button>
+                                <button class="qty-btn" data-index="${index}" data-change="-1">−</button>
+                                <span class="qty-value">${quantity}</span>
+                                <button class="qty-btn" data-index="${index}" data-change="1">+</button>
                             </div>
-                            <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+                            <button class="remove-btn" data-index="${index}">Remove</button>
                         </div>
                     </div>
                     <div class="cart-item-price">
@@ -75,11 +78,11 @@
                     </div>
                     <div class="cart-item-actions">
                         <div class="quantity-selector">
-                            <button class="qty-btn" onclick="updateQuantity(${index}, -1)">−</button>
-                            <span class="qty-value">${item.quantity}</span>
-                            <button class="qty-btn" onclick="updateQuantity(${index}, 1)">+</button>
+                            <button class="qty-btn" data-index="${index}" data-change="-1">−</button>
+                            <span class="qty-value">${quantity}</span>
+                            <button class="qty-btn" data-index="${index}" data-change="1">+</button>
                         </div>
-                        <button class="remove-btn" onclick="removeItem(${index})">
+                        <button class="remove-btn" data-index="${index}">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
                             </svg>
@@ -134,12 +137,12 @@
         cartContent.innerHTML = cartHTML;
     }
 
-    // Make functions global
-    window.updateQuantity = function(index, change) {
+    function updateQuantity(index, change) {
         const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
         
         if (cart[index]) {
-            cart[index].quantity += change;
+            const currentQty = Number(cart[index].quantity || 1);
+            cart[index].quantity = currentQty + change;
             
             if (cart[index].quantity <= 0) {
                 cart.splice(index, 1);
@@ -161,29 +164,45 @@
             updateBadge();
             if (window.updateCartCount) window.updateCartCount();
         }
-    };
+    }
 
-    window.removeItem = function(index) {
-        if (confirm('Remove this item from your cart?')) {
-            const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
-            cart.splice(index, 1);
-            localStorage.setItem('ghoharyCart', JSON.stringify(cart));
-            renderCart();
-            
-            // Update cart count
-            const updateBadge = () => {
-                const cartCountElement = document.querySelector('.cart-count');
-                if (cartCountElement) {
-                    const cartData = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
-                    const totalItems = cartData.reduce((sum, item) => sum + (item.quantity || 1), 0);
-                    cartCountElement.textContent = totalItems;
-                    cartCountElement.style.display = totalItems > 0 ? 'flex' : 'none';
-                }
-            };
-            updateBadge();
-            if (window.updateCartCount) window.updateCartCount();
-        }
-    };
+    function removeItem(index) {
+        const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
+        cart.splice(index, 1);
+        localStorage.setItem('ghoharyCart', JSON.stringify(cart));
+        renderCart();
+        
+        // Update cart count
+        const updateBadge = () => {
+            const cartCountElement = document.querySelector('.cart-count');
+            if (cartCountElement) {
+                const cartData = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
+                const totalItems = cartData.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                cartCountElement.textContent = totalItems;
+                cartCountElement.style.display = totalItems > 0 ? 'flex' : 'none';
+            }
+        };
+        updateBadge();
+        if (window.updateCartCount) window.updateCartCount();
+    }
+
+    if (cartContent) {
+        cartContent.addEventListener('click', (event) => {
+            const qtyBtn = event.target.closest('.qty-btn');
+            if (qtyBtn) {
+                const index = parseInt(qtyBtn.dataset.index, 10);
+                const change = parseInt(qtyBtn.dataset.change, 10);
+                updateQuantity(index, change);
+                return;
+            }
+
+            const removeBtn = event.target.closest('.remove-btn');
+            if (removeBtn) {
+                const index = parseInt(removeBtn.dataset.index, 10);
+                removeItem(index);
+            }
+        });
+    }
 
     // Use global updateCartCount if available, otherwise define locally
     if (!window.updateCartCount) {

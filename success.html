@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="Order Confirmed | GHOHARY">
+    <title>Order Confirmed | GHOHARY</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="header-loader.js"></script>
+    
+    <style>
+        .success-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-lg);
+            background: linear-gradient(135deg, var(--ivory) 0%, var(--champagne) 100%);
+        }
+
+        .success-content {
+            text-align: center;
+            max-width: 600px;
+            background: white;
+            padding: clamp(40px, 8vw, 80px);
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .success-icon {
+            font-size: clamp(60px, 15vw, 120px);
+            margin-bottom: 20px;
+            animation: scaleIn 0.6s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .success-title {
+            font-family: var(--font-serif);
+            font-size: clamp(32px, 6vw, 48px);
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .success-message {
+            font-size: clamp(14px, 2vw, 16px);
+            color: var(--text-mid);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .order-details {
+            background: var(--ivory);
+            padding: clamp(20px, 4vw, 30px);
+            border-radius: 4px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .order-detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            font-size: clamp(13px, 2vw, 14px);
+        }
+
+        .order-detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .order-detail-label {
+            color: var(--text-mid);
+            font-weight: 400;
+        }
+
+        .order-detail-value {
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .btn-success {
+            background: var(--burgundy);
+            color: white;
+            padding: clamp(12px, 2vw, 16px) clamp(24px, 4vw, 32px);
+            border: none;
+            border-radius: 4px;
+            font-family: var(--font-sans);
+            font-size: clamp(13px, 2vw, 14px);
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .btn-success:hover {
+            background: var(--burgundy-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--burgundy);
+            border: 1px solid var(--burgundy);
+            text-decoration: none;
+            padding: clamp(12px, 2vw, 16px) clamp(24px, 4vw, 32px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--ivory);
+        }
+
+        .email-notice {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            font-size: clamp(12px, 2vw, 13px);
+            color: var(--text-muted);
+        }
+
+        .loading {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <header></header>
+
+    <section class="success-container">
+        <div class="success-content">
+            <div class="success-icon">✓</div>
+            
+            <h1 class="success-title">Order Confirmed</h1>
+            
+            <p class="success-message">
+                Thank you for your order! We're excited to create something beautiful for you.
+            </p>
+
+            <div class="order-details">
+                <div class="order-detail-row">
+                    <span class="order-detail-label">Order Status</span>
+                    <span class="order-detail-value">Processing</span>
+                </div>
+                <div class="order-detail-row">
+                    <span class="order-detail-label">Session ID</span>
+                    <span class="order-detail-value" id="sessionId">Loading...</span>
+                </div>
+                <div class="order-detail-row">
+                    <span class="order-detail-label">Email Confirmation</span>
+                    <span class="order-detail-value" id="emailStatus">Pending</span>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a href="account.html?view=orders" class="btn-success">View My Orders</a>
+                <a href="collections.html" class="btn-secondary">Continue Shopping</a>
+            </div>
+
+            <div class="email-notice">
+                A confirmation email will be sent to your registered email address with your order details and tracking information.
+            </div>
+        </div>
+    </section>
+
+    <script src="seed-data.js"></script>
+    <script src="app.js"></script>
+    <script>
+        (function() {
+            'use strict';
+
+            // Get session ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const sessionId = urlParams.get('session_id');
+
+            if (sessionId) {
+                document.getElementById('sessionId').textContent = sessionId.substring(0, 20) + '...';
+                
+                // Clear cart and pending order
+                localStorage.removeItem('ghoharyCart');
+                localStorage.removeItem('ghoharyPendingOrder');
+                sessionStorage.removeItem('orderTotal');
+            }
+
+            console.log('✅ Order success page loaded');
+        })();
+    </script>
+</body>
+</html>

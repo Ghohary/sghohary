@@ -1,14 +1,18 @@
 // GHOHARY Backend Server
 // Handles products, users, appointments, and orders
 
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 const DB_FILE = path.join(__dirname, 'server-db.json');
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:8000';
 
 // Middleware
 const corsOptions = {
@@ -123,12 +127,79 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// ===== STRIPE CHECKOUT SESSION =====
+// Create a Stripe Checkout Session
+app.post('/api/create-checkout-session', async (req, res) => {
+    try {
+        const { lineItems, customerName, email, amount } = req.body;
+
+        if (!lineItems || !Array.isArray(lineItems) || lineItems.length === 0) {
+            return res.status(400).json({ error: 'No items in cart' });
+        }
+
+        if (!email) {
+            return res.status(400).json({ error: 'Email is required' });
+        }
+
+        // Convert line items to Stripe format
+        const sessionLineItems = lineItems.map(item => ({
+            price_data: {
+                currency: 'aed',
+                product_data: {
+                    name: item.name || 'GHOHARY Item',
+                    images: item.image ? [item.image] : [],
+                    description: `Size: ${item.size || 'One Size'}`
+                },
+                unit_amount: Math.round(item.amount) // Already in cents
+            },
+            quantity: item.quantity || 1
+        }));
+
+        // Create Stripe Checkout Session
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            mode: 'payment',
+            customer_email: email,
+            client_reference_id: `${Date.now()}`,
+            line_items: sessionLineItems,
+            success_url: `${FRONTEND_URL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${FRONTEND_URL}/cancel.html`,
+            metadata: {
+                customerName,
+                totalAmount: amount
+            }
+        });
+
+        // Save pending order to database
+        const db = readDB();
+        db.orders = db.orders || [];
+        db.orders.push({
+            id: session.id,
+            email,
+            customerName,
+            amount,
+            status: 'pending',
+            items: lineItems,
+            createdAt: new Date().toISOString()
+        });
+        writeDB(db);
+
+        res.json({ url: session.url, sessionId: session.id });
+    } catch (error) {
+        console.error('❌ Stripe Session Error:', error);
+        res.status(500).json({ 
+            error: error.message || 'Failed to create checkout session'
+        });
+    }
+});
+
 // Start server
 initializeDB();
 app.listen(PORT, () => {
     console.log(`\n🎀 GHOHARY Server running on http://localhost:${PORT}`);
     console.log(`📦 Database file: ${DB_FILE}`);
-    console.log(`✅ API ready at http://localhost:${PORT}/api/\n`);
+    console.log(`✅ API ready at http://localhost:${PORT}/api/`);
+    console.log(`💳 Stripe Checkout Session endpoint: POST /api/create-checkout-session\n`);
 });
 
 
@@ -166,42 +237,36 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res)
             process.env.STRIPE_WEBHOOK_SECRET
         );
 
-        // Handle payment success
+        // Handle checkout session completion
+        if (event.type === 'checkout.session.completed') {
+            const session = event.data.object;
+            console.log('✅ Checkout session completed:', session.id);
+            
+            // Update order status to completed
+            const db = readDB();
+            const orderIndex = db.orders.findIndex(o => o.id === session.id);
+            if (orderIndex !== -1) {
+                db.orders[orderIndex].status = 'completed';
+                db.orders[orderIndex].completedAt = new Date().toISOString();
+                writeDB(db);
+            }
+        }
+
+        // Handle payment intent succeeded
         if (event.type === 'payment_intent.succeeded') {
             const paymentIntent = event.data.object;
             console.log('✅ Payment succeeded:', paymentIntent.id);
-            
-            // Here you would:
-            // 1. Save order to database
-            // 2. Send confirmation email
-            // 3. Update inventory
-            // 4. Create shipping label
         }
 
         // Handle payment failure
         if (event.type === 'payment_intent.payment_failed') {
             const paymentIntent = event.data.object;
             console.log('❌ Payment failed:', paymentIntent.id);
-            
-            // Here you would:
-            // 1. Notify customer of failed payment
-            // 2. Save failed attempt
         }
 
         res.json({ received: true });
     } catch (error) {
-        console.error('Webhook Error:', error);
+        console.error('❌ Webhook Error:', error);
         res.status(400).send(`Webhook Error: ${error.message}`);
     }
-});
-
-// Health check endpoint
-app.get('/health', (req, res) => {
-    res.json({ status: 'Server running', timestamp: new Date() });
-});
-
-// Start server
-app.listen(PORT, () => {
-    console.log(`🚀 Stripe Payment Server running on http://localhost:${PORT}`);
-    console.log(`💳 Ready to process payments with Stripe`);
 });

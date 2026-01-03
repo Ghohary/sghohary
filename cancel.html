@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="Payment Cancelled | GHOHARY">
+    <title>Payment Cancelled | GHOHARY</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="header-loader.js"></script>
+    
+    <style>
+        .cancel-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-lg);
+            background: linear-gradient(135deg, var(--ivory) 0%, var(--champagne) 100%);
+        }
+
+        .cancel-content {
+            text-align: center;
+            max-width: 600px;
+            background: white;
+            padding: clamp(40px, 8vw, 80px);
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .cancel-icon {
+            font-size: clamp(60px, 15vw, 120px);
+            margin-bottom: 20px;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .cancel-title {
+            font-family: var(--font-serif);
+            font-size: clamp(32px, 6vw, 48px);
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .cancel-message {
+            font-size: clamp(14px, 2vw, 16px);
+            color: var(--text-mid);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .info-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: clamp(15px, 3vw, 20px);
+            border-radius: 4px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .info-box p {
+            font-size: clamp(13px, 2vw, 14px);
+            color: #856404;
+            margin: 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .btn-primary {
+            background: var(--burgundy);
+            color: white;
+            padding: clamp(12px, 2vw, 16px) clamp(24px, 4vw, 32px);
+            border: none;
+            border-radius: 4px;
+            font-family: var(--font-sans);
+            font-size: clamp(13px, 2vw, 14px);
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .btn-primary:hover {
+            background: var(--burgundy-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--burgundy);
+            border: 1px solid var(--burgundy);
+            text-decoration: none;
+            padding: clamp(12px, 2vw, 16px) clamp(24px, 4vw, 32px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--ivory);
+        }
+
+        .help-text {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            font-size: clamp(12px, 2vw, 13px);
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <header></header>
+
+    <section class="cancel-container">
+        <div class="cancel-content">
+            <div class="cancel-icon">✕</div>
+            
+            <h1 class="cancel-title">Payment Cancelled</h1>
+            
+            <p class="cancel-message">
+                Your payment has been cancelled. Your cart is still saved and waiting for you.
+            </p>
+
+            <div class="info-box">
+                <p>💡 <strong>Your items are still in your cart.</strong> You can review them and try checkout again whenever you're ready.</p>
+            </div>
+
+            <div class="action-buttons">
+                <a href="checkout.html" class="btn-primary">Return to Checkout</a>
+                <a href="cart.html" class="btn-secondary">Review Cart</a>
+            </div>
+
+            <div class="help-text">
+                If you encountered any issues during checkout, please contact our customer service team for assistance.
+            </div>
+        </div>
+    </section>
+
+    <script src="seed-data.js"></script>
+    <script src="app.js"></script>
+    <script>
+        (function() {
+            'use strict';
+
+            // Cart is preserved on cancellation
+            // User can return to checkout to try again
+            
+            console.log('❌ Payment cancelled page loaded');
+        })();
+    </script>
+</body>
+</html>
