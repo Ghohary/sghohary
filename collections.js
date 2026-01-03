@@ -98,7 +98,7 @@
                         <p class="product-category">${product.category || 'Custom Design'}</p>
                         <p class="product-price">${
                             typeof product.price === 'number' 
-                                ? `AED ${product.price.toLocaleString()}` 
+                                ? `${product.price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} AED` 
                                 : (product.price || 'Price Upon Request')
                         }</p>
                     </div>

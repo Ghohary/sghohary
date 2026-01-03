@@ -1134,14 +1134,14 @@ nav .nav-icons {
     content: '';
     position: absolute;
     inset: 0;
-    border: 1px solid rgba(201, 165, 93, 0.2);
+    border: none;
     transition: border-color 0.4s ease;
     pointer-events: none;
     z-index: 10;
 }
 
 .product-card:hover::before {
-    border-color: var(--gold);
+    border-color: transparent;
 }
 
 .product-card:hover {
