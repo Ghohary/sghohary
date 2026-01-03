@@ -290,19 +290,18 @@ nav {
     min-height: 80px;
 }
 
-nav .mobile-menu-btn {
-    order: -1;
-    margin-right: auto;
-}
-
 nav .logo {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    margin-right: auto;
+    position: relative;
+    left: 0;
+    transform: none;
 }
 
 nav .nav-icons {
-    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: clamp(16px, 3vw, 24px);
+    margin-left: 0;
 }
 
 @media (min-width: 768px) {
@@ -316,21 +315,13 @@ nav .nav-icons {
     letter-spacing: 0.45em;
     color: var(--text-dark);
     text-decoration: none;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
     z-index: 1001;
     text-shadow: none;
 }
 
 .logo::after {
-    content: 'DUBAI';
-    display: block;
-    font-size: clamp(6px, 1.2vw, 9px);
-    letter-spacing: 0.6em;
-    color: var(--gray-600);
-    text-align: center;
-    margin-top: clamp(1px, 0.3vh, 3px);
+    content: '';
+    display: none;
 }
 
 /* Mobile Menu */
@@ -344,6 +335,12 @@ nav .nav-icons {
     cursor: pointer;
     z-index: 1001;
     position: relative;
+}
+
+@media (min-width: 768px) {
+    .mobile-menu-btn {
+        display: none;
+    }
 }
 
 .mobile-menu-btn span {
@@ -437,9 +434,10 @@ nav .nav-icons {
     }
     
     .logo {
-        grid-column: 2;
+        grid-column: 1;
         grid-row: 1;
-        justify-self: center;
+        justify-self: start;
+        margin-right: 0;
     }
 
     .nav-icons {
@@ -463,20 +461,67 @@ nav .nav-icons {
     .nav-links a { font-size: 11px; }
 }
 
-.nav-icons {
-    display: none;
-}
-
 @media (max-width: 1023px) {
-    .nav-icons {
-        display: flex;
-        gap: 16px;
-        align-items: center;
+    nav {
+        justify-content: space-between;
     }
 
-    .nav-icons .search-link,
+    .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 100%;
+        height: 100vh;
+        background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 50%, var(--gray-100) 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: clamp(24px, 4vh, 36px);
+        list-style: none;
+        transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1000;
+        box-shadow: -4px 0 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-links.active {
+        right: 0;
+    }
+
+    .nav-icons {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        order: 2;
+        margin-left: auto;
+        padding-right: 8px;
+    }
+
     .nav-icons a[aria-label="Account"] {
         display: none;
+    }
+
+    .nav-icons a + a {
+        position: relative;
+        padding-left: 12px;
+    }
+
+    .nav-icons a + a::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 1px;
+        height: 20px;
+        background: rgba(0, 0, 0, 0.15);
+    }
+
+    .mobile-menu-btn {
+        order: 3;
+        margin-left: 8px;
+        padding-left: 14px;
+        border-left: 1px solid rgba(0, 0, 0, 0.15);
     }
 }
 
@@ -907,6 +952,7 @@ nav .nav-icons {
     margin-bottom: var(--spacing-md);
     scrollbar-width: none;
     -ms-overflow-style: none;
+    padding-top: 4px;
 }
 
 .filters-bar::-webkit-scrollbar {
@@ -922,8 +968,8 @@ nav .nav-icons {
 }
 
 .filter-btn {
-    padding: 12px 24px;
-    font-size: 11px;
+    padding: 10px 18px;
+    font-size: clamp(10px, 1.6vw, 12px);
     letter-spacing: 0.18em;
     text-transform: uppercase;
     background: transparent;
@@ -934,6 +980,20 @@ nav .nav-icons {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
+}
+
+@media (max-width: 640px) {
+    .filters-bar {
+        gap: 10px;
+        justify-content: flex-start;
+        padding-bottom: 6px;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .filter-btn {
+        padding: 9px 14px;
+        letter-spacing: 0.14em;
+    }
 }
 
 .filter-btn::before {
@@ -969,8 +1029,8 @@ nav .nav-icons {
 
 .sort-dropdown select,
 .custom-select {
-    padding: 12px 20px;
-    font-size: 12px;
+    padding: 10px 16px;
+    font-size: clamp(11px, 1.8vw, 13px);
     border: 1px solid var(--gray-400);
     background: var(--white);
     color: var(--text-dark);
@@ -978,6 +1038,18 @@ nav .nav-icons {
     font-family: 'Montserrat', sans-serif;
     transition: all 0.3s ease;
     letter-spacing: 0.05em;
+}
+
+@media (max-width: 640px) {
+    .sort-dropdown {
+        justify-content: flex-start;
+        margin-top: 6px;
+    }
+
+    .sort-dropdown select,
+    .custom-select {
+        width: 100%;
+    }
 }
 
 .sort-dropdown select:hover,
