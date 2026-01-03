@@ -71,8 +71,8 @@
     // Update product price
     const priceEl = document.querySelector('.price-amount');
     if (priceEl) {
-        if (typeof product.price === 'number') {
-            priceEl.textContent = product.price.toLocaleString();
+        if (product.price && product.price !== 'Price Upon Request') {
+            priceEl.textContent = parseFloat(product.price).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
         } else {
             priceEl.textContent = product.price || 'Price Upon Request';
         }

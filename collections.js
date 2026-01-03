@@ -96,9 +96,9 @@
                         <h3 class="product-name">${product.name}</h3>
                         <p class="product-category">${product.category || 'Custom Design'}</p>
                         <p class="product-price">${
-                            typeof product.price === 'number' 
-                                ? `${product.price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} AED` 
-                                : (product.price || 'Price Upon Request')
+                            product.price && product.price !== 'Price Upon Request'
+                                ? `${parseFloat(product.price).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} AED` 
+                                : 'Price Upon Request'
                         }</p>
                     </div>
                 </a>

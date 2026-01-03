@@ -1211,7 +1211,7 @@
             
             tbody.innerHTML = products.map(p => {
                 const totalInventory = p.sizes ? p.sizes.reduce((sum, s) => sum + (s.inventory || 0), 0) : 0;
-                const priceDisplay = p.price === 'Price Upon Request' ? 'Price Upon Request' : `AED ${Number(p.price).toLocaleString()}`;
+                const priceDisplay = p.price === 'Price Upon Request' || !p.price ? 'Price Upon Request' : `${parseFloat(p.price).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} AED`;
                 const isVisible = p.visible !== false; // Default to visible if not set
                 const visibilityIcon = isVisible ? 
                     '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>' :
