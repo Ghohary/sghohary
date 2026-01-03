@@ -10,6 +10,17 @@
     if (!document.querySelector('.page-transition')) {
         const transitionOverlay = document.createElement('div');
         transitionOverlay.className = 'page-transition';
+        
+        // Create rotating diamond
+        const diamond = document.createElement('div');
+        diamond.className = 'transition-diamond';
+        diamond.innerHTML = `
+            <div class="diamond-outer">
+                <div class="diamond-inner"></div>
+            </div>
+        `;
+        
+        transitionOverlay.appendChild(diamond);
         document.body.appendChild(transitionOverlay);
     }
 
@@ -21,16 +32,22 @@
             const isDownload = link.download;
             
             if (!isExternal && !isDownload) {
-                // Internal navigation - add transition
+                // Internal navigation - add elegant transition
                 e.preventDefault();
                 
-                // Fade out current page
-                document.body.style.animation = 'pageExit 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
+                const transition = document.querySelector('.page-transition');
                 
-                // Navigate after fade out
+                // Show transition overlay
+                transition.style.opacity = '1';
+                transition.style.pointerEvents = 'auto';
+                
+                // Trigger beautiful exit animation
+                document.body.style.animation = 'pageExit 0.5s cubic-bezier(0.43, 0.13, 0.23, 0.96) forwards';
+                
+                // Show diamond and navigate
                 setTimeout(() => {
                     window.location.href = link.href;
-                }, 300);
+                }, 500);
             }
         }
     }, true);
