@@ -290,6 +290,20 @@
             animation: fadeInUp 0.9s ease-out forwards;
             animation-delay: 0.2s;
             opacity: 0;
+            position: relative;
+        }
+
+        .hero-title::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 55%;
+            transform: translate(-50%, -50%);
+            width: min(70%, 420px);
+            height: clamp(48px, 10vh, 96px);
+            background: radial-gradient(circle, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0.08) 60%, rgba(0, 0, 0, 0) 75%);
+            filter: blur(4px);
+            z-index: -1;
         }
 
         @media (min-width: 768px) {
@@ -957,10 +971,7 @@
         <div class="hero-bg-pattern"></div>
         <div class="container hero-content">
             <div class="hero-subtitle">Festive Gifts</div>
-            <h1 class="hero-title">The Gift of <em>GHOHARY</em></h1>
-            <p class="hero-description">
-                A curated selection of couture pieces designed to celebrate your most luminous moments.
-            </p>
+            <h1 class="hero-title">The Bridal Collection <em>25/26</em></h1>
             <div class="hero-cta">
                 <a href="collections.html" class="btn btn-primary"><span>Discover</span></a>
             </div>
