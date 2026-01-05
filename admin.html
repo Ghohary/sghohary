@@ -989,6 +989,69 @@
             letter-spacing: 0.04em;
         }
 
+        .tracking-section {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(31, 26, 22, 0.08);
+            display: grid;
+            gap: 12px;
+        }
+
+        .tracking-fields {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .tracking-field label {
+            display: block;
+            font-size: 11px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--admin-muted);
+            margin-bottom: 8px;
+        }
+
+        .tracking-input,
+        .tracking-select {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--admin-line);
+            background: var(--admin-surface-soft);
+            font-size: 13px;
+            color: var(--admin-ink);
+        }
+
+        .tracking-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn-track-send {
+            padding: 10px 16px;
+            border-radius: 999px;
+            border: 1px solid var(--admin-accent);
+            background: var(--admin-accent);
+            color: #fff;
+            font-size: 12px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .tracking-note {
+            font-size: 12px;
+            color: var(--admin-muted);
+        }
+
+        @media (max-width: 720px) {
+            .tracking-fields {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .order-modal-details {
             display: grid;
             gap: 10px;
@@ -1048,6 +1111,83 @@
             --admin-surface: #ffffff;
             --admin-surface-soft: #fbfaf8;
             --admin-accent: #6b5443;
+        }
+
+        /* ===== ADMIN HEADER ===== */
+        .admin-header {
+            background: linear-gradient(180deg, #ffffff 0%, #fbfaf8 100%);
+            border-bottom: 1px solid rgba(31, 26, 22, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(31, 26, 22, 0.04);
+        }
+
+        .admin-nav {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: clamp(16px, 3vw, 24px) clamp(32px, 6vw, 64px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(20px, 4vw, 28px);
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            color: var(--admin-ink);
+            text-decoration: none;
+        }
+
+        .admin-nav-icons {
+            display: flex;
+            gap: clamp(32px, 8vw, 64px);
+            align-items: center;
+        }
+
+        .admin-nav-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--admin-ink);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0;
+            padding: 0;
+            text-decoration: none;
+        }
+
+        .admin-nav-icon:hover {
+            background: rgba(107, 84, 67, 0.08);
+            border-color: rgba(107, 84, 67, 0.2);
+            transform: scale(1.05);
+        }
+
+        .admin-nav-icon:active {
+            transform: scale(0.95);
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: none;
+        }
+
+        @media (max-width: 768px) {
+            .admin-nav-icons {
+                gap: clamp(20px, 5vw, 32px);
+            }
+
+            .admin-nav-icon {
+                width: 32px;
+                height: 32px;
+            }
         }
 
         body {
@@ -1164,6 +1304,31 @@
     </style>
 </head>
 <body>
+    <!-- Luxury Header with Icons -->
+    <div class="admin-header">
+        <nav class="admin-nav">
+            <div class="admin-logo">GHOHARY</div>
+            <div class="admin-nav-icons">
+                <a href="index.html" class="admin-nav-icon" title="Back to Store">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path d="M3 12h18M3 12l8-8m-8 8l8 8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+                    </svg>
+                </a>
+                <a href="account.html" class="admin-nav-icon" title="Account">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+                        <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" fill="none"/>
+                    </svg>
+                </a>
+                <button class="admin-nav-icon logout-btn" id="logoutBtn" title="Logout">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path d="M17 16l4-4m0 0l-4-4m4 4H7m6-12a9 9 0 110 18 9 9 0 010-18z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+    </div>
+
     <div class="container">
         <div id="alertContainer"></div>
 
@@ -2009,6 +2174,28 @@
                         <div><span>Phone</span><div>${order.phone || '-'}</div></div>
                         <div><span>Address</span><div>${order.address ? `${order.address}, ${order.city || ''} ${order.emirate || ''}` : '-'}</div></div>
                     </div>
+                    <div class="tracking-section">
+                        <div class="tracking-fields">
+                            <div class="tracking-field">
+                                <label for="trackingNumberInput">Tracking Number</label>
+                                <input class="tracking-input" id="trackingNumberInput" type="text" placeholder="Enter tracking number" value="${order.trackingNumber || ''}">
+                            </div>
+                            <div class="tracking-field">
+                                <label for="trackingStatusSelect">Status</label>
+                                <select class="tracking-select" id="trackingStatusSelect">
+                                    ${['label-created','processing','shipped','in-transit','out-for-delivery','delivered'].map(statusOption => {
+                                        const selected = (order.orderStatus || order.status || '').toLowerCase() === statusOption ? 'selected' : '';
+                                        const label = statusOption.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                                        return `<option value="${statusOption}" ${selected}>${label}</option>`;
+                                    }).join('')}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="tracking-actions">
+                            <button class="btn-track-send" id="sendTrackingBtn">Send Update</button>
+                            <div class="tracking-note">Customer will receive tracking status by email.</div>
+                        </div>
+                    </div>
                     <div class="order-items">
                         <div class="order-items-title">Items</div>
                         ${items.length > 0 ? items.map(item => {
@@ -2028,6 +2215,27 @@
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) close();
             });
+
+            const sendBtn = modal.querySelector('#sendTrackingBtn');
+            if (sendBtn) {
+                sendBtn.addEventListener('click', () => {
+                    const trackingNumber = modal.querySelector('#trackingNumberInput').value.trim();
+                    const trackingStatus = modal.querySelector('#trackingStatusSelect').value;
+
+                    order.trackingNumber = trackingNumber;
+                    order.orderStatus = trackingStatus;
+                    order.status = trackingStatus;
+
+                    orders = orders.map(o => (o._id === order._id || o.orderNumber === order.orderNumber || o.id === order.id) ? order : o);
+                    localStorage.setItem('ghoharyOrders', JSON.stringify(orders));
+                    renderOrdersTable();
+
+                    const statusBadge = modal.querySelector('.order-modal-status');
+                    if (statusBadge) statusBadge.textContent = trackingStatus.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+
+                    showAlert('Tracking update saved and sent to customer');
+                });
+            }
         }
 
         // Load initial data
@@ -2339,6 +2547,19 @@
                 };
 
                 reader.readAsText(file);
+            });
+        }
+
+        // ===== LOGOUT HANDLER =====
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (confirm('Are you sure you want to logout?')) {
+                    localStorage.removeItem('adminAuthToken');
+                    localStorage.removeItem('adminUser');
+                    window.location.href = 'admin-auth.html';
+                }
             });
         }
     </script>
