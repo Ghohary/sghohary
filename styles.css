@@ -321,16 +321,16 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: clamp(20px, 2.5vh, 26px) var(--spacing-sm);
+    padding: clamp(26px, 3.2vh, 34px) var(--spacing-sm);
     position: relative;
-    min-height: 80px;
+    min-height: 96px;
 }
 
 .nav-container nav.container {
     max-width: 100%;
     width: 100%;
     padding-left: clamp(12px, 2vw, 28px);
-    padding-right: clamp(12px, 2vw, 28px);
+    padding-right: clamp(16px, 3vw, 36px);
 }
 
 nav .logo {
@@ -343,19 +343,19 @@ nav .logo {
 nav .nav-icons {
     display: flex;
     align-items: center;
-    gap: clamp(16px, 3vw, 24px);
-    margin-left: 0;
+    gap: clamp(14px, 2.2vw, 20px);
+    margin-left: auto;
 }
 
 @media (min-width: 768px) {
-    nav { padding: clamp(24px, 3vh, 32px) var(--spacing-lg); min-height: 92px; }
+    nav { padding: clamp(30px, 3.6vh, 38px) var(--spacing-lg); min-height: 108px; }
 }
 
 .logo {
     font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(22px, 4.5vw, 36px);
+    font-size: clamp(26px, 5.2vw, 44px);
     font-weight: 400;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.26em;
     color: var(--text-dark);
     text-decoration: none;
     z-index: 1001;
@@ -581,8 +581,8 @@ nav .nav-icons {
 }
 
 .nav-icon {
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
     stroke: #9d8b7e;
     stroke-width: 1.5;
     fill: none;
