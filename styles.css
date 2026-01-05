@@ -254,10 +254,12 @@ a:hover {
     background: linear-gradient(90deg, var(--gray-800) 0%, var(--gray-600) 50%, var(--gray-800) 100%);
     color: var(--white);
     text-align: center;
-    padding: clamp(3px, 0.8vh, 5px) var(--spacing-sm);
-    font-size: clamp(6px, 0.8vw + 2px, 8px);
-    letter-spacing: 0.3em;
+    padding: clamp(8px, 1.8vh, 12px) var(--spacing-sm);
+    font-size: clamp(11px, 1.2vw + 3px, 14px);
+    letter-spacing: 0.22em;
     text-transform: uppercase;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
     position: relative;
     z-index: 1001;
     width: 100%;
@@ -284,7 +286,7 @@ a:hover {
 }
 
 @media (min-width: 768px) {
-    .announcement-bar { font-size: 9px; padding: 10px var(--spacing-md); }
+    .announcement-bar { font-size: 12px; padding: 12px var(--spacing-md); }
 }
 
 /* Navigation */
