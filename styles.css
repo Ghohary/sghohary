@@ -254,8 +254,8 @@ a:hover {
     background: linear-gradient(90deg, var(--gray-800) 0%, var(--gray-600) 50%, var(--gray-800) 100%);
     color: var(--white);
     text-align: center;
-    padding: clamp(12px, 2.5vh, 16px) var(--spacing-sm);
-    font-size: var(--text-xs);
+    padding: clamp(3px, 0.8vh, 5px) var(--spacing-sm);
+    font-size: clamp(6px, 0.8vw + 2px, 8px);
     letter-spacing: 0.3em;
     text-transform: uppercase;
     position: relative;
@@ -284,7 +284,7 @@ a:hover {
 }
 
 @media (min-width: 768px) {
-    .announcement-bar { font-size: 11px; padding: 16px var(--spacing-md); }
+    .announcement-bar { font-size: 9px; padding: 10px var(--spacing-md); }
 }
 
 /* Navigation */
@@ -324,6 +324,13 @@ nav {
     min-height: 80px;
 }
 
+.nav-container nav.container {
+    max-width: 100%;
+    width: 100%;
+    padding-left: clamp(12px, 2vw, 28px);
+    padding-right: clamp(12px, 2vw, 28px);
+}
+
 nav .logo {
     margin-right: auto;
     position: relative;
@@ -346,7 +353,7 @@ nav .nav-icons {
     font-family: 'Cormorant Garamond', serif;
     font-size: clamp(22px, 4.5vw, 36px);
     font-weight: 400;
-    letter-spacing: 0.45em;
+    letter-spacing: 0.22em;
     color: var(--text-dark);
     text-decoration: none;
     z-index: 1001;
@@ -380,7 +387,7 @@ nav .nav-icons {
 .mobile-menu-btn span {
     width: clamp(22px, 4vw, 26px);
     height: 2px;
-    background: var(--gray-700);
+    background: #9d8b7e;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 2px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
@@ -500,6 +507,11 @@ nav .nav-icons {
         justify-content: space-between;
     }
 
+    .logo {
+        justify-self: start;
+        margin-right: 0;
+    }
+
     .nav-links {
         position: fixed;
         top: 0;
@@ -524,26 +536,25 @@ nav .nav-icons {
 
     .nav-icons {
         display: flex;
-        gap: 12px;
+        gap: 24px;
         align-items: center;
-        order: 2;
-        margin-left: auto;
-        padding-right: 8px;
+        justify-self: end;
+        margin-left: 0;
+        padding-right: 0;
     }
 
     .nav-icons a[aria-label="Account"] {
         display: none;
     }
 
-    .nav-icons a + a {
+    .nav-icons > * {
         position: relative;
-        padding-left: 12px;
     }
 
-    .nav-icons a + a::before {
+    .nav-icons > * + *::before {
         content: '';
         position: absolute;
-        left: 0;
+        left: -12px;
         top: 50%;
         transform: translateY(-50%);
         width: 1px;
@@ -553,9 +564,9 @@ nav .nav-icons {
 
     .mobile-menu-btn {
         order: 3;
-        margin-left: 8px;
-        padding-left: 14px;
-        border-left: 1px solid rgba(0, 0, 0, 0.15);
+        margin-left: 0;
+        padding-left: 0;
+        border-left: none;
     }
 }
 
@@ -570,14 +581,14 @@ nav .nav-icons {
 .nav-icon {
     width: 22px;
     height: 22px;
-    stroke: var(--text-dark);
+    stroke: #9d8b7e;
     stroke-width: 1.5;
     fill: none;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nav-icons a:hover .nav-icon {
-    stroke: var(--gray-600);
+    stroke: #9d8b7e;
     transform: scale(1.1);
 }
 
@@ -3611,6 +3622,23 @@ nav .nav-icons {
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
+.order-toggle {
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.order-details-panel {
+    display: none;
+}
+
+.order-card.open .order-details-panel {
+    display: block;
+}
+
 .order-number {
     display: block;
     font-size: 14px;
@@ -4702,6 +4730,9 @@ button, a {
     justify-content: space-between;
     padding: 8px 0;
     font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-mid);
 }
 
 .order-summary-row.total {
@@ -4711,6 +4742,7 @@ button, a {
     font-size: 14px;
     color: var(--text-dark);
     font-weight: 500;
+    letter-spacing: 0.18em;
 }
 
 .order-actions {
@@ -4720,19 +4752,19 @@ button, a {
 }
 
 .btn-view-invoice,
-.btn-track,
-.btn-reorder {
+.btn-track {
     padding: 10px 16px;
     font-size: 13px;
-    border-radius: 4px;
+    border-radius: 999px;
     border: 1px solid rgba(170, 142, 110, 0.3);
     background: transparent;
     color: var(--text-dark);
     cursor: pointer;
     transition: all 0.3s ease;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.16em;
     font-weight: 500;
+    font-family: 'Cormorant Garamond', serif;
 }
 
 .btn-view-invoice:hover,
@@ -4989,6 +5021,14 @@ button, a {
 .tracking-number {
     font-size: 13px;
     color: var(--text-muted);
+}
+
+.tracking-carrier {
+    font-size: 12px;
+    color: var(--text-mid);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-top: 6px;
 }
 
 .tracking-timeline {
