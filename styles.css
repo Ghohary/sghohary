@@ -343,7 +343,7 @@ nav .logo {
 nav .nav-icons {
     display: flex;
     align-items: center;
-    gap: clamp(14px, 2.2vw, 20px);
+    gap: clamp(18px, 3vw, 28px);
     margin-left: auto;
 }
 
@@ -581,8 +581,8 @@ nav .nav-icons {
 }
 
 .nav-icon {
-    width: 18px;
-    height: 18px;
+    width: 22px;
+    height: 22px;
     stroke: #9d8b7e;
     stroke-width: 1.5;
     fill: none;
