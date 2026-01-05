@@ -305,7 +305,7 @@
             gap: clamp(14px, 3vh, 20px);
             align-items: center;
             padding: 0 var(--spacing-md);
-            margin-top: clamp(-52px, -7vh, -28px);
+            margin-top: clamp(-68px, -9vh, -36px);
         }
 
         @media (min-width: 768px) {
@@ -343,12 +343,12 @@
         }
 
         .btn-primary {
-            background: #8f775a;
-            color: #f9f5f0;
+            background: linear-gradient(90deg, var(--gray-800) 0%, var(--gray-600) 50%, var(--gray-800) 100%);
+            color: var(--white);
             position: relative;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.26);
         }
 
         .btn-primary span {
@@ -357,9 +357,9 @@
         }
 
         .btn-primary:hover {
-            color: #ffffff;
+            color: var(--white);
             border-color: rgba(255, 255, 255, 0.4);
-            background: #9b856a;
+            background: linear-gradient(90deg, var(--gray-700) 0%, var(--gray-500) 50%, var(--gray-700) 100%);
             box-shadow: 0 16px 36px rgba(0, 0, 0, 0.28);
         }
 
