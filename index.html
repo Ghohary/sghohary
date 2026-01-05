@@ -176,6 +176,26 @@
             border-image: linear-gradient(90deg, transparent, var(--gray-300), transparent) 1;
         }
 
+        .hero-media {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .hero-video,
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(24, 18, 14, 0.55) 0%, rgba(24, 18, 14, 0.35) 40%, rgba(24, 18, 14, 0.25) 100%);
+        }
+
         @media (min-width: 1920px) {
             .hero {
                 min-height: clamp(800px, 75vh, 1000px);
@@ -189,6 +209,7 @@
             background: radial-gradient(circle at top right, rgba(0, 0, 0, 0.05), transparent 60%),
                         radial-gradient(circle at bottom left, rgba(0, 0, 0, 0.03), transparent 50%);
             pointer-events: none;
+            z-index: 1;
         }
 
         .hero-bg-pattern {
@@ -198,6 +219,7 @@
             background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30L30 0z' fill='%23000000' fill-opacity='1'/%3E%3C/svg%3E");
             background-size: clamp(30px, 6vw, 60px) clamp(30px, 6vw, 60px);
             background-size: 40px 40px;
+            z-index: 1;
         }
 
         @media (min-width: 768px) {
@@ -214,6 +236,17 @@
             z-index: 2;
             text-align: center;
             animation: fadeInUp 1s ease forwards;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding-bottom: clamp(28px, 6vh, 84px);
+        }
+
+        .hero-subtitle,
+        .hero-title,
+        .hero-description {
+            color: #f7f3ee;
         }
 
         @keyframes fadeInUp {
@@ -295,6 +328,7 @@
         }
 
         .hero-cta {
+            position: relative;
             display: flex;
             flex-direction: column;
             gap: clamp(14px, 3vh, 20px);
@@ -323,6 +357,7 @@
             font-weight: 400;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             border: none;
+            border-radius: 999px;
             cursor: pointer;
             width: 100%;
             max-width: 280px;
@@ -336,19 +371,19 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--gray-700) 0%, var(--gray-800) 100%);
+            background: transparent;
             color: var(--white);
             position: relative;
             overflow: hidden;
-            border: 1px solid var(--gray-600);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 1.5px solid var(--white);
+            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25);
         }
 
         .btn-primary::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, var(--gray-600) 0%, var(--gray-500) 100%);
+            background: linear-gradient(90deg, var(--gray-700) 0%, var(--gray-600) 50%, var(--gray-700) 100%);
             transform: translateX(-100%);
             transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -364,22 +399,28 @@
         }
 
         .btn-primary:hover {
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            color: var(--text-dark);
+            border-color: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .btn-primary:active {
+            color: var(--text-dark);
         }
 
         .btn-secondary {
-            background: transparent;
-            color: var(--text-dark);
-            border: 2px solid var(--gray-400);
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.03);
+            background: linear-gradient(90deg, rgba(45, 45, 45, 0.85) 0%, rgba(60, 60, 60, 0.85) 50%, rgba(45, 45, 45, 0.85) 100%);
+            color: var(--white);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
         }
 
         .btn-secondary:hover,
         .btn-secondary:active {
-            background: linear-gradient(135deg, var(--gray-300) 0%, var(--gray-200) 100%);
-            color: var(--text-dark);
-            border-color: var(--gray-400);
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(90deg, var(--gray-600) 0%, var(--gray-500) 50%, var(--gray-600) 100%);
+            color: var(--white);
+            border-color: rgba(255, 255, 255, 0.35);
+            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.28);
         }
 
         /* Collections Section - Mobile Optimized */
@@ -899,25 +940,14 @@
 
     <!-- Hero Section -->
     <section class="hero">
+        <div class="hero-media">
+            <img class="hero-image" src="assets/IMG_6387.jpg" alt="GHOHARY couture hero" loading="eager">
+            <div class="hero-overlay"></div>
+        </div>
         <div class="hero-bg-pattern"></div>
         <div class="container hero-content">
-            <div class="hero-text">
-                <div class="hero-subtitle">Haute Couture Dubai</div>
-                <h1 class="hero-title">
-                    Timeless
-                    <em>Elegance</em>
-                </h1>
-                <p class="hero-description">
-                    Exquisite bridal gowns and evening wear, meticulously handcrafted for your most precious moments. Each piece is a masterpiece of artistry, designed to capture your unique beauty.
-                </p>
-                <div class="hero-cta">
-                    <a href="appointment.html" class="btn btn-primary">
-                        <span>Book Consultation</span>
-                    </a>
-                    <a href="collections.html" class="btn btn-secondary">
-                        <span>View Collections</span>
-                    </a>
-                </div>
+            <div class="hero-cta">
+                <a href="collections.html" class="btn btn-primary"><span>Shop Now</span></a>
             </div>
         </div>
     </section>
