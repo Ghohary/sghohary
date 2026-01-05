@@ -247,7 +247,7 @@
             font-size: clamp(9px, 1.5vw + 2px, 13px);
             letter-spacing: 0.5em;
             text-transform: uppercase;
-            color: var(--text-mid);
+            color: rgba(255, 255, 255, 0.75);
             margin-bottom: clamp(18px, 2.5vh, 28px);
             display: flex;
             align-items: center;
@@ -261,18 +261,18 @@
             content: '';
             width: clamp(20px, 4vw + 8px, 60px);
             height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gray-400), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
         }
 
         .hero-title {
             font-size: clamp(36px, 6vw + 16px, 110px);
             font-weight: 300;
             line-height: 1.1;
-            color: var(--text-dark);
+            color: #f9f5f0;
             margin-bottom: clamp(20px, 3vh, 36px);
             padding: 0 var(--spacing-sm);
             letter-spacing: 0.15em;
-            text-shadow: 0 2px 24px rgba(0, 0, 0, 0.08);
+            text-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
         }
 
         @media (min-width: 768px) {
@@ -290,13 +290,13 @@
 
         .hero-title em {
             font-style: italic;
-            color: var(--text-dark);
+            color: #f5efe7;
             display: block;
         }
 
         .hero-description {
             font-size: clamp(12px, 2vw + 4px, 17px);
-            color: var(--text-light);
+            color: rgba(255, 255, 255, 0.82);
             max-width: 680px;
             margin: 0 auto clamp(32px, 4vh, 52px);
             line-height: 1.9;
@@ -355,21 +355,12 @@
         }
 
         .btn-primary {
-            background: transparent;
-            color: var(--white);
+            background: rgba(255, 255, 255, 0.92);
+            color: var(--text-dark);
             position: relative;
             overflow: hidden;
-            border: 1.5px solid var(--white);
-            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25);
-        }
-
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg, var(--gray-700) 0%, var(--gray-600) 50%, var(--gray-700) 100%);
-            transform: translateX(-100%);
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
         }
 
         .btn-primary span {
@@ -377,15 +368,11 @@
             z-index: 1;
         }
 
-        .btn-primary:hover::before,
-        .btn-primary:active::before {
-            transform: translateX(0);
-        }
-
         .btn-primary:hover {
             color: var(--text-dark);
-            border-color: rgba(255, 255, 255, 0.6);
-            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+            border-color: rgba(255, 255, 255, 0.95);
+            background: #ffffff;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.28);
         }
 
         .btn-primary:active {
@@ -930,6 +917,11 @@
         </div>
         <div class="hero-bg-pattern"></div>
         <div class="container hero-content">
+            <div class="hero-subtitle">GHOHARY Haute Couture</div>
+            <h1 class="hero-title">Timeless <em>Bridal Elegance</em></h1>
+            <p class="hero-description">
+                Discover sculpted silhouettes and couture craftsmanship designed for unforgettable entrances.
+            </p>
             <div class="hero-cta">
                 <a href="collections.html" class="btn btn-primary"><span>Shop Now</span></a>
             </div>
