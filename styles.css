@@ -323,7 +323,7 @@ nav {
     align-items: center;
     padding: clamp(18px, 2.4vh, 26px) var(--spacing-sm);
     position: relative;
-    min-height: 76px;
+    min-height: 64px;
 }
 
 .nav-container nav.container {
@@ -363,7 +363,7 @@ nav .nav-icons {
 }
 
 @media (min-width: 768px) {
-    nav { padding: clamp(22px, 2.8vh, 30px) var(--spacing-lg); min-height: 88px; }
+    nav { padding: clamp(22px, 2.8vh, 30px) var(--spacing-lg); min-height: 64px; }
 }
 
 .logo {
