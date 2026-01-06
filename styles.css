@@ -334,10 +334,10 @@ nav {
 }
 
 nav .logo {
-    margin-right: auto;
-    position: relative;
-    left: 0;
-    transform: none;
+    margin-right: 0;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 nav .nav-icons {
@@ -492,10 +492,11 @@ nav .nav-icons {
     }
     
     .logo {
-        grid-column: 1;
+        grid-column: 2;
         grid-row: 1;
-        justify-self: start;
-        margin-right: 0;
+        justify-self: center;
+        position: static;
+        transform: none;
     }
 
     .nav-icons {
