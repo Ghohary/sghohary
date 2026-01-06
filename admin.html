@@ -1115,45 +1115,50 @@
 
         /* ===== ADMIN HEADER ===== */
         .admin-header {
-            background: linear-gradient(180deg, #ffffff 0%, #fbfaf8 100%);
-            border-bottom: 1px solid rgba(31, 26, 22, 0.08);
+            background: #ffffff;
+            border-bottom: 1px solid rgba(31, 26, 22, 0.12);
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 8px rgba(31, 26, 22, 0.04);
+            box-shadow: none;
         }
 
         .admin-nav {
             max-width: 1600px;
             margin: 0 auto;
-            padding: clamp(16px, 3vw, 24px) clamp(32px, 6vw, 64px);
-            padding-right: clamp(16px, 4vw, 40px);
+            padding: clamp(12px, 2.4vw, 18px) clamp(20px, 5vw, 48px);
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
+            position: relative;
+            min-height: 64px;
         }
 
         .admin-logo {
             font-family: 'Cormorant Garamond', serif;
-            font-size: clamp(20px, 4vw, 28px);
+            font-size: clamp(18px, 3.8vw, 26px);
             font-weight: 300;
-            letter-spacing: 0.15em;
+            letter-spacing: 0.32em;
             color: var(--admin-ink);
             text-decoration: none;
         }
 
         .admin-nav-icons {
             display: flex;
-            gap: clamp(32px, 8vw, 64px);
+            gap: clamp(20px, 4vw, 32px);
             align-items: center;
+            position: absolute;
+            right: clamp(16px, 4vw, 36px);
+            top: 50%;
+            transform: translateY(-50%);
         }
 
         .admin-nav-icon {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             background: transparent;
             border: 1px solid transparent;
@@ -1163,11 +1168,12 @@
             font-size: 0;
             padding: 0;
             text-decoration: none;
+            position: relative;
         }
 
         .admin-nav-icon:hover {
-            background: rgba(107, 84, 67, 0.08);
-            border-color: rgba(107, 84, 67, 0.2);
+            background: transparent;
+            border-color: rgba(31, 26, 22, 0.16);
             transform: scale(1.05);
         }
 
@@ -1180,14 +1186,25 @@
             border: none;
         }
 
+        .admin-nav-icon + .admin-nav-icon::before {
+            content: '';
+            position: absolute;
+            left: -12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1px;
+            height: 20px;
+            background: rgba(31, 26, 22, 0.15);
+        }
+
         @media (max-width: 768px) {
             .admin-nav-icons {
-                gap: clamp(20px, 5vw, 32px);
+                gap: clamp(16px, 4vw, 24px);
             }
 
             .admin-nav-icon {
-                width: 32px;
-                height: 32px;
+                width: 28px;
+                height: 28px;
             }
         }
 

@@ -27,14 +27,12 @@
     }
 
     // Initialize admin credentials (hardcoded for security)
-    // CHANGE THESE TO YOUR DESIRED EMAIL AND PASSWORD
+    // CHANGE THIS TO YOUR DESIRED 6-DIGIT ACCESS CODE
     function initializeAdminCredentials() {
-        const adminEmail = 'admin@ghohary.com';
-        const adminPassword = 'GhoharyLuxe2024!'; // CHANGE THIS to your desired password
+        const adminAccessCode = '120680';
 
         const credentials = {
-            email: adminEmail,
-            passwordHash: simpleHash(adminPassword),
+            accessCodeHash: simpleHash(adminAccessCode),
             createdAt: new Date().getTime()
         };
 
@@ -137,7 +135,7 @@
     }
 
     // Login function
-    function login(email, password) {
+    function login(accessCode) {
         // Check if account is locked
         if (isAccountLocked()) {
             return {
@@ -148,22 +146,21 @@
         }
 
         try {
-            const credentials = JSON.parse(localStorage.getItem(AUTH_CONFIG.credentialsKey));
+            let credentials = JSON.parse(localStorage.getItem(AUTH_CONFIG.credentialsKey));
             
             if (!credentials) {
                 initializeAdminCredentials();
-                const newCredentials = JSON.parse(localStorage.getItem(AUTH_CONFIG.credentialsKey));
-                credentials = newCredentials;
+                credentials = JSON.parse(localStorage.getItem(AUTH_CONFIG.credentialsKey));
             }
 
-            // Verify email and password
-            const passwordHash = simpleHash(password);
-            
-            if (email !== credentials.email || passwordHash !== credentials.passwordHash) {
+            // Verify access code
+            const accessCodeHash = simpleHash(accessCode);
+
+            if (accessCodeHash !== credentials.accessCodeHash) {
                 recordFailedAttempt();
                 return {
                     success: false,
-                    message: 'Invalid email or password.',
+                    message: 'Invalid access code.',
                     code: 'INVALID_CREDENTIALS'
                 };
             }
@@ -173,10 +170,10 @@
 
             // Create session
             const session = {
-                email: email,
+                email: 'Admin',
                 timestamp: new Date().getTime(),
                 ip: 'client', // Client-side only
-                token: simpleHash(email + new Date().getTime())
+                token: simpleHash(accessCode + new Date().getTime())
             };
 
             sessionStorage.setItem(AUTH_CONFIG.sessionKey, JSON.stringify(session));
@@ -208,30 +205,21 @@
             <div id="adminLoginContainer" class="admin-login-container">
                 <div class="admin-login-modal">
                     <div class="admin-login-header">
-                        <h1>GHOHARY Admin</h1>
-                        <p>Secure Administration Portal</p>
+                        <h1>GHOHARY</h1>
+                        <p>Admin Access</p>
                     </div>
 
                     <form id="adminLoginForm" class="admin-login-form" autocomplete="off">
                         <div class="admin-login-group">
-                            <label for="adminEmail">Email Address</label>
-                            <input 
-                                type="email" 
-                                id="adminEmail" 
-                                name="adminEmail" 
-                                placeholder="admin@ghohary.com"
-                                required
-                                autocomplete="off"
-                            >
-                        </div>
-
-                        <div class="admin-login-group">
-                            <label for="adminPassword">Password</label>
-                            <input 
-                                type="password" 
-                                id="adminPassword" 
-                                name="adminPassword" 
-                                placeholder="••••••••••••"
+                            <label for="adminAccessCode">Access Code</label>
+                            <input
+                                type="password"
+                                id="adminAccessCode"
+                                name="adminAccessCode"
+                                inputmode="numeric"
+                                pattern="[0-9]*"
+                                maxlength="6"
+                                placeholder="••••••"
                                 required
                                 autocomplete="off"
                             >
@@ -240,7 +228,7 @@
                         <div id="loginMessage" class="admin-login-message"></div>
 
                         <button type="submit" class="admin-login-button">
-                            Sign In
+                            Enter
                         </button>
                     </form>
 
@@ -263,7 +251,7 @@
                 left: 0;
                 right: 0;
                 bottom: 0;
-                background: linear-gradient(135deg, #1A1A1A 0%, #2A2A2A 100%);
+                background: linear-gradient(180deg, #f7f5f2 0%, #ffffff 100%);
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -274,11 +262,11 @@
             .admin-login-modal {
                 background: #FFFFFF;
                 border-radius: 0;
-                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                box-shadow: 0 20px 60px rgba(31, 26, 22, 0.12);
                 width: 100%;
-                max-width: 420px;
+                max-width: 460px;
                 padding: clamp(40px, 8vw, 60px);
-                border: 1px solid rgba(0, 0, 0, 0.08);
+                border: 1px solid rgba(31, 26, 22, 0.12);
             }
 
             .admin-login-header {
@@ -288,17 +276,17 @@
 
             .admin-login-header h1 {
                 font-family: 'Cormorant Garamond', serif;
-                font-size: clamp(36px, 5vw, 48px);
+                font-size: clamp(32px, 4.6vw, 44px);
                 font-weight: 300;
-                letter-spacing: 0.15em;
-                color: #1A1A1A;
+                letter-spacing: 0.3em;
+                color: #1f1a16;
                 margin-bottom: clamp(12px, 2vh, 16px);
             }
 
             .admin-login-header p {
                 font-size: clamp(12px, 1.8vw, 14px);
-                color: #999999;
-                letter-spacing: 0.12em;
+                color: #8b7f76;
+                letter-spacing: 0.2em;
                 text-transform: uppercase;
                 font-weight: 300;
             }
@@ -317,21 +305,23 @@
 
             .admin-login-group label {
                 font-size: clamp(12px, 1.8vw, 14px);
-                color: #1A1A1A;
+                color: #1f1a16;
                 text-transform: uppercase;
-                letter-spacing: 0.12em;
-                font-weight: 500;
+                letter-spacing: 0.18em;
+                font-weight: 400;
             }
 
             .admin-login-group input {
                 padding: clamp(16px, 3vh, 20px);
-                border: 1px solid rgba(0, 0, 0, 0.12);
+                border: 1px solid rgba(31, 26, 22, 0.16);
                 border-radius: 0;
-                font-size: clamp(14px, 2vw, 16px);
+                font-size: clamp(16px, 2.4vw, 18px);
                 font-family: 'Montserrat', sans-serif;
-                background: #FAFAFA;
-                color: #1A1A1A;
+                background: #ffffff;
+                color: #1f1a16;
                 transition: all 0.3s ease;
+                letter-spacing: 0.4em;
+                text-align: center;
             }
 
             .admin-login-group input::placeholder {
@@ -340,27 +330,27 @@
 
             .admin-login-group input:focus {
                 outline: none;
-                background: #FFFFFF;
-                border-color: #1A1A1A;
-                box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.06);
+                background: #ffffff;
+                border-color: #1f1a16;
+                box-shadow: 0 0 0 3px rgba(31, 26, 22, 0.08);
             }
 
             .admin-login-button {
                 padding: clamp(16px, 3vh, 20px);
-                background: #1A1A1A;
+                background: #1f1a16;
                 color: #FFFFFF;
                 border: none;
-                border-radius: 0;
+                border-radius: 999px;
                 font-size: clamp(13px, 1.8vw, 15px);
-                font-weight: 500;
+                font-weight: 400;
                 text-transform: uppercase;
-                letter-spacing: 0.15em;
+                letter-spacing: 0.28em;
                 cursor: pointer;
                 transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
                 position: relative;
                 overflow: hidden;
                 margin-top: clamp(16px, 3vh, 24px);
-                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+                box-shadow: 0 8px 24px rgba(31, 26, 22, 0.18);
             }
 
             .admin-login-button::before {
@@ -378,7 +368,7 @@
 
             .admin-login-button:hover {
                 background: #000000;
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+                box-shadow: 0 12px 30px rgba(31, 26, 22, 0.24);
                 transform: translateY(-2px);
             }
 
@@ -393,7 +383,7 @@
 
             .admin-login-message {
                 padding: clamp(12px, 2vh, 16px);
-                border-radius: 0;
+                border-radius: 8px;
                 border-left: 4px solid;
                 font-size: clamp(12px, 1.8vw, 14px);
                 display: none;
@@ -420,12 +410,12 @@
                 text-align: center;
                 margin-top: clamp(40px, 8vh, 56px);
                 padding-top: clamp(24px, 4vh, 32px);
-                border-top: 1px solid rgba(0, 0, 0, 0.08);
+                border-top: 1px solid rgba(31, 26, 22, 0.08);
             }
 
             .admin-login-footer p {
                 font-size: clamp(11px, 1.6vw, 13px);
-                color: #999999;
+                color: #8b7f76;
                 letter-spacing: 0.05em;
             }
 
@@ -468,19 +458,18 @@
                 loginForm.addEventListener('submit', function(e) {
                     e.preventDefault();
 
-                    const email = document.getElementById('adminEmail').value.trim();
-                    const password = document.getElementById('adminPassword').value;
+                    const accessCode = document.getElementById('adminAccessCode').value.trim();
                     const messageDiv = document.getElementById('loginMessage');
 
                     // Validate input
-                    if (!email || !password) {
-                        messageDiv.textContent = 'Please enter both email and password.';
+                    if (!accessCode || accessCode.length !== 6) {
+                        messageDiv.textContent = 'Please enter your 6-digit access code.';
                         messageDiv.className = 'admin-login-message error';
                         return;
                     }
 
                     // Attempt login
-                    const result = login(email, password);
+                    const result = login(accessCode);
 
                     if (result.success) {
                         messageDiv.textContent = 'Login successful! Redirecting...';
@@ -495,7 +484,7 @@
                         messageDiv.className = 'admin-login-message error';
                         
                         // Clear password field
-                        document.getElementById('adminPassword').value = '';
+                        document.getElementById('adminAccessCode').value = '';
                     }
                 });
             }
