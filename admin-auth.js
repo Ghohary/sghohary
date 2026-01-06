@@ -36,8 +36,18 @@
             createdAt: new Date().getTime()
         };
 
-        // Only store if not already set
-        if (!localStorage.getItem(AUTH_CONFIG.credentialsKey)) {
+        const existing = localStorage.getItem(AUTH_CONFIG.credentialsKey);
+        if (!existing) {
+            localStorage.setItem(AUTH_CONFIG.credentialsKey, JSON.stringify(credentials));
+            return;
+        }
+
+        try {
+            const parsed = JSON.parse(existing);
+            if (!parsed || !parsed.accessCodeHash) {
+                localStorage.setItem(AUTH_CONFIG.credentialsKey, JSON.stringify(credentials));
+            }
+        } catch (e) {
             localStorage.setItem(AUTH_CONFIG.credentialsKey, JSON.stringify(credentials));
         }
     }
