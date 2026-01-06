@@ -319,32 +319,39 @@ a:hover {
 
 nav {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: clamp(18px, 2.4vh, 26px) var(--spacing-sm);
     position: relative;
     min-height: 64px;
+    width: 100%;
 }
 
 .nav-container nav.container {
     max-width: 100%;
     width: 100%;
     padding-left: clamp(12px, 2vw, 28px);
-    padding-right: clamp(16px, 3vw, 36px);
+    padding-right: clamp(12px, 2vw, 28px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
 }
 
 nav .logo {
-    margin-right: 0;
+    margin: 0;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+    z-index: 10;
 }
 
 nav .nav-icons {
     display: flex;
     align-items: center;
-    gap: clamp(16px, 2.6vw, 22px);
+    gap: clamp(14px, 2.4vw, 20px);
     margin-left: auto;
+    order: 3;
 }
 
 .nav-icons > * {
@@ -354,12 +361,12 @@ nav .nav-icons {
 .nav-icons > * + *::before {
     content: '';
     position: absolute;
-    left: -12px;
+    left: -8px;
     top: 50%;
     transform: translateY(-50%);
     width: 1px;
-    height: 22px;
-    background: rgba(0, 0, 0, 0.12);
+    height: 18px;
+    background: rgba(0, 0, 0, 0.08);
 }
 
 @media (min-width: 768px) {
@@ -393,6 +400,8 @@ nav .nav-icons {
     cursor: pointer;
     z-index: 1001;
     position: relative;
+    order: 1;
+    margin-right: auto;
 }
 
 @media (min-width: 768px) {
@@ -483,26 +492,30 @@ nav .nav-icons {
 @media (min-width: 1024px) {
     .mobile-menu-btn { display: none; }
 
-    nav {
+    .nav-container nav.container {
         display: grid;
         grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
         grid-template-rows: auto auto;
         row-gap: 14px;
-        align-items: center;
+        padding-left: clamp(20px, 3vw, 36px);
+        padding-right: clamp(20px, 3vw, 36px);
     }
     
-    .logo {
+    nav .logo {
         grid-column: 2;
         grid-row: 1;
         justify-self: center;
         position: static;
         transform: none;
+        order: auto;
     }
 
-    .nav-icons {
+    nav .nav-icons {
         grid-column: 3;
         grid-row: 1;
         justify-self: end;
+        order: auto;
+        margin-left: 0;
     }
 
     .nav-links {
@@ -515,29 +528,30 @@ nav .nav-icons {
         grid-column: 1 / -1;
         grid-row: 2;
         justify-content: center;
+        box-shadow: none;
     }
     
-    .nav-links a { font-size: 11px; }
+    .nav-links a { 
+        font-size: 11px;
+        padding: 0;
+    }
+
+    .nav-links a::after {
+        height: 2px;
+    }
 }
 
 @media (max-width: 1023px) {
-    nav {
-        justify-content: space-between;
-    }
-
-    .logo {
-        justify-self: start;
-        margin-right: 0;
+    .nav-container nav.container {
+        position: relative;
     }
 
     .mobile-menu-btn {
-        position: absolute;
-        left: clamp(12px, 2vw, 28px);
+        position: relative;
     }
 
     .nav-icons {
-        position: absolute;
-        right: clamp(12px, 2vw, 28px);
+        position: relative;
     }
 
     .nav-links {
@@ -566,28 +580,11 @@ nav .nav-icons {
         display: flex;
         gap: 20px;
         align-items: center;
-        justify-self: end;
         margin-left: 0;
-        padding-right: 0;
     }
 
     .nav-icons a[aria-label="Account"] {
         display: none;
-    }
-
-    .mobile-menu-btn {
-        order: 3;
-        margin-left: 0;
-        padding-left: 0;
-        border-left: none;
-    }
-}
-
-@media (min-width: 1024px) {
-    .nav-icons {
-        display: flex;
-        gap: 20px;
-        align-items: center;
     }
 }
 
@@ -1293,10 +1290,6 @@ nav .nav-icons {
     font-weight: 600;
     margin-bottom: clamp(8px, 1.5vw, 12px);
     transition: color 0.3s ease;
-}
-    letter-spacing: 0.2em;
-    margin-bottom: 12px;
-    font-weight: 400;
 }
 
 .product-price {
@@ -2394,9 +2387,6 @@ nav .nav-icons {
         font-size: 12px;
     }
 }
-    font-weight: 600;
-    border-radius: 0;
-}
 
 .size-btn::before {
     content: '';
@@ -2579,8 +2569,6 @@ nav .nav-icons {
         margin-bottom: 40px;
         margin-top: 40px;
     }
-}
-
 }
 
 /* Related Products */

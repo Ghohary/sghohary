@@ -116,6 +116,7 @@
             return;
         }
 
+        const formatMoney = (value) => `AED ${Number(value || 0).toLocaleString()}`;
         let ordersHTML = '';
         userOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).forEach(order => {
             const orderDate = new Date(order.createdAt);
@@ -127,50 +128,56 @@
             
             const statusClass = (order.status || 'pending').toLowerCase();
             const statusLabel = (order.status || 'Pending').charAt(0).toUpperCase() + (order.status || 'pending').slice(1);
+            const orderNumber = order.orderNumber || order.id || `GH-${String(order.id || '').substring(3, 11) || 'NEW'}`;
+            const shippingTotal = Number(order.totalShipping || order.shipping || 0);
+            const orderTotal = Number(order.orderTotal || order.total || order.amount || 0);
             
             ordersHTML += `
                 <div class="order-card" data-order-id="${order.id}">
-                    <div class="order-header">
+                    <button class="order-header order-toggle" type="button" data-order-id="${order.id}">
                         <div>
-                            <div class="order-number">Order #${order.id.substring(3, 11)}</div>
+                            <div class="order-number">${orderNumber}</div>
                             <div class="order-date">${formattedDate}</div>
                         </div>
                         <div class="order-status ${statusClass}">${statusLabel}</div>
-                    </div>
+                    </button>
                     
-                    <div class="order-items">
-                        ${(order.items || []).map(item => `
-                            <div class="order-item">
-                                <img src="${item.image || 'https://via.placeholder.com/80x100'}" alt="${item.name}" class="order-item-image">
-                                <div class="order-item-details">
-                                    <h4>${item.name}</h4>
-                                    <p>Size: ${item.size || 'One Size'}</p>
-                                    <p>Quantity: ${item.quantity || 1}</p>
+                    <div class="order-details-panel">
+                        <div class="order-items">
+                            ${(order.items || []).map(item => `
+                                <div class="order-item">
+                                    <img src="${item.image || 'https://via.placeholder.com/80x100'}" alt="${item.name}" class="order-item-image">
+                                    <div class="order-item-details">
+                                        <h4>${item.name}</h4>
+                                        <p>Size: ${item.size || 'One Size'}</p>
+                                        <p>Quantity: ${item.quantity || 1}</p>
+                                    </div>
+                                    <div class="order-item-price">
+                                        ${formatMoney(item.unitPrice || (item.amount || 0) / 100)}
+                                    </div>
                                 </div>
-                                <div class="order-item-price">AED ${((item.amount || 0) / 100).toLocaleString()}</div>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="order-summary">
+                            <div class="order-summary-row">
+                                <span>Subtotal</span>
+                                <span>${formatMoney(order.subtotal)}</span>
                             </div>
-                        `).join('')}
-                    </div>
-                    
-                    <div class="order-summary">
-                        <div class="order-summary-row">
-                            <span>Subtotal</span>
-                            <span>AED ${(order.subtotal || 0).toLocaleString()}</span>
+                            <div class="order-summary-row">
+                                <span>Shipping</span>
+                                <span>${shippingTotal ? formatMoney(shippingTotal) : 'Complimentary'}</span>
+                            </div>
+                            <div class="order-summary-row total">
+                                <span>Total</span>
+                                <span>${formatMoney(orderTotal)}</span>
+                            </div>
                         </div>
-                        <div class="order-summary-row">
-                            <span>Shipping</span>
-                            <span>AED ${(order.shipping || 120).toLocaleString()}</span>
+                        
+                        <div class="order-actions">
+                            <button class="btn-view-invoice" data-order-id="${order.id}" data-type="receipt">View Receipt</button>
+                            <button class="btn-track" data-order-id="${order.id}">Track Order</button>
                         </div>
-                        <div class="order-summary-row total">
-                            <span>Total</span>
-                            <span>AED ${(order.total || order.amount || 0).toLocaleString()}</span>
-                        </div>
-                    </div>
-                    
-                    <div class="order-actions">
-                        <button class="btn-view-invoice" data-order-id="${order.id}">📄 View Invoice</button>
-                        <button class="btn-track" data-order-id="${order.id}">📍 Track Order</button>
-                        ${order.status !== 'cancelled' ? `<button class="btn-reorder" data-order-id="${order.id}">🛍️ Reorder</button>` : ''}
                     </div>
                 </div>
             `;
@@ -181,7 +188,7 @@
         // Attach event listeners
         document.querySelectorAll('.btn-view-invoice').forEach(btn => {
             btn.addEventListener('click', function() {
-                showInvoice(this.dataset.orderId, userOrders);
+                showInvoice(this.dataset.orderId, userOrders, this.dataset.type);
             });
         });
         
@@ -190,27 +197,34 @@
                 showTracking(this.dataset.orderId, userOrders);
             });
         });
-        
-        document.querySelectorAll('.btn-reorder').forEach(btn => {
+
+        document.querySelectorAll('.order-toggle').forEach(btn => {
             btn.addEventListener('click', function() {
-                reorderItems(this.dataset.orderId, userOrders);
+                const card = this.closest('.order-card');
+                if (card) {
+                    card.classList.toggle('open');
+                }
             });
         });
+        
     }
 
     // ===== SHOW INVOICE =====
-    function showInvoice(orderId, userOrders) {
+    function showInvoice(orderId, userOrders, type = 'receipt') {
         const order = userOrders.find(o => o.id === orderId);
         if (!order) return;
         
         const invoiceDate = new Date(order.createdAt);
-        const invoiceNo = orderId.substring(3, 11);
+        const invoiceNo = order.orderNumber || order.id || orderId.substring(3, 11);
+        const isReceipt = type === 'receipt';
+        const shippingTotal = Number(order.totalShipping || order.shipping || 0);
+        const orderTotal = Number(order.orderTotal || order.total || order.amount || 0);
         
         let invoiceHTML = `
             <div class="invoice-modal active" id="invoiceModal">
                 <div class="invoice-container">
                     <div class="invoice-header">
-                        <div class="invoice-title">Invoice</div>
+                        <div class="invoice-title">${isReceipt ? 'Receipt' : 'Invoice'}</div>
                         <button class="invoice-close" id="closeInvoice">&times;</button>
                     </div>
                     
@@ -218,7 +232,7 @@
                         <div class="invoice-branding">
                             <div class="invoice-logo">GHOHARY</div>
                             <div class="invoice-details">
-                                <strong>Invoice No:</strong> ${invoiceNo}<br>
+                                <strong>${isReceipt ? 'Receipt No' : 'Invoice No'}:</strong> ${invoiceNo}<br>
                                 <strong>Date:</strong> ${invoiceDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                             </div>
                         </div>
@@ -231,7 +245,7 @@
                                     ${order.email}<br>
                                     ${order.phone || ''}<br>
                                     ${order.address}<br>
-                                    ${order.city}, ${order.emirate}
+                                    ${order.city}, ${order.emirate || order.state || ''}
                                 </p>
                             </div>
                             <div class="invoice-section">
@@ -239,7 +253,7 @@
                                 <p>
                                     ${order.customerName}<br>
                                     ${order.address}<br>
-                                    ${order.city}, ${order.emirate}
+                                    ${order.city}, ${order.emirate || order.state || ''}
                                 </p>
                             </div>
                         </div>
@@ -256,13 +270,14 @@
                             </thead>
                             <tbody>
                                 ${(order.items || []).map(item => {
-                                    const itemTotal = ((item.amount || 0) / 100) * item.quantity;
+                                    const unitPrice = Number(item.unitPrice || (item.amount || 0) / 100);
+                                    const itemTotal = unitPrice * (item.quantity || 1);
                                     return `
                                         <tr>
                                             <td>${item.name}</td>
                                             <td>${item.size || 'One Size'}</td>
-                                            <td>${item.quantity}</td>
-                                            <td style="text-align: right;">AED ${((item.amount || 0) / 100).toLocaleString()}</td>
+                                            <td>${item.quantity || 1}</td>
+                                            <td style="text-align: right;">AED ${unitPrice.toLocaleString()}</td>
                                             <td style="text-align: right;">AED ${itemTotal.toLocaleString()}</td>
                                         </tr>
                                     `;
@@ -278,11 +293,11 @@
                                 </div>
                                 <div class="totals-row">
                                     <span>Shipping</span>
-                                    <span>AED ${(order.shipping || 120).toLocaleString()}</span>
+                                    <span>${shippingTotal ? `AED ${shippingTotal.toLocaleString()}` : 'Complimentary'}</span>
                                 </div>
                                 <div class="totals-row total">
-                                    <span>Total Due</span>
-                                    <span>AED ${(order.total || order.amount || 0).toLocaleString()}</span>
+                                    <span>Total ${isReceipt ? 'Paid' : 'Due'}</span>
+                                    <span>AED ${orderTotal.toLocaleString()}</span>
                                 </div>
                             </div>
                         </div>
@@ -293,8 +308,8 @@
                         </div>
                         
                         <div class="invoice-actions">
-                            <button class="btn-print" id="printInvoice">🖨️ Print</button>
-                            <button class="btn-download" id="downloadInvoice">⬇️ Download</button>
+                            <button class="btn-print" id="printInvoice">Print</button>
+                            <button class="btn-download" id="downloadInvoice">Download</button>
                         </div>
                     </div>
                 </div>
@@ -324,13 +339,15 @@
         
         const trackingSteps = getTrackingSteps(order.status);
         const ordersTab = document.getElementById('ordersTab');
+        const trackingNumber = order.trackingNumber || order.tracking || 'Assigned after shipment';
         
         let trackingHTML = `
             <h2 class="tab-title">Order Tracking</h2>
             <div class="tracking-container active">
                 <div class="tracking-header">
                     <div class="tracking-title">Track Your Order</div>
-                    <div class="tracking-number">Order #${orderId.substring(3, 11)}</div>
+                    <div class="tracking-number">${order.orderNumber || order.id || orderId.substring(3, 11)}</div>
+                    <div class="tracking-carrier">Tracking: ${trackingNumber}</div>
                 </div>
                 
                 <div class="tracking-timeline">
@@ -375,38 +392,6 @@
             ...step,
             status: index < currentIndex ? 'completed' : index === currentIndex ? 'current' : 'pending'
         }));
-    }
-
-    // ===== REORDER ITEMS =====
-    function reorderItems(orderId, userOrders) {
-        const order = userOrders.find(o => o.id === orderId);
-        if (!order) return;
-        
-        let cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
-        
-        (order.items || []).forEach(item => {
-            const existing = cart.find(c => c.id === item.id && c.size === item.size);
-            if (existing) {
-                existing.quantity += item.quantity;
-            } else {
-                cart.push({
-                    id: item.id,
-                    name: item.name,
-                    price: (item.amount || 0) / 100,
-                    image: item.image,
-                    size: item.size,
-                    quantity: item.quantity
-                });
-            }
-        });
-        
-        localStorage.setItem('ghoharyCart', JSON.stringify(cart));
-        
-        if (successBanner) {
-            successBanner.textContent = '✓ Items added to cart!';
-            successBanner.style.display = 'flex';
-            setTimeout(() => { window.location.href = 'cart.html'; }, 1500);
-        }
     }
 
     // ===== LOAD PROFILE DATA =====
@@ -469,6 +454,9 @@
     }
 
     // ===== INITIALIZE =====
+    if (successBanner) {
+        successBanner.style.display = 'none';
+    }
     loadProfileData(currentUser);
     renderOrders();
 

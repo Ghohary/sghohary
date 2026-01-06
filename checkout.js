@@ -170,7 +170,11 @@
             const shippingPerItem = 120;
             const isUaeAddress = customer.country === 'uae';
             const totalShipping = isUaeAddress ? 0 : lineItems.reduce((sum, item) => sum + item.quantity, 0) * shippingPerItem;
-            const orderTotal = Math.round((subtotal + totalShipping) * 100); // in cents for Stripe
+            const orderTotalValue = subtotal + totalShipping;
+            if (orderTotalValue < 2) {
+                throw new Error('Minimum order total is AED 2.00.');
+            }
+            const orderTotal = Math.round(orderTotalValue * 100); // in cents for Stripe
 
             if (totalShipping > 0) {
                 lineItems.push({
@@ -194,15 +198,6 @@
                 };
             });
 
-            localStorage.setItem('ghoharyPendingOrder', JSON.stringify({
-                customer,
-                orderTotal: orderTotal / 100, // Store in AED
-                subtotal: subtotal,
-                totalShipping: totalShipping,
-                items,
-                createdAt: new Date().toISOString()
-            }));
-
             const response = await fetch(`${API_URL}/api/create-checkout-session`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -225,6 +220,15 @@
             if (!url) {
                 throw new Error('Checkout URL missing from server');
             }
+
+            localStorage.setItem('ghoharyPendingOrder', JSON.stringify({
+                customer,
+                orderTotal: orderTotal / 100, // Store in AED
+                subtotal: subtotal,
+                totalShipping: totalShipping,
+                items,
+                createdAt: new Date().toISOString()
+            }));
 
             window.location.href = url;
         } catch (error) {

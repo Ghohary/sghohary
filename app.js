@@ -605,9 +605,9 @@
 
     // Finalize Stripe Checkout on return
     const checkoutParams = new URLSearchParams(window.location.search);
-    const checkoutSuccess = checkoutParams.get('checkout') === 'success' || checkoutParams.get('order') === 'success';
+    const checkoutSuccess = checkoutParams.get('checkout') === 'success';
     const checkoutSessionId = checkoutParams.get('session_id');
-    if (checkoutSuccess) {
+    if (checkoutSuccess && checkoutSessionId) {
         const pendingOrderRaw = localStorage.getItem('ghoharyPendingOrder');
         if (pendingOrderRaw) {
             const pendingOrder = JSON.parse(pendingOrderRaw);
