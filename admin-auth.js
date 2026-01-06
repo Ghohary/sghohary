@@ -91,50 +91,11 @@
 
     // Check if account is locked due to failed attempts
     function isAccountLocked() {
-        const lockoutData = localStorage.getItem('ghoharyAdminLockout');
-        if (!lockoutData) return false;
-
-        try {
-            const lockout = JSON.parse(lockoutData);
-            const now = new Date().getTime();
-            
-            if (now - lockout.timestamp < AUTH_CONFIG.lockoutDuration) {
-                return true;
-            }
-
-            // Lockout expired
-            localStorage.removeItem('ghoharyAdminLockout');
-            return false;
-        } catch (e) {
-            return false;
-        }
+        return false;
     }
 
     // Record failed login attempt
     function recordFailedAttempt() {
-        const attemptKey = 'ghoharyAdminAttempts';
-        let attempts = JSON.parse(localStorage.getItem(attemptKey) || '{"count": 0, "timestamp": 0}');
-        const now = new Date().getTime();
-
-        // Reset attempts if more than 1 hour has passed
-        if (now - attempts.timestamp > 60 * 60 * 1000) {
-            attempts = { count: 0, timestamp: now };
-        }
-
-        attempts.count++;
-        attempts.timestamp = now;
-
-        // Lock account after 5 failed attempts
-        if (attempts.count >= AUTH_CONFIG.maxLoginAttempts) {
-            localStorage.setItem('ghoharyAdminLockout', JSON.stringify({
-                timestamp: now,
-                attempts: attempts.count
-            }));
-            localStorage.removeItem(attemptKey);
-            return 'locked';
-        }
-
-        localStorage.setItem(attemptKey, JSON.stringify(attempts));
         return 'failed';
     }
 
