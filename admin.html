@@ -943,6 +943,13 @@
         async function fetchProductsWithFallback() {
             try {
                 const products = await requestJson('/api/products');
+                const localProducts = JSON.parse(localStorage.getItem('ghoharyProducts')) || [];
+
+                if (Array.isArray(products) && products.length === 0 && localProducts.length > 0) {
+                    storageMode = 'local';
+                    return localProducts;
+                }
+
                 storageMode = 'api';
                 return Array.isArray(products) ? products : [];
             } catch (error) {
@@ -1144,8 +1151,7 @@
                     return;
                 }
             } else {
-                const lines = content.split(/?
-/).filter(Boolean);
+                const lines = content.split(/\r?\n/).filter(Boolean);
                 if (lines.length < 2) {
                     alert('CSV file is empty.');
                     return;
@@ -1250,6 +1256,7 @@
         document.querySelectorAll('.size-item').forEach(item => {
             item.addEventListener('click', (event) => {
                 if (event.target.classList.contains('stock-input')) return;
+                if (event.target.closest('.size-checkbox')) return;
                 const checkbox = item.querySelector('.size-checkbox-input');
                 checkbox.checked = !checkbox.checked;
                 updateSizeSelection(checkbox, checkbox.checked);
