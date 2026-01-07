@@ -327,6 +327,40 @@
             border-radius: 999px;
         }
 
+        .region-countries {
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 6px;
+            border: 1px solid var(--color-beige);
+            background: var(--color-skin);
+            display: none;
+        }
+
+        .region-countries.active {
+            display: block;
+        }
+
+        .country-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.5rem 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .country-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .country-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
         .size-checkbox {
             display: flex;
             align-items: center;
@@ -898,6 +932,14 @@
                         <div class="region-summary" id="regionSummary">Selected: None</div>
                     </div>
                     <div class="regions-grid" id="shippingRegions"></div>
+                    <div class="region-countries" id="regionCountries">
+                        <strong id="regionCountriesTitle">Select a region</strong>
+                        <div class="country-actions">
+                            <button type="button" class="btn btn-secondary btn-small" onclick="selectAllCountries()">Select all in region</button>
+                            <button type="button" class="btn btn-secondary btn-small" onclick="clearCountries()">Clear region</button>
+                        </div>
+                        <div class="country-grid" id="countryGrid"></div>
+                    </div>
                 </div>
                 <div class="btn-group full-width">
                     <button type="button" class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
@@ -916,6 +958,17 @@
             { id: 'south-america', label: 'South America', note: 'All South American countries' },
             { id: 'oceania', label: 'Oceania', note: 'All Oceanian countries' }
         ];
+
+        const REGION_COUNTRIES = {
+            africa: ['Algeria','Angola','Benin','Botswana','Burkina Faso','Burundi','Cabo Verde','Cameroon','Central African Republic','Chad','Comoros','Congo (Brazzaville)','Congo (Kinshasa)','Djibouti','Egypt','Equatorial Guinea','Eritrea','Eswatini','Ethiopia','Gabon','Gambia','Ghana','Guinea','Guinea-Bissau','Ivory Coast','Kenya','Lesotho','Liberia','Libya','Madagascar','Malawi','Mali','Mauritania','Mauritius','Morocco','Mozambique','Namibia','Niger','Nigeria','Rwanda','Sao Tome and Principe','Senegal','Seychelles','Sierra Leone','Somalia','South Africa','South Sudan','Sudan','Tanzania','Togo','Tunisia','Uganda','Zambia','Zimbabwe'],
+            asia: ['Afghanistan','Armenia','Azerbaijan','Bahrain','Bangladesh','Bhutan','Brunei','Cambodia','China','Cyprus','Georgia','India','Indonesia','Iran','Iraq','Israel','Japan','Jordan','Kazakhstan','Kuwait','Kyrgyzstan','Laos','Lebanon','Malaysia','Maldives','Mongolia','Myanmar','Nepal','North Korea','Oman','Pakistan','Palestine','Philippines','Qatar','Saudi Arabia','Singapore','South Korea','Sri Lanka','Syria','Taiwan','Tajikistan','Thailand','Timor-Leste','Turkey','Turkmenistan','United Arab Emirates','Uzbekistan','Vietnam','Yemen'],
+            europe: ['Albania','Andorra','Austria','Belarus','Belgium','Bosnia and Herzegovina','Bulgaria','Croatia','Czechia','Denmark','Estonia','Finland','France','Germany','Greece','Hungary','Iceland','Ireland','Italy','Kosovo','Latvia','Liechtenstein','Lithuania','Luxembourg','Malta','Moldova','Monaco','Montenegro','Netherlands','North Macedonia','Norway','Poland','Portugal','Romania','Russia','San Marino','Serbia','Slovakia','Slovenia','Spain','Sweden','Switzerland','Ukraine','United Kingdom','Vatican City'],
+            'north-america': ['Antigua and Barbuda','Bahamas','Barbados','Belize','Canada','Costa Rica','Cuba','Dominica','Dominican Republic','El Salvador','Grenada','Guatemala','Haiti','Honduras','Jamaica','Mexico','Nicaragua','Panama','Saint Kitts and Nevis','Saint Lucia','Saint Vincent and the Grenadines','Trinidad and Tobago','United States'],
+            'south-america': ['Argentina','Bolivia','Brazil','Chile','Colombia','Ecuador','Guyana','Paraguay','Peru','Suriname','Uruguay','Venezuela'],
+            oceania: ['Australia','Fiji','Kiribati','Marshall Islands','Micronesia','Nauru','New Zealand','Palau','Papua New Guinea','Samoa','Solomon Islands','Tonga','Tuvalu','Vanuatu']
+        };
+
+        let activeRegionId = null;
 
         let productsCache = [];
         let storageMode = 'local';
@@ -981,6 +1034,7 @@
             SHIPPING_REGIONS.forEach(region => {
                 const card = document.createElement('div');
                 card.className = 'region-card';
+                card.dataset.region = region.id;
                 card.innerHTML = `
                     <label class="checkbox-label" style="margin-top: 0;">
                         <input type="checkbox" class="shipping-region-input" value="${region.id}">
@@ -988,8 +1042,80 @@
                     </label>
                     <p>${region.note}</p>
                 `;
+                card.addEventListener('click', (event) => {
+                    if (event.target.tagName.toLowerCase() === 'input') return;
+                    if (event.target.closest('.checkbox-label')) return;
+                    setActiveRegion(region.id);
+                });
                 container.appendChild(card);
             });
+        }
+
+        function setActiveRegion(regionId) {
+            activeRegionId = regionId;
+            document.querySelectorAll('.region-card').forEach(card => {
+                card.classList.toggle('selected', card.dataset.region === regionId);
+            });
+            renderRegionCountries();
+        }
+
+        function renderRegionCountries() {
+            const panel = document.getElementById('regionCountries');
+            const title = document.getElementById('regionCountriesTitle');
+            const grid = document.getElementById('countryGrid');
+
+            if (!activeRegionId) {
+                panel.classList.remove('active');
+                title.textContent = 'Select a region';
+                grid.innerHTML = '';
+                return;
+            }
+
+            const countries = REGION_COUNTRIES[activeRegionId] || [];
+            const settings = JSON.parse(localStorage.getItem('ghoharySettings')) || {};
+            const selected = settings.shippingCountries || {};
+            const selectedSet = new Set(selected[activeRegionId] || []);
+
+            panel.classList.add('active');
+            title.textContent = `Countries in ${SHIPPING_REGIONS.find(r => r.id === activeRegionId)?.label || ''}`;
+            grid.innerHTML = '';
+
+            countries.forEach(country => {
+                const label = document.createElement('label');
+                label.className = 'country-item';
+                label.innerHTML = `
+                    <input type="checkbox" class="shipping-country-input" value="${country}" ${selectedSet.has(country) ? 'checked' : ''}>
+                    <span>${country}</span>
+                `;
+                label.querySelector('input').addEventListener('change', () => {
+                    saveCountrySelection();
+                });
+                grid.appendChild(label);
+            });
+        }
+
+        function selectAllCountries() {
+            document.querySelectorAll('.shipping-country-input').forEach(input => {
+                input.checked = true;
+            });
+            saveCountrySelection();
+        }
+
+        function clearCountries() {
+            document.querySelectorAll('.shipping-country-input').forEach(input => {
+                input.checked = false;
+            });
+            saveCountrySelection();
+        }
+
+        function saveCountrySelection() {
+            if (!activeRegionId) return;
+            const selectedCountries = Array.from(document.querySelectorAll('.shipping-country-input:checked'))
+                .map(input => input.value);
+            const settings = JSON.parse(localStorage.getItem('ghoharySettings')) || {};
+            settings.shippingCountries = settings.shippingCountries || {};
+            settings.shippingCountries[activeRegionId] = selectedCountries;
+            localStorage.setItem('ghoharySettings', JSON.stringify(settings));
         }
 
         function loadSettings() {
@@ -1007,6 +1133,10 @@
             });
 
             updateRegionSummary();
+
+            if (selected.length) {
+                setActiveRegion(selected[0]);
+            }
         }
 
         function updateRegionSummary() {
@@ -1050,6 +1180,10 @@
             const settings = JSON.parse(localStorage.getItem('ghoharySettings')) || {};
             settings.shippingRegions = selected;
             localStorage.setItem('ghoharySettings', JSON.stringify(settings));
+
+            if (selected.length && !activeRegionId) {
+                setActiveRegion(selected[0]);
+            }
 
             const message = document.getElementById('settingsMessage');
             message.classList.add('show');
