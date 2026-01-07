@@ -526,6 +526,39 @@
             display: block;
         }
 
+        .import-panel {
+            background: var(--color-skin);
+            border: 1px solid var(--color-beige);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .import-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .import-status {
+            font-size: 0.85rem;
+            color: var(--color-brown);
+            margin-top: 0.75rem;
+        }
+
+        .import-log {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid var(--color-beige);
+            max-height: 180px;
+            overflow: auto;
+            font-size: 0.85rem;
+            color: var(--color-deep-brown);
+        }
+
         .settings-toast {
             position: fixed;
             right: 2rem;
@@ -826,6 +859,27 @@
             <div class="product-grid" id="productGrid"></div>
         </div>
 
+        <div class="form-section">
+            <h2 class="section-title">Bulk Import</h2>
+            <div class="import-panel">
+                <p style="font-size: 0.9rem; color: var(--color-brown);">
+                    Import up to thousands of products via CSV or JSON. Recommended: use image URLs, not base64.
+                </p>
+                <p style="font-size: 0.85rem; color: var(--color-brown); margin-top: 0.5rem;">
+                    CSV headers: name,category,sku,price,displayPrice,description,material,color,sizes,images,visible
+                </p>
+                <p style="font-size: 0.85rem; color: var(--color-brown); margin-top: 0.25rem;">
+                    sizes format: 32:5|34:0|universal:0 — images format: url1|url2|url3
+                </p>
+                <div class="import-actions">
+                    <input type="file" id="bulkImportFile" accept=".json,.csv">
+                    <button type="button" class="btn btn-primary btn-small" onclick="importProducts()">Import Products</button>
+                </div>
+                <div class="import-status" id="importStatus">No import running.</div>
+                <div class="import-log" id="importLog" style="display: none;"></div>
+            </div>
+        </div>
+
         <!-- Settings -->
         <div class="form-section">
             <h2 class="section-title">Store Settings</h2>
@@ -996,6 +1050,153 @@
             showSettingsToast();
         }
 
+        function parseCsvLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                if (char === '"') {
+                    if (inQuotes && line[i + 1] === '"') {
+                        current += '"';
+                        i++;
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current);
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            result.push(current);
+            return result.map(value => value.trim());
+        }
+
+        function parseSizes(value) {
+            if (!value) return [];
+            return value.split('|').map(part => {
+                const [size, stock] = part.split(':');
+                return {
+                    size: (size || '').trim(),
+                    stock: stock ? parseInt(stock, 10) : 0
+                };
+            }).filter(item => item.size);
+        }
+
+        function parseImages(value) {
+            if (!value) return [];
+            return value.split('|').map(url => url.trim()).filter(Boolean);
+        }
+
+        function normalizeProduct(raw, index, skuMap) {
+            const product = {
+                id: raw.id || Date.now() + index,
+                name: raw.name || raw.Name || '',
+                category: raw.category || raw.Category || '',
+                sku: raw.sku || raw.SKU || '',
+                price: raw.price !== undefined && raw.price !== '' ? parseFloat(raw.price) : null,
+                displayPrice: raw.displayPrice !== undefined ? String(raw.displayPrice).toLowerCase() !== 'false' : true,
+                description: raw.description || raw.Description || '',
+                material: raw.material || raw.Material || '',
+                color: raw.color || raw.Color || '',
+                sizes: Array.isArray(raw.sizes) ? raw.sizes : parseSizes(raw.sizes || ''),
+                images: Array.isArray(raw.images) ? raw.images : parseImages(raw.images || ''),
+                visible: raw.visible !== undefined ? String(raw.visible).toLowerCase() !== 'false' : true,
+                dateAdded: raw.dateAdded || new Date().toISOString(),
+                dateModified: new Date().toISOString()
+            };
+
+            if (product.sku && skuMap[product.sku]) {
+                product.id = skuMap[product.sku];
+            }
+
+            return product;
+        }
+
+        async function importProducts() {
+            const fileInput = document.getElementById('bulkImportFile');
+            const statusEl = document.getElementById('importStatus');
+            const logEl = document.getElementById('importLog');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please choose a CSV or JSON file.');
+                return;
+            }
+
+            statusEl.textContent = 'Reading file...';
+            logEl.style.display = 'none';
+            logEl.innerHTML = '';
+
+            const content = await file.text();
+            let rawProducts = [];
+
+            if (file.name.toLowerCase().endsWith('.json')) {
+                try {
+                    rawProducts = JSON.parse(content);
+                    if (!Array.isArray(rawProducts)) {
+                        rawProducts = rawProducts.products || [];
+                    }
+                } catch (error) {
+                    alert('Invalid JSON file.');
+                    return;
+                }
+            } else {
+                const lines = content.split(/?
+/).filter(Boolean);
+                if (lines.length < 2) {
+                    alert('CSV file is empty.');
+                    return;
+                }
+                const headers = parseCsvLine(lines[0]).map(h => h.trim());
+                rawProducts = lines.slice(1).map(line => {
+                    const values = parseCsvLine(line);
+                    const row = {};
+                    headers.forEach((header, idx) => {
+                        row[header] = values[idx] || '';
+                    });
+                    return row;
+                });
+            }
+
+            await loadProducts();
+            const skuMap = {};
+            productsCache.forEach(item => {
+                if (item.sku) skuMap[item.sku] = item.id;
+            });
+
+            const total = rawProducts.length;
+            let success = 0;
+            let failed = 0;
+
+            statusEl.textContent = `Importing ${total} products...`;
+            logEl.style.display = 'block';
+
+            for (let i = 0; i < total; i++) {
+                const raw = rawProducts[i];
+                const product = normalizeProduct(raw, i, skuMap);
+                if (!product.name) {
+                    failed++;
+                    logEl.innerHTML += `<div>Row ${i + 1}: Missing product name.</div>`;
+                    continue;
+                }
+                try {
+                    await saveProduct(product);
+                    success++;
+                } catch (error) {
+                    failed++;
+                    logEl.innerHTML += `<div>Row ${i + 1}: ${error.message}</div>`;
+                }
+                statusEl.textContent = `Imported ${success} / ${total} (failed ${failed})`;
+            }
+
+            await loadProducts();
+            updateStats();
+            statusEl.textContent = `Import complete: ${success} added, ${failed} failed.`;
+        }
+
         function updateSizeSelection(checkbox, isChecked) {
             const size = checkbox.dataset.size;
             const stockInput = document.querySelector(`.stock-input[data-size="${size}"]`);
@@ -1063,18 +1264,42 @@
 
         // Image upload handling
         let uploadedImages = [];
-        
-        document.getElementById('imageUpload').addEventListener('change', function(e) {
+
+        async function compressImage(file, maxDimension = 1600, quality = 0.8) {
+            const imageBitmap = await createImageBitmap(file);
+            const scale = Math.min(1, maxDimension / Math.max(imageBitmap.width, imageBitmap.height));
+            const width = Math.round(imageBitmap.width * scale);
+            const height = Math.round(imageBitmap.height * scale);
+
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(imageBitmap, 0, 0, width, height);
+
+            return canvas.toDataURL('image/jpeg', quality);
+        }
+
+        document.getElementById('imageUpload').addEventListener('change', async function(e) {
             const files = Array.from(e.target.files);
-            
-            files.forEach(file => {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    uploadedImages.push(event.target.result);
-                    displayImagePreviews();
-                };
-                reader.readAsDataURL(file);
-            });
+
+            for (const file of files) {
+                try {
+                    const compressed = await compressImage(file);
+                    uploadedImages.push(compressed);
+                } catch (error) {
+                    console.warn('[Admin] Image compression failed, using original:', error.message);
+                    const reader = new FileReader();
+                    await new Promise(resolve => {
+                        reader.onload = event => {
+                            uploadedImages.push(event.target.result);
+                            resolve();
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                }
+                displayImagePreviews();
+            }
         });
 
         function displayImagePreviews() {
