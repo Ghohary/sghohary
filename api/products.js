@@ -1,6 +1,6 @@
 const { createClient } = require('redis');
 
-const redisUrl = process.env.ghohary_REDIS_URL;
+const redisUrl = process.env.sghohary_REDIS_URL;
 let redisClient = null;
 let redisConnecting = null;
 
@@ -61,7 +61,7 @@ function parseBody(req) {
 
 module.exports = async (req, res) => {
     if (!redisUrl) {
-        res.status(500).json({ error: 'Redis not configured. Set ghohary_REDIS_URL in Vercel.' });
+        res.status(500).json({ error: 'Redis not configured. Set sghohary_REDIS_URL in Vercel.' });
         return;
     }
 
