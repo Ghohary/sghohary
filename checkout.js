@@ -19,6 +19,45 @@
 
     let shippingRegions = [];
 
+    function slugifyCountry(name) {
+        return String(name || '')
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/(^-|-$)/g, '');
+    }
+
+    function getSelectedCountriesFromSettings() {
+        const settings = JSON.parse(localStorage.getItem('ghoharySettings') || '{}');
+        const selected = settings.shippingCountries || {};
+        const list = Object.values(selected).flat().filter(Boolean);
+        return Array.from(new Set(list));
+    }
+
+    function applySelectedCountries() {
+        const selectedCountries = getSelectedCountriesFromSettings();
+        if (!selectedCountries.length) return;
+
+        const byName = new Map(shippingRegions.map(region => [region.name.toLowerCase(), region]));
+        const filtered = [];
+
+        selectedCountries.forEach(country => {
+            const existing = byName.get(country.toLowerCase());
+            if (existing) {
+                filtered.push(existing);
+            } else {
+                filtered.push({
+                    id: slugifyCountry(country),
+                    name: country,
+                    enabled: true,
+                    price: null,
+                    eta: 'Contact for shipping'
+                });
+            }
+        });
+
+        shippingRegions = filtered;
+    }
+
     function loadSavedCheckoutData() {
         const saved = JSON.parse(sessionStorage.getItem('ghoharyCheckoutForm') || 'null');
         const data = saved || currentUser || null;
@@ -68,6 +107,7 @@
             }
         }
 
+        applySelectedCountries();
         populateCountrySelect();
     }
 
@@ -108,6 +148,12 @@
         if (!region || !region.enabled) {
             shippingNotice.textContent = 'Shipping to this country is not available.';
             shippingNotice.classList.add('error');
+            return;
+        }
+
+        if (region.price === null || region.price === undefined) {
+            shippingNotice.textContent = 'Shipping available • Contact for shipping quote';
+            shippingNotice.classList.remove('error');
             return;
         }
 
