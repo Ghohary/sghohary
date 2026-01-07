@@ -632,6 +632,18 @@ nav .nav-icons {
     transition: all 0.3s ease;
 }
 
+.shipping-notice {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #6b5f56;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.shipping-notice.error {
+    color: #9f2f2f;
+}
+
 .cart-link:hover .cart-count {
     box-shadow: 0 4px 16px rgba(201, 165, 93, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.5);
     transform: scale(1.1);

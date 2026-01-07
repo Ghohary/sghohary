@@ -15,6 +15,9 @@
     const checkoutForm = document.getElementById('checkoutForm');
     const submitBtn = checkoutForm ? checkoutForm.querySelector('button[type="submit"]') : null;
     const checkoutLoginBtn = document.getElementById('checkoutLoginBtn');
+    const shippingNotice = document.getElementById('shippingNotice');
+
+    let shippingRegions = [];
 
     function loadSavedCheckoutData() {
         const saved = JSON.parse(sessionStorage.getItem('ghoharyCheckoutForm') || 'null');
@@ -44,12 +47,81 @@
         if (countryEl && data.country) countryEl.value = data.country;
     }
 
+    async function loadShippingRegions() {
+        const stored = localStorage.getItem('ghoharyShippingRegions');
+        if (stored) {
+            try {
+                shippingRegions = JSON.parse(stored) || [];
+            } catch (e) {
+                shippingRegions = [];
+            }
+        }
+
+        if (!shippingRegions.length) {
+            try {
+                const response = await fetch('shipping-regions.json', { cache: 'no-store' });
+                if (response.ok) {
+                    shippingRegions = await response.json();
+                }
+            } catch (e) {
+                shippingRegions = [];
+            }
+        }
+
+        populateCountrySelect();
+    }
+
+    function populateCountrySelect() {
+        const countrySelect = document.getElementById('country');
+        if (!countrySelect) return;
+
+        const currentValue = countrySelect.value;
+        countrySelect.innerHTML = '';
+
+        shippingRegions.forEach(region => {
+            const option = document.createElement('option');
+            option.value = region.id;
+            option.textContent = region.enabled ? region.name : `${region.name} (Not Available)`;
+            option.disabled = !region.enabled;
+            countrySelect.appendChild(option);
+        });
+
+        if (currentValue && shippingRegions.some(r => r.id === currentValue)) {
+            countrySelect.value = currentValue;
+        } else {
+            const firstEnabled = shippingRegions.find(r => r.enabled);
+            if (firstEnabled) {
+                countrySelect.value = firstEnabled.id;
+            }
+        }
+    }
+
+    function getSelectedRegion() {
+        const countryValue = document.getElementById('country')?.value;
+        if (!countryValue) return null;
+        return shippingRegions.find(r => r.id === countryValue) || null;
+    }
+
+    function updateShippingNotice() {
+        if (!shippingNotice) return;
+        const region = getSelectedRegion();
+        if (!region || !region.enabled) {
+            shippingNotice.textContent = 'Shipping to this country is not available.';
+            shippingNotice.classList.add('error');
+            return;
+        }
+
+        const priceLabel = region.price === 0 ? 'Complimentary Shipping' : `Shipping AED ${region.price.toLocaleString()}`;
+        shippingNotice.textContent = `${priceLabel} • ${region.eta}`;
+        shippingNotice.classList.remove('error');
+    }
+
 
     // Render order summary
     function renderOrderSummary() {
         const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
         const products = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
-        const countryValue = document.getElementById('country')?.value || 'uae';
+        const selectedRegion = getSelectedRegion();
         
         if (cart.length === 0) {
             window.location.href = 'cart.html';
@@ -94,20 +166,18 @@
 
         summaryHTML += '</div>';
 
-        const shippingPerItem = 120;
-        const isUaeAddress = countryValue === 'uae';
-        const totalShipping = isUaeAddress ? 0 : totalQuantity * shippingPerItem;
+        const totalShipping = selectedRegion ? Number(selectedRegion.price || 0) : 0;
         const total = subtotal + totalShipping;
 
         summaryHTML += `
             <div class="summary-totals">
                 <div class="summary-row">
-                    <span>${isUaeAddress ? 'Subtotal (incl. VAT)' : 'Subtotal (VAT exempt)'}</span>
+                    <span>${selectedRegion && selectedRegion.id === 'uae' ? 'Subtotal (incl. VAT)' : 'Subtotal (VAT exempt)'}</span>
                     <span>AED ${subtotal.toLocaleString()}</span>
                 </div>
                 <div class="summary-row">
-                    <span>${isUaeAddress ? 'Shipping (UAE)' : `Shipping (120 AED × ${totalQuantity} items)`}</span>
-                    <span>${isUaeAddress ? 'Complimentary' : `AED ${totalShipping.toLocaleString()}`}</span>
+                    <span>${selectedRegion ? `Shipping (${selectedRegion.name})` : 'Shipping'}</span>
+                    <span>${totalShipping === 0 ? 'Complimentary' : `AED ${totalShipping.toLocaleString()}`}</span>
                 </div>
                 <div class="summary-divider"></div>
                 <div class="summary-row summary-total">
@@ -119,7 +189,7 @@
 
         orderSummary.innerHTML = summaryHTML;
         sessionStorage.setItem('orderTotal', total.toString());
-        localStorage.setItem('ghoharyShippingCountry', isUaeAddress ? 'UAE' : 'International');
+        localStorage.setItem('ghoharyShippingCountry', selectedRegion ? selectedRegion.name : 'Unavailable');
     }
 
     function showError(message) {
@@ -167,9 +237,11 @@
 
             // Calculate total with shipping (free for UAE)
             const subtotal = lineItems.reduce((sum, item) => sum + (item.amount * item.quantity), 0) / 100;
-            const shippingPerItem = 120;
-            const isUaeAddress = customer.country === 'uae';
-            const totalShipping = isUaeAddress ? 0 : lineItems.reduce((sum, item) => sum + item.quantity, 0) * shippingPerItem;
+            const selectedRegion = shippingRegions.find(r => r.id === customer.country);
+            if (!selectedRegion || !selectedRegion.enabled) {
+                throw new Error('Shipping is not available for the selected country.');
+            }
+            const totalShipping = Number(selectedRegion.price || 0);
             const orderTotalValue = subtotal + totalShipping;
             if (orderTotalValue < 2) {
                 throw new Error('Minimum order total is AED 2.00.');
@@ -244,6 +316,7 @@
         const countrySelect = document.getElementById('country');
         if (countrySelect) {
             countrySelect.addEventListener('change', () => {
+                updateShippingNotice();
                 renderOrderSummary();
             });
         }
@@ -270,10 +343,16 @@
                 city: document.getElementById('city').value,
                 state: document.getElementById('state').value,
                 zip: document.getElementById('zip').value,
-                country: document.getElementById('country')?.value || 'uae',
+                country: document.getElementById('country')?.value || '',
                 emirate: document.getElementById('state').value,
                 phone: document.getElementById('phone').value
             };
+
+            const selectedRegion = getSelectedRegion();
+            if (!selectedRegion || !selectedRegion.enabled) {
+                showError('Shipping is not available for the selected country.');
+                return;
+            }
 
             ensureUserAccount(customerPayload);
             saveAddressIfRequested(customerPayload);
@@ -405,7 +484,11 @@
         });
     }
 
-    loadSavedCheckoutData();
-    renderOrderSummary();
+    (async function initCheckout() {
+        await loadShippingRegions();
+        loadSavedCheckoutData();
+        updateShippingNotice();
+        renderOrderSummary();
+    })();
     console.log('💳 Stripe Checkout (hosted) page loaded');
 })();
