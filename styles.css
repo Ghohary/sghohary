@@ -1359,6 +1359,142 @@ nav .nav-icons {
     margin-bottom: var(--spacing-lg);
 }
 
+
+/* Collections - Graff Monochrome Theme */
+.graff-collection .page-hero {
+    background: #FFFFFF;
+    border-bottom: 1px solid #0A0A0A;
+}
+
+.graff-collection .page-hero::before {
+    background: radial-gradient(circle at top center, rgba(0, 0, 0, 0.08), transparent 60%);
+}
+
+.graff-collection .page-title {
+    color: #0A0A0A;
+}
+
+.graff-collection .page-description {
+    color: #3A3A3A;
+}
+
+.graff-collection .filters-section {
+    background: #FFFFFF;
+    border-bottom: 1px solid #0A0A0A;
+    box-shadow: none;
+}
+
+.graff-collection .filter-btn {
+    border: 1px solid #0A0A0A;
+    color: #0A0A0A;
+}
+
+.graff-collection .filter-btn::before {
+    background: #0A0A0A;
+    opacity: 0.08;
+}
+
+.graff-collection .filter-btn.active,
+.graff-collection .filter-btn:hover {
+    color: #FFFFFF;
+    border-color: #0A0A0A;
+    background: #0A0A0A;
+    box-shadow: none;
+}
+
+.graff-collection .filter-btn.active .filter-icon,
+.graff-collection .filter-btn:hover .filter-icon {
+    color: #FFFFFF;
+}
+
+.graff-collection .sort-dropdown select,
+.graff-collection .custom-select {
+    border: 1px solid #0A0A0A;
+    background: #FFFFFF;
+    color: #0A0A0A;
+    box-shadow: none;
+}
+
+.graff-collection .sort-dropdown select:focus,
+.graff-collection .custom-select:focus {
+    border-color: #0A0A0A;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.graff-collection .products-section {
+    background: #F4F4F4;
+}
+
+.graff-collection .product-card {
+    border: 1px solid #0A0A0A;
+    border-radius: 0;
+}
+
+.graff-collection .product-card:hover {
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.2);
+}
+
+.graff-collection .product-image-wrapper {
+    background: #E9E9E9;
+}
+
+.graff-collection .product-info {
+    background: #FFFFFF;
+    border-top: 1px solid #0A0A0A;
+}
+
+.graff-collection .product-info::before {
+    background: linear-gradient(90deg, transparent, #0A0A0A, transparent);
+}
+
+.graff-collection .product-name {
+    color: #0A0A0A;
+}
+
+.graff-collection .product-card:hover .product-name {
+    color: #111111;
+}
+
+.graff-collection .product-category {
+    color: #3A3A3A;
+}
+
+.graff-collection .product-price {
+    color: #0A0A0A;
+}
+
+.graff-collection .product-card:hover .product-price {
+    color: #0A0A0A;
+    text-shadow: none;
+}
+
+.graff-collection .cta-section {
+    background: #0A0A0A;
+    color: #FFFFFF;
+}
+
+.graff-collection .cta-section::before {
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.12), transparent 70%);
+}
+
+.graff-collection .cta-title {
+    color: #FFFFFF;
+}
+
+.graff-collection .cta-description {
+    color: #CFCFCF;
+}
+
+.graff-collection .cta-section .btn-primary {
+    background: #FFFFFF;
+    color: #0A0A0A;
+    border-color: #FFFFFF;
+}
+
+.graff-collection .cta-section .btn-primary:hover span {
+    color: #0A0A0A;
+}
+
 /* Product Detail Page */
 .product-detail-section {
     padding: 0;
