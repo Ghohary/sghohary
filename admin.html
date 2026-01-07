@@ -227,6 +227,32 @@
             margin-bottom: 1rem;
         }
 
+        .sizes-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .sizes-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .sizes-bulk {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .sizes-bulk input {
+            width: 140px;
+        }
+
         .sizes-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
@@ -638,6 +664,18 @@
                         <p style="font-size: 0.9rem; color: var(--color-brown); margin-bottom: 1rem;">
                             Select sizes and enter stock quantity for each. Leave stock empty or 0 for "Made to Order".
                         </p>
+
+                        <div class="sizes-toolbar">
+                            <div class="sizes-actions">
+                                <button type="button" class="btn btn-secondary btn-small" onclick="selectAllSizes()">Select all sizes</button>
+                                <button type="button" class="btn btn-secondary btn-small" onclick="clearAllSizes()">Clear</button>
+                            </div>
+                            <div class="sizes-bulk">
+                                <input type="number" id="bulkStockInput" min="0" placeholder="Set stock">
+                                <button type="button" class="btn btn-primary btn-small" onclick="applyStockToSelected()">Apply to selected</button>
+                                <button type="button" class="btn btn-secondary btn-small" onclick="applyStockToAll()">Apply to all</button>
+                            </div>
+                        </div>
                         
                         <div class="sizes-grid" id="sizesGrid">
                             <!-- Size 32 -->
@@ -825,24 +863,6 @@
             { id: 'oceania', label: 'Oceania', note: 'All Oceanian countries' }
         ];
 
-        // Size management
-        document.querySelectorAll('.size-checkbox-input').forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                const size = this.dataset.size;
-                const stockInput = document.querySelector(`.stock-input[data-size="${size}"]`);
-                const sizeItem = this.closest('.size-item');
-                
-                if (this.checked) {
-                    stockInput.disabled = false;
-                    sizeItem.classList.add('selected');
-                } else {
-                    stockInput.disabled = true;
-                    stockInput.value = '';
-                    sizeItem.classList.remove('selected');
-                }
-            });
-        });
-
         function renderShippingRegions() {
             const container = document.getElementById('shippingRegions');
             container.innerHTML = '';
@@ -925,6 +945,71 @@
             setTimeout(() => message.classList.remove('show'), 2500);
             showSettingsToast();
         }
+
+        function updateSizeSelection(checkbox, isChecked) {
+            const size = checkbox.dataset.size;
+            const stockInput = document.querySelector(`.stock-input[data-size="${size}"]`);
+            const sizeItem = checkbox.closest('.size-item');
+
+            if (isChecked) {
+                stockInput.disabled = false;
+                sizeItem.classList.add('selected');
+            } else {
+                stockInput.disabled = true;
+                stockInput.value = '';
+                sizeItem.classList.remove('selected');
+            }
+        }
+
+        function selectAllSizes() {
+            document.querySelectorAll('.size-checkbox-input').forEach(checkbox => {
+                checkbox.checked = true;
+                updateSizeSelection(checkbox, true);
+            });
+        }
+
+        function clearAllSizes() {
+            document.querySelectorAll('.size-checkbox-input').forEach(checkbox => {
+                checkbox.checked = false;
+                updateSizeSelection(checkbox, false);
+            });
+        }
+
+        function applyStockToSelected() {
+            const value = document.getElementById('bulkStockInput').value;
+            document.querySelectorAll('.size-checkbox-input:checked').forEach(checkbox => {
+                const size = checkbox.dataset.size;
+                const stockInput = document.querySelector(`.stock-input[data-size="${size}"]`);
+                stockInput.value = value;
+            });
+        }
+
+        function applyStockToAll() {
+            const value = document.getElementById('bulkStockInput').value;
+            document.querySelectorAll('.size-checkbox-input').forEach(checkbox => {
+                checkbox.checked = true;
+                updateSizeSelection(checkbox, true);
+                const size = checkbox.dataset.size;
+                const stockInput = document.querySelector(`.stock-input[data-size="${size}"]`);
+                stockInput.value = value;
+            });
+        }
+
+        // Size management
+        document.querySelectorAll('.size-item').forEach(item => {
+            item.addEventListener('click', (event) => {
+                if (event.target.classList.contains('stock-input')) return;
+                const checkbox = item.querySelector('.size-checkbox-input');
+                checkbox.checked = !checkbox.checked;
+                updateSizeSelection(checkbox, checkbox.checked);
+            });
+        });
+
+        document.querySelectorAll('.size-checkbox-input').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                updateSizeSelection(this, this.checked);
+            });
+        });
 
         // Image upload handling
         let uploadedImages = [];
