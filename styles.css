@@ -984,6 +984,12 @@ nav .nav-icons {
     opacity: 0.9;
 }
 
+.hero-subtitle.hero-subtitle-small {
+    font-size: clamp(10px, 1.1vw + 2px, 12px);
+    letter-spacing: 0.22em;
+    color: #fff;
+}
+
 .hero-title {
     font-size: clamp(48px, 10vw, 96px);
     color: var(--text-dark);
@@ -992,6 +998,12 @@ nav .nav-icons {
     line-height: 1.1;
     margin-bottom: var(--spacing-lg);
     text-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+}
+
+.hero-title.hero-title-small {
+    font-size: clamp(28px, 6vw, 56px);
+    color: #fff;
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.35);
 }
 
 .hero-description {
@@ -1021,6 +1033,24 @@ nav .nav-icons {
     text-transform: uppercase;
     color: #fff;
     margin-top: var(--spacing-sm);
+}
+
+.hero-cta.hero-cta-link {
+    text-decoration: none;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-cta.hero-cta-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 100%;
+    height: 1px;
+    background: #fff;
 }
 
 @media (min-width: 768px) {
