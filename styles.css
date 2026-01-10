@@ -334,6 +334,11 @@ body.has-fixed-nav .hero {
     stroke: #fff;
 }
 
+.nav-container .nav-icon {
+    color: var(--text-dark);
+    stroke: var(--text-dark);
+}
+
 .nav-container.hero-transparent .mobile-menu-btn span {
     background: #fff;
 }
