@@ -339,6 +339,12 @@ body.has-fixed-nav .hero {
     stroke: var(--text-dark);
 }
 
+.nav-container .nav-icon path,
+.nav-container .nav-icon circle,
+.nav-container .nav-icon rect {
+    stroke: currentColor;
+}
+
 .nav-container.hero-transparent .mobile-menu-btn span {
     background: #fff;
 }
