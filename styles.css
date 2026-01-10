@@ -399,6 +399,8 @@ nav .nav-icons {
 
 .nav-icons > * {
     position: relative;
+    display: inline-flex;
+    align-items: center;
 }
 
 .nav-icons > * + *::before {
@@ -662,6 +664,7 @@ nav .nav-icons {
     stroke-width: 1.4;
     fill: none;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: block;
 }
 
 .nav-icons a:hover .nav-icon {
