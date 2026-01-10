@@ -412,7 +412,7 @@ nav .nav-icons {
 .logo {
     font-family: 'Cormorant Garamond', serif;
     font-size: clamp(24px, 4.6vw, 34px);
-    font-weight: 400;
+    font-weight: 500;
     letter-spacing: 0;
     color: var(--text-dark);
     text-decoration: none;
