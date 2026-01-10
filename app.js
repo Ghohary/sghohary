@@ -826,6 +826,13 @@
     const navContainer = document.querySelector('.nav-container');
     
     if (navContainer) {
+        const setNavHeight = () => {
+            const height = navContainer.offsetHeight || 0;
+            document.documentElement.style.setProperty('--nav-height', `${height}px`);
+            document.body.classList.add('has-fixed-nav');
+        };
+        setNavHeight();
+
         const handleScroll = debounce(function() {
             const currentScroll = window.pageYOffset;
             
@@ -837,6 +844,7 @@
         }, 10);
 
         window.addEventListener('scroll', handleScroll, { passive: true });
+        window.addEventListener('resize', setNavHeight, { passive: true });
     }
 
     // ===== HERO TRANSPARENT HEADER =====

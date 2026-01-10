@@ -291,7 +291,7 @@ a:hover {
 
 /* Navigation */
 .nav-container {
-    position: sticky;
+    position: fixed;
     top: 0;
     z-index: 1000;
     width: 100%;
@@ -305,6 +305,14 @@ a:hover {
     transition: all 0.4s ease;
     display: flex;
     justify-content: center;
+}
+
+body.has-fixed-nav {
+    padding-top: var(--nav-height, 64px);
+}
+
+body.has-fixed-nav .hero {
+    margin-top: calc(-1 * var(--nav-height, 64px));
 }
 
 .nav-container.hero-transparent {
