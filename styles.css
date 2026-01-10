@@ -1014,6 +1014,15 @@ nav .nav-icons {
     align-items: center;
 }
 
+.hero-cta.hero-cta-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(12px, 1.4vw, 16px);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #fff;
+    margin-top: var(--spacing-sm);
+}
+
 @media (min-width: 768px) {
     .hero-cta {
         flex-direction: row;
