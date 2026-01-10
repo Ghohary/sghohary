@@ -66,11 +66,21 @@
 
     // Update product price
     const priceEl = document.querySelector('.price-amount');
-    if (priceEl) {
-        if (product.price && product.price !== 'Price Upon Request') {
-            priceEl.textContent = parseFloat(product.price).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-        } else {
+    const btnPriceEl = document.querySelector('.btn-add-to-cart .btn-price');
+    if (product.price && product.price !== 'Price Upon Request') {
+        const formattedPrice = parseFloat(product.price).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        if (priceEl) {
+            priceEl.textContent = formattedPrice;
+        }
+        if (btnPriceEl) {
+            btnPriceEl.textContent = `AED ${formattedPrice}`;
+        }
+    } else {
+        if (priceEl) {
             priceEl.textContent = product.price || 'Price Upon Request';
+        }
+        if (btnPriceEl) {
+            btnPriceEl.textContent = '';
         }
     }
 
@@ -240,36 +250,36 @@
         });
     }
 
-    // ===== ADD TO CART =====
+    // ===== ADD TO CART / QUICK BUY =====
     const addToCartBtn = document.getElementById('addToCartBtn');
-    
+    const quickBuyBtn = document.getElementById('quickBuyBtn');
     let modalTimeoutId = null;
-    if (addToCartBtn) {
-        addToCartBtn.addEventListener('click', function() {
-            if (!selectedSize) {
-                alert('Please select a size');
-                return;
-            }
 
-            const customizationField = document.getElementById('customization');
-            
-            // Store essential data + product name/price/image as fallback for cart display
-            const cartProduct = {
-                id: product.id,
-                name: product.name,  // Store name as fallback
-                price: product.price, // Store price as fallback
-                image: (product.images && product.images.length > 0) ? product.images[0] : '/placeholder.jpg', // Store image as fallback
-                size: selectedSize,
-                customization: customizationField ? customizationField.value : '',
-                quantity: 1
-            };
-            
-            console.log('[Product] Adding to cart:', {
-                productId: product.id,
-                productName: product.name,
-                productPrice: product.price,
-                cartItem: cartProduct
-            });
+    const addToCart = (redirectToCheckout = false) => {
+        if (!selectedSize) {
+            alert('Please select a size');
+            return;
+        }
+
+        const customizationField = document.getElementById('customization');
+        
+        // Store essential data + product name/price/image as fallback for cart display
+        const cartProduct = {
+            id: product.id,
+            name: product.name,  // Store name as fallback
+            price: product.price, // Store price as fallback
+            image: (product.images && product.images.length > 0) ? product.images[0] : '/placeholder.jpg', // Store image as fallback
+            size: selectedSize,
+            customization: customizationField ? customizationField.value : '',
+            quantity: 1
+        };
+        
+        console.log('[Product] Adding to cart:', {
+            productId: product.id,
+            productName: product.name,
+            productPrice: product.price,
+            cartItem: cartProduct
+        });
 
             // Get cart from localStorage
             let cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
@@ -329,17 +339,28 @@
             window.dispatchEvent(new Event('cartUpdated'));
 
             // Show success modal (if present) and auto-hide after 10s
-            const modal = document.getElementById('successModal');
-            if (modal) {
-                modal.style.display = 'flex';
-                if (modalTimeoutId) {
-                    clearTimeout(modalTimeoutId);
-                }
-                modalTimeoutId = setTimeout(() => {
-                    modal.style.display = 'none';
-                }, 10000);
+        const modal = document.getElementById('successModal');
+        if (modal) {
+            modal.style.display = 'flex';
+            if (modalTimeoutId) {
+                clearTimeout(modalTimeoutId);
             }
-        });
+            modalTimeoutId = setTimeout(() => {
+                modal.style.display = 'none';
+            }, 10000);
+        }
+
+        if (redirectToCheckout) {
+            window.location.href = 'checkout.html';
+        }
+    };
+
+    if (addToCartBtn) {
+        addToCartBtn.addEventListener('click', () => addToCart(false));
+    }
+
+    if (quickBuyBtn) {
+        quickBuyBtn.addEventListener('click', () => addToCart(true));
     }
 
     // ===== UPDATE CART COUNT =====
