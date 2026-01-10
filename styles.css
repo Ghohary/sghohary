@@ -687,8 +687,9 @@ nav .nav-icons {
 
 .cart-count {
     position: absolute;
-    top: clamp(-10px, -1.5vw, -8px);
-    right: clamp(-10px, -1.5vw, -8px);
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
     background: transparent;
     color: #fff;
     font-size: clamp(9px, 1.2vw, 12px);
