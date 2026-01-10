@@ -257,8 +257,15 @@
 
     const addToCart = (redirectToCheckout = false) => {
         if (!selectedSize) {
-            alert('Please select a size');
+            const sizeAlert = document.getElementById('sizeAlert');
+            if (sizeAlert) {
+                sizeAlert.style.display = 'block';
+            }
             return;
+        }
+        const sizeAlert = document.getElementById('sizeAlert');
+        if (sizeAlert) {
+            sizeAlert.style.display = 'none';
         }
 
         const customizationField = document.getElementById('customization');
