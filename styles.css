@@ -355,7 +355,7 @@ body.has-fixed-nav .hero {
 
 nav {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     padding: clamp(22px, 3.2vh, 32px) var(--spacing-sm);
     position: relative;
@@ -410,8 +410,9 @@ nav .nav-icons {
 }
 
 .nav-icons-left {
-    margin-left: 0;
+    margin-left: 10px;
     order: 1;
+    gap: 10px;
 }
 
 .nav-icons-right {
