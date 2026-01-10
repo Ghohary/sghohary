@@ -405,6 +405,20 @@ nav .nav-icons {
     background: rgba(0, 0, 0, 0.08);
 }
 
+.nav-icons > * + *::before {
+    display: none;
+}
+
+.nav-icons-left {
+    margin-left: 0;
+    order: 1;
+}
+
+.nav-icons-right {
+    margin-left: auto;
+    order: 3;
+}
+
 @media (min-width: 768px) {
     nav { padding: clamp(26px, 3.4vh, 36px) var(--spacing-lg); min-height: 72px; }
 }
