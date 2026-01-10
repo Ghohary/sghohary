@@ -2984,12 +2984,22 @@ nav .nav-icons {
     transition: transform 0.4s ease;
 }
 
+.cart-item-placeholder {
+    width: 100%;
+    height: 160px;
+    background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
+}
+
 .cart-item:hover .cart-item-image img {
     transform: scale(1.02);
 }
 
 @media (min-width: 768px) {
     .cart-item-image img {
+        height: 200px;
+    }
+
+    .cart-item-placeholder {
         height: 200px;
     }
 }
