@@ -952,11 +952,6 @@ nav .nav-icons {
     justify-content: center;
     text-align: center;
     overflow: hidden;
-    margin-bottom: 12px;
-}
-
-.hero:last-of-type {
-    margin-bottom: 0;
 }
 
 .hero::before {
