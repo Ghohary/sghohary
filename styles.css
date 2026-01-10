@@ -653,9 +653,6 @@ nav .nav-icons {
         margin-left: 0;
     }
 
-    .nav-icons a[aria-label="Account"] {
-        display: none;
-    }
 }
 
 .nav-icon {
