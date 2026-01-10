@@ -355,7 +355,7 @@ body.has-fixed-nav .hero {
 
 nav {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     padding: clamp(22px, 3.2vh, 32px) var(--spacing-sm);
     position: relative;
@@ -386,8 +386,15 @@ nav .nav-icons {
     display: flex;
     align-items: center;
     gap: clamp(14px, 2.4vw, 20px);
-    margin-left: auto;
+    margin-left: 0;
     order: 3;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    order: 1;
 }
 
 .nav-icons > * {
@@ -410,7 +417,7 @@ nav .nav-icons {
 }
 
 .nav-icons-left {
-    margin-left: 10px;
+    margin-left: 0;
     order: 1;
     gap: 10px;
 }
