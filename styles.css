@@ -1003,6 +1003,7 @@ nav .nav-icons {
 .hero-title.hero-title-small {
     font-size: clamp(28px, 6vw, 56px);
     color: #fff;
+    font-weight: 500;
     text-shadow: 0 2px 18px rgba(0, 0, 0, 0.35);
 }
 
