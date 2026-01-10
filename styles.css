@@ -357,7 +357,7 @@ nav {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: clamp(18px, 2.4vh, 26px) var(--spacing-sm);
+    padding: clamp(22px, 3.2vh, 32px) var(--spacing-sm);
     position: relative;
     min-height: 64px;
     width: 100%;
@@ -406,14 +406,14 @@ nav .nav-icons {
 }
 
 @media (min-width: 768px) {
-    nav { padding: clamp(22px, 2.8vh, 30px) var(--spacing-lg); min-height: 64px; }
+    nav { padding: clamp(26px, 3.4vh, 36px) var(--spacing-lg); min-height: 72px; }
 }
 
 .logo {
     font-family: 'Cormorant Garamond', serif;
     font-size: clamp(24px, 4.6vw, 34px);
     font-weight: 400;
-    letter-spacing: 0.3em;
+    letter-spacing: 0;
     color: var(--text-dark);
     text-decoration: none;
     z-index: 1001;
