@@ -427,6 +427,18 @@ nav .nav-icons {
     order: 3;
 }
 
+.nav-icons-right .wishlist-link {
+    order: 1;
+}
+
+.nav-icons-right .account-link {
+    order: 2;
+}
+
+.nav-icons-right .cart-link {
+    order: 3;
+}
+
 @media (min-width: 768px) {
     nav { padding: clamp(26px, 3.4vh, 36px) var(--spacing-lg); min-height: 72px; }
 }
