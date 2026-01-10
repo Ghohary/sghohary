@@ -1601,6 +1601,10 @@ nav .nav-icons {
     background: #f7f2ec;
 }
 
+.product-images {
+    padding-top: var(--nav-height, 64px);
+}
+
 @media (min-width: 600px) {
     .product-images {
         min-height: 55vh;
