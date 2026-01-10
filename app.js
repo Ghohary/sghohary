@@ -839,6 +839,26 @@
         window.addEventListener('scroll', handleScroll, { passive: true });
     }
 
+    // ===== HERO TRANSPARENT HEADER =====
+    if (navContainer) {
+        const heroSection = document.querySelector('.hero');
+        if (heroSection) {
+            const updateHeroHeader = () => {
+                const heroBottom = heroSection.getBoundingClientRect().bottom;
+                const navHeight = navContainer.offsetHeight || 0;
+                if (heroBottom > navHeight) {
+                    navContainer.classList.add('hero-transparent');
+                } else {
+                    navContainer.classList.remove('hero-transparent');
+                }
+            };
+
+            updateHeroHeader();
+            window.addEventListener('scroll', updateHeroHeader, { passive: true });
+            window.addEventListener('resize', updateHeroHeader, { passive: true });
+        }
+    }
+
     // ===== TOUCH FEEDBACK FOR INTERACTIVE ELEMENTS =====
     const interactiveElements = document.querySelectorAll('.collection-card, .instagram-item, .product-card');
     
