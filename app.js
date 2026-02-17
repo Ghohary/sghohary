@@ -826,6 +826,13 @@
     const navContainer = document.querySelector('.nav-container');
     
     if (navContainer) {
+        const setNavHeight = () => {
+            const height = navContainer.offsetHeight || 0;
+            document.documentElement.style.setProperty('--nav-height', `${height}px`);
+            document.body.classList.add('has-fixed-nav');
+        };
+        setNavHeight();
+
         const handleScroll = debounce(function() {
             const currentScroll = window.pageYOffset;
             
@@ -837,6 +844,41 @@
         }, 10);
 
         window.addEventListener('scroll', handleScroll, { passive: true });
+        window.addEventListener('resize', setNavHeight, { passive: true });
+    }
+
+    // ===== HERO TRANSPARENT HEADER =====
+    const initHeroHeader = () => {
+        const headerContainer = document.querySelector('.nav-container');
+        const heroSection = document.querySelector('.hero');
+        if (!headerContainer || !heroSection) {
+            return false;
+        }
+
+        const updateHeroHeader = () => {
+            const heroBottom = heroSection.getBoundingClientRect().bottom;
+            const navHeight = headerContainer.offsetHeight || 0;
+            if (heroBottom > navHeight) {
+                headerContainer.classList.add('hero-transparent');
+            } else {
+                headerContainer.classList.remove('hero-transparent');
+            }
+        };
+
+        updateHeroHeader();
+        window.addEventListener('scroll', updateHeroHeader, { passive: true });
+        window.addEventListener('resize', updateHeroHeader, { passive: true });
+        return true;
+    };
+
+    if (!initHeroHeader()) {
+        let heroHeaderTries = 0;
+        const heroHeaderTimer = setInterval(() => {
+            heroHeaderTries += 1;
+            if (initHeroHeader() || heroHeaderTries > 20) {
+                clearInterval(heroHeaderTimer);
+            }
+        }, 200);
     }
 
     // ===== TOUCH FEEDBACK FOR INTERACTIVE ELEMENTS =====
