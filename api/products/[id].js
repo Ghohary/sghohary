@@ -1,6 +1,7 @@
 const { createClient } = require('redis');
 
 const redisUrl = process.env.ghohary_REDIS_URL;
+const BLOBSOURCE_URL_PATTERN = /(?:^|[./-])(vercel-storage\.com|public\.blob\.vercel-storage\.com|blob\.vercel-storage)(?:[/?#]|$)/i;
 let redisClient = null;
 let redisConnecting = null;
 
@@ -47,6 +48,43 @@ async function writeProducts(products) {
     await client.set('ghohary:products', JSON.stringify(products));
 }
 
+function sanitizeImageUrl(value) {
+    const url = String(value || '').trim();
+    if (!url) return '';
+    if (BLOBSOURCE_URL_PATTERN.test(url)) return '';
+    return url;
+}
+
+function sanitizeProductImageFields(product) {
+    if (!product || typeof product !== 'object') return product;
+
+    const cloned = { ...product };
+    const keys = ['images', 'image', 'downloadUrl', 'download_url', 'image_url', 'imageUrl', 'imageSrc', 'image_src', 'main_image', 'featured_image', 'thumbnail', 'thumb', 'thumbnailUrl'];
+
+    keys.forEach((key) => {
+        if (!Object.prototype.hasOwnProperty.call(cloned, key)) {
+            return;
+        }
+        const value = cloned[key];
+        if (Array.isArray(value)) {
+            cloned[key] = value
+                .map((entry) => sanitizeImageUrl(entry))
+                .filter((entry) => entry !== '');
+            return;
+        }
+        if (typeof value === 'string') {
+            const next = sanitizeImageUrl(value);
+            if (next) {
+                cloned[key] = next;
+            } else {
+                delete cloned[key];
+            }
+        }
+    });
+
+    return cloned;
+}
+
 function parseBody(req) {
     if (!req.body) return {};
     if (typeof req.body === 'string') {
@@ -79,7 +117,7 @@ module.exports = async (req, res) => {
             res.status(404).json({ error: 'Not found' });
             return;
         }
-        res.status(200).json(products[index]);
+        res.status(200).json(sanitizeProductImageFields(products[index]));
         return;
     }
 
@@ -97,7 +135,7 @@ module.exports = async (req, res) => {
         };
         products[index] = updated;
         await writeProducts(products);
-        res.status(200).json(updated);
+        res.status(200).json(sanitizeProductImageFields(updated));
         return;
     }
 
@@ -108,7 +146,7 @@ module.exports = async (req, res) => {
         }
         const removed = products.splice(index, 1)[0];
         await writeProducts(products);
-        res.status(200).json(removed);
+        res.status(200).json(sanitizeProductImageFields(removed));
         return;
     }
 

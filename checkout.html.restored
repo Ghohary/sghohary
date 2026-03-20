@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="Complete your order">
+    <title>Checkout | GHOHARY</title>
+    
+    <!-- Auth Check -->
+    <script>
+        const currentUser = JSON.parse(localStorage.getItem('ghoharyCurrentUser') || 'null');
+    </script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="header-loader.js"></script>
+    
+    <!-- Stripe Elements CSS -->
+    <style>
+        .StripeElement {
+            box-sizing: border-box;
+            height: 40px;
+            padding: 10px 12px;
+            border: 1px solid var(--gray-300);
+            border-radius: 4px;
+            background-color: white;
+            box-shadow: 0 1px 3px 0 #e6ebf1;
+            -webkit-transition: box-shadow 150ms ease;
+            transition: box-shadow 150ms ease;
+        }
+
+        .StripeElement--focus {
+            box-shadow: 0 1px 3px 0 #cfd7df;
+            border-color: var(--gray-700);
+        }
+
+        .StripeElement--invalid {
+            border-color: #fa755a;
+        }
+
+        #card-errors {
+            color: #fa755a;
+            text-align: left;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header></header>
+
+    <!-- Checkout Section -->
+    <section class="checkout-section">
+        <div class="container">
+            <div class="checkout-grid">
+                <!-- Checkout Form -->
+                <div class="checkout-form">
+                    <h1 class="page-title">Checkout</h1>
+
+                    <div class="checkout-login-cta">
+                        <span>Have an account?</span>
+                        <button type="button" class="btn btn-secondary" id="checkoutLoginBtn">Log In</button>
+                    </div>
+
+                    <form id="checkoutForm">
+                        <!-- Contact Information -->
+                        <div class="form-section">
+                            <h3 class="form-section-title">Contact Information</h3>
+                            <div class="form-group">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName">First Name *</label>
+                                    <input type="text" id="firstName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Last Name *</label>
+                                    <input type="text" id="lastName" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number *</label>
+                                <input type="tel" id="phone" required placeholder="+971">
+                            </div>
+                        </div>
+
+                        <!-- Delivery Information -->
+                        <div class="form-section">
+                            <h3 class="form-section-title">Delivery Information</h3>
+                            <div class="form-group">
+                                <label for="country">Country *</label>
+                                <select id="country" required>
+                                    <option value="">Loading countries...</option>
+                                </select>
+                                <div id="shippingNotice" class="shipping-notice"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Street Address *</label>
+                                <input type="text" id="address" required autocomplete="off">
+                            </div>
+                            <div class="form-group checkbox-group">
+                                <label for="saveAddress">
+                                    <input type="checkbox" id="saveAddress">
+                                    Save this address for future orders
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="addressLine2">Address Line 2 (Optional)</label>
+                                <input type="text" id="addressLine2" placeholder="Apartment, suite, floor">
+                            </div>
+                            <div class="form-group">
+                                <label for="city">City *</label>
+                                <input type="text" id="city" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="state">State / Emirate *</label>
+                                    <input type="text" id="state" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="zip">Zip / Postal Code *</label>
+                                    <input type="text" id="zip" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="notes">Delivery Notes (Optional)</label>
+                                <textarea id="notes" rows="3" placeholder="Any special instructions for delivery"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Secure Payment -->
+                        <div class="form-section">
+                            <h3 class="form-section-title">Secure Payment</h3>
+                            <p class="payment-note">You will be redirected to Stripe to complete your payment.</p>
+                        </div>
+
+                        <div id="checkout-errors" role="alert"></div>
+
+                        <button type="submit" class="btn btn-primary btn-full">
+                            <span>Proceed to Secure Payment</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="order-summary-sidebar">
+                    <h3 class="summary-title">Order Summary</h3>
+                    <div id="orderSummary">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="seed-data.js"></script>
+    <script>window.CHECKOUT_PAGE_HANDLED = true;</script>
+    <script src="app.js"></script>
+    <script src="checkout.js"></script>
+</body>
+</html>

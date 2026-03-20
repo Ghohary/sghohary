@@ -4,7 +4,12 @@
 
     window.CHECKOUT_PAGE_HANDLED = true;
 
-    const currentUser = JSON.parse(localStorage.getItem('ghoharyCurrentUser') || 'null');
+    let currentUser = null;
+    try {
+        currentUser = JSON.parse(localStorage.getItem('ghoharyCurrentUser') || 'null');
+    } catch (error) {
+        currentUser = null;
+    }
 
     const API_URL = window.location.origin.includes('localhost:8000') 
         ? 'http://localhost:3001'
@@ -14,13 +19,41 @@
     const orderSummary = document.getElementById('orderSummary');
     const checkoutForm = document.getElementById('checkoutForm');
     const submitBtn = checkoutForm ? checkoutForm.querySelector('button[type="submit"]') : null;
-    const checkoutLoginBtn = document.getElementById('checkoutLoginBtn');
-    const shippingNotice = document.getElementById('shippingNotice');
+
+    // Escape HTML to prevent XSS
+    function escapeHTML(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    // Parse price safely — handles "1,600", "1600.00", "AED 1600", etc.
+    function parsePrice(value) {
+        if (typeof value === 'number') return value;
+        const cleaned = String(value || '').replace(/[^0-9.]/g, '');
+        const n = parseFloat(cleaned);
+        return Number.isFinite(n) ? n : 0;
+    }
 
     let shippingRegions = [];
 
+    function safeParseArray(storageKey) {
+        try {
+            const raw = localStorage.getItem(storageKey);
+            const parsed = JSON.parse(raw || '[]');
+            return Array.isArray(parsed) ? parsed : [];
+        } catch (error) {
+            return [];
+        }
+    }
+
     function loadSavedCheckoutData() {
-        const saved = JSON.parse(sessionStorage.getItem('ghoharyCheckoutForm') || 'null');
+        let saved = null;
+        try {
+            saved = JSON.parse(sessionStorage.getItem('ghoharyCheckoutForm') || 'null');
+        } catch (error) {
+            saved = null;
+        }
         const data = saved || currentUser || null;
         if (!data) return;
 
@@ -31,7 +64,6 @@
         const addressEl = document.getElementById('address');
         const address2El = document.getElementById('addressLine2');
         const cityEl = document.getElementById('city');
-        const stateEl = document.getElementById('state');
         const zipEl = document.getElementById('zip');
         const countryEl = document.getElementById('country');
 
@@ -42,24 +74,28 @@
         if (addressEl && data.address) addressEl.value = data.address;
         if (address2El && data.addressLine2) address2El.value = data.addressLine2;
         if (cityEl && data.city) cityEl.value = data.city;
-        if (stateEl && data.state) stateEl.value = data.state;
         if (zipEl && data.zip) zipEl.value = data.zip;
         if (countryEl && data.country) countryEl.value = data.country;
     }
 
     async function loadShippingRegions() {
-        const stored = localStorage.getItem('ghoharyShippingRegions');
-        if (stored) {
-            try {
-                shippingRegions = JSON.parse(stored) || [];
-            } catch (e) {
-                shippingRegions = [];
+        // Always fetch from the live API (backed by Redis) so admin changes appear immediately
+        try {
+            const response = await fetch('/api/shipping-regions', { cache: 'no-store' });
+            if (response.ok) {
+                const data = await response.json();
+                // API may return { regions: [...] } wrapper or plain array
+                const raw = Array.isArray(data) ? data : (Array.isArray(data?.regions) ? data.regions : []);
+                shippingRegions = raw;
             }
+        } catch (e) {
+            console.warn('[Checkout] API fetch failed, trying static fallback', e);
         }
 
+        // Fallback to static file if API failed
         if (!shippingRegions.length) {
             try {
-                const response = await fetch('shipping-regions.json', { cache: 'no-store' });
+                const response = await fetch('/shipping-regions.json', { cache: 'no-store' });
                 if (response.ok) {
                     shippingRegions = await response.json();
                 }
@@ -78,13 +114,70 @@
         const currentValue = countrySelect.value;
         countrySelect.innerHTML = '';
 
+        // Add placeholder
+        const placeholder = document.createElement('option');
+        placeholder.value = '';
+        placeholder.textContent = 'Select country...';
+        placeholder.disabled = true;
+        countrySelect.appendChild(placeholder);
+
+        // Group regions by continent for a cleaner dropdown
+        const continentLabels = {
+            gcc: 'Middle East',
+            europe: 'Europe',
+            america: 'Americas',
+            asia: 'Asia',
+            australia: 'Oceania'
+        };
+        const grouped = {};
+        const ungrouped = [];
+
         shippingRegions.forEach(region => {
-            const option = document.createElement('option');
-            option.value = region.id;
-            option.textContent = region.enabled ? region.name : `${region.name} (Not Available)`;
-            option.disabled = !region.enabled;
-            countrySelect.appendChild(option);
+            const continent = region.continent || '';
+            if (continent && continentLabels[continent]) {
+                if (!grouped[continent]) grouped[continent] = [];
+                grouped[continent].push(region);
+            } else {
+                ungrouped.push(region);
+            }
         });
+
+        const continentOrder = ['gcc', 'europe', 'america', 'asia', 'australia'];
+        const hasGroups = Object.keys(grouped).length > 1;
+
+        if (hasGroups) {
+            continentOrder.forEach(key => {
+                const regions = grouped[key];
+                if (!regions || !regions.length) return;
+                const group = document.createElement('optgroup');
+                group.label = continentLabels[key] || key;
+                regions.forEach(region => {
+                    const option = document.createElement('option');
+                    option.value = region.id;
+                    option.textContent = region.enabled ? region.name : `${region.name} (Not available)`;
+                    option.disabled = !region.enabled;
+                    group.appendChild(option);
+                });
+                countrySelect.appendChild(group);
+            });
+            // Add any ungrouped at the end
+            ungrouped.forEach(region => {
+                const option = document.createElement('option');
+                option.value = region.id;
+                option.textContent = region.enabled ? region.name : `${region.name} (Not available)`;
+                option.disabled = !region.enabled;
+                countrySelect.appendChild(option);
+            });
+        } else {
+            // No continent data — flat list
+            shippingRegions.forEach(region => {
+                const option = document.createElement('option');
+                option.value = region.id;
+                option.textContent = region.enabled ? region.name : `${region.name} (Not available)`;
+                option.disabled = !region.enabled;
+                countrySelect.appendChild(option);
+            });
+        }
 
         if (currentValue && shippingRegions.some(r => r.id === currentValue)) {
             countrySelect.value = currentValue;
@@ -92,6 +185,8 @@
             const firstEnabled = shippingRegions.find(r => r.enabled);
             if (firstEnabled) {
                 countrySelect.value = firstEnabled.id;
+            } else {
+                countrySelect.value = '';
             }
         }
     }
@@ -102,94 +197,68 @@
         return shippingRegions.find(r => r.id === countryValue) || null;
     }
 
-    function updateShippingNotice() {
-        if (!shippingNotice) return;
-        const region = getSelectedRegion();
-        if (!region || !region.enabled) {
-            shippingNotice.textContent = 'Shipping to this country is not available.';
-            shippingNotice.classList.add('error');
-            return;
-        }
-
-        const priceLabel = region.price === 0 ? 'Complimentary Shipping' : `Shipping AED ${region.price.toLocaleString()}`;
-        shippingNotice.textContent = `${priceLabel} • ${region.eta}`;
-        shippingNotice.classList.remove('error');
-    }
-
-
-    // Render order summary
+    // Render order summary — uses CART DATA DIRECTLY, no products DB lookup needed
     function renderOrderSummary() {
-        const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
-        const products = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
-        const selectedRegion = getSelectedRegion();
-        
-        if (cart.length === 0) {
+        var cart = safeParseArray('ghoharyCart');
+        var selectedRegion = getSelectedRegion();
+
+        if (!orderSummary) return;
+
+        if (!cart.length) {
             window.location.href = 'cart.html';
             return;
         }
 
-        let subtotal = 0;
-        let totalQuantity = 0;
-        let summaryHTML = '<div class="summary-items">';
+        var subtotal = 0;
+        var html = '<div class="summary-items">';
 
-        cart.forEach(item => {
-            const product = products.find(p => {
-                const itemId = item.id;
-                const productId = p.id;
-                return itemId == productId || Number(itemId) === Number(productId);
-            });
+        for (var i = 0; i < cart.length; i++) {
+            var item = cart[i];
+            var name = String(item.name || 'Product');
+            var price = parsePrice(item.price);
+            var qty = Math.max(1, parseInt(item.quantity) || 1);
+            var size = String(item.size || '');
+            var image = String(item.image || '');
+            var lineTotal = price * qty;
+            subtotal += lineTotal;
 
-            const productName = product?.name || item.name || 'Unknown Product';
-            const productPrice = product ? (parseFloat(product.price) || 0) : (parseFloat(item.price) || 0);
-            const productImage = (product?.images && product.images.length > 0)
-                ? product.images[0]
-                : (item.image || '/placeholder.jpg');
-            const quantity = Number(item.quantity || 1);
+            html += '<div class="summary-item">';
+            if (image) {
+                html += '<img src="' + escapeHTML(image) + '" alt="' + escapeHTML(name) + '" class="summary-item-image">';
+            } else {
+                html += '<div class="summary-item-image" style="background:#f0f0f0;"></div>';
+            }
+            html += '<div class="summary-item-details">';
+            html += '<h4>' + escapeHTML(name) + '</h4>';
+            html += '<p>' + (size ? escapeHTML(size) + ' &times; ' : '') + qty + '</p>';
+            html += '</div>';
+            html += '<div class="summary-item-price">AED ' + lineTotal.toLocaleString() + '</div>';
+            html += '</div>';
+        }
 
-            const itemTotal = productPrice * quantity;
-            subtotal += itemTotal;
-            totalQuantity += quantity;
+        html += '</div>';
 
-            summaryHTML += `
-                <div class="summary-item">
-                    <img src="${productImage}" alt="${productName}" class="summary-item-image">
-                    <div class="summary-item-details">
-                        <h4>${productName}</h4>
-                        <p>Size: ${item.size} × ${quantity}</p>
-                    </div>
-                    <div class="summary-item-price">
-                        AED ${itemTotal.toLocaleString()}
-                    </div>
-                </div>
-            `;
-        });
+        var shipping = selectedRegion ? parsePrice(selectedRegion.price) : 0;
+        var total = subtotal + shipping;
 
-        summaryHTML += '</div>';
+        html += '<div class="summary-totals">';
+        html += '<div class="summary-row"><span>Subtotal</span><span>AED ' + subtotal.toLocaleString() + '</span></div>';
+        html += '<div class="summary-row"><span>Shipping</span><span>' + (shipping > 0 ? 'AED ' + shipping.toLocaleString() : 'Select country') + '</span></div>';
+        html += '<div class="summary-row summary-total"><span>Total</span><span>AED ' + total.toLocaleString() + '</span></div>';
+        html += '</div>';
 
-        const totalShipping = selectedRegion ? Number(selectedRegion.price || 0) : 0;
-        const total = subtotal + totalShipping;
+        orderSummary.innerHTML = html;
+        sessionStorage.setItem('orderTotal', String(total));
 
-        summaryHTML += `
-            <div class="summary-totals">
-                <div class="summary-row">
-                    <span>${selectedRegion && selectedRegion.id === 'uae' ? 'Subtotal (incl. VAT)' : 'Subtotal (VAT exempt)'}</span>
-                    <span>AED ${subtotal.toLocaleString()}</span>
-                </div>
-                <div class="summary-row">
-                    <span>${selectedRegion ? `Shipping (${selectedRegion.name})` : 'Shipping'}</span>
-                    <span>${totalShipping === 0 ? 'Complimentary' : `AED ${totalShipping.toLocaleString()}`}</span>
-                </div>
-                <div class="summary-divider"></div>
-                <div class="summary-row summary-total">
-                    <span>Total</span>
-                    <span>AED ${total.toLocaleString()}</span>
-                </div>
-            </div>
-        `;
-
-        orderSummary.innerHTML = summaryHTML;
-        sessionStorage.setItem('orderTotal', total.toString());
-        localStorage.setItem('ghoharyShippingCountry', selectedRegion ? selectedRegion.name : 'Unavailable');
+        // Sync everywhere
+        var mob = document.getElementById('orderSummaryMobile');
+        if (mob) mob.innerHTML = html;
+        var btn = document.getElementById('checkoutSubmitInline');
+        if (btn) btn.innerHTML = '<span>Pay AED ' + total.toLocaleString() + '</span>';
+        var st = document.getElementById('stickyTotal');
+        if (st) st.textContent = 'AED ' + total.toLocaleString();
+        var mt = document.getElementById('mobileSummaryTotal');
+        if (mt) mt.textContent = 'AED ' + total.toLocaleString();
     }
 
     function showError(message) {
@@ -200,23 +269,22 @@
     }
 
     async function startCheckoutSession(customer) {
+        if (!submitBtn) {
+            showError('Checkout form is not available right now.');
+            return;
+        }
+
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span>Redirecting to Stripe...</span>';
 
         try {
-            const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
-            
-            if (cart.length === 0) {
+            const cart = safeParseArray('ghoharyCart');
+            if (!cart.length) {
                 throw new Error('Your cart is empty');
             }
 
-            // Get products to lookup actual prices
-            const products = JSON.parse(localStorage.getItem('ghoharyProducts') || '[]');
-            
             const lineItems = cart.map(item => {
-                // Try to get price from products database first
-                const product = products.find(p => p.id == item.id);
-                const price = product ? parseFloat(product.price) : parseFloat(item.price || 0);
+                const price = parsePrice(item.price);
                 
                 if (isNaN(price) || price <= 0) {
                     throw new Error(`Invalid price for ${item.name}`);
@@ -258,17 +326,13 @@
                 });
             }
 
-            const items = cart.map(item => {
-                const product = products.find(p => p.id == item.id);
-                const unitPrice = product ? parseFloat(product.price) : parseFloat(item.price || 0);
-                return {
-                    name: item.name || product?.name || 'GHOHARY Item',
-                    size: item.size || '',
-                    quantity: Number(item.quantity || 1),
-                    unitPrice: Number(unitPrice || 0),
-                    image: item.image || product?.images?.[0] || ''
-                };
-            });
+            const items = cart.map(item => ({
+                name: item.name || 'GHOHARY Item',
+                size: item.size || '',
+                quantity: Number(item.quantity || 1),
+                unitPrice: parsePrice(item.price),
+                image: item.image || ''
+            }));
 
             const response = await fetch(`${API_URL}/api/create-checkout-session`, {
                 method: 'POST',
@@ -308,7 +372,20 @@
             console.error('Error message:', error.message);
             showError(error.message || 'Payment processing failed. Please try again.');
             submitBtn.disabled = false;
-            submitBtn.innerHTML = '<span>Proceed to Secure Payment</span>';
+            submitBtn.innerHTML = '<span>Continue to secure payment</span>';
+        }
+    }
+
+    function updateShippingNotice() {
+        const notice = document.getElementById('shippingNotice');
+        if (!notice) return;
+        const region = getSelectedRegion();
+        if (region && region.enabled && region.eta) {
+            notice.textContent = 'Estimated delivery: ' + region.eta;
+        } else if (region && !region.enabled) {
+            notice.textContent = 'Shipping not available for this country.';
+        } else {
+            notice.textContent = '';
         }
     }
 
@@ -316,23 +393,23 @@
         const countrySelect = document.getElementById('country');
         if (countrySelect) {
             countrySelect.addEventListener('change', () => {
-                updateShippingNotice();
                 renderOrderSummary();
+                updateShippingNotice();
             });
         }
 
         checkoutForm.addEventListener('submit', async function(e) {
             e.preventDefault();
 
+            // Use checkout-ui.js validation if available
+            if (window.checkoutUIValidate && !window.checkoutUIValidate()) {
+                return;
+            }
+
             const firstName = document.getElementById('firstName').value;
             const lastName = document.getElementById('lastName').value;
             const email = document.getElementById('email').value;
             const address = document.getElementById('address').value;
-
-            if (!firstName || !email || !address) {
-                showError('Please fill in all required fields');
-                return;
-            }
 
             const customerPayload = {
                 firstName,
@@ -341,10 +418,8 @@
                 address,
                 addressLine2: document.getElementById('addressLine2')?.value || '',
                 city: document.getElementById('city').value,
-                state: document.getElementById('state').value,
                 zip: document.getElementById('zip').value,
                 country: document.getElementById('country')?.value || '',
-                emirate: document.getElementById('state').value,
                 phone: document.getElementById('phone').value
             };
 
@@ -373,7 +448,7 @@
         const email = (customer.email || '').trim().toLowerCase();
         if (!email) return;
 
-        const users = JSON.parse(localStorage.getItem('ghoharyUsers') || '[]');
+        const users = safeParseArray('ghoharyUsers');
         const existing = users.find(u => u.email.toLowerCase() === email);
         if (existing) {
             localStorage.setItem('ghoharyCurrentUser', JSON.stringify({
@@ -384,10 +459,8 @@
                 address: existing.address || '',
                 addressLine2: existing.addressLine2 || '',
                 city: existing.city || '',
-                state: existing.state || '',
                 zip: existing.zip || '',
-                country: existing.country || 'uae',
-                emirate: existing.emirate || ''
+                country: existing.country || 'uae'
             }));
             return;
         }
@@ -402,10 +475,8 @@
             address: customer.address || '',
             addressLine2: customer.addressLine2 || '',
             city: customer.city || '',
-            state: customer.state || '',
             zip: customer.zip || '',
             country: customer.country || 'uae',
-            emirate: customer.emirate || '',
             createdAt: new Date().toISOString()
         };
 
@@ -419,12 +490,10 @@
             address: newUser.address,
             addressLine2: newUser.addressLine2,
             city: newUser.city,
-            state: newUser.state,
             zip: newUser.zip,
-            country: newUser.country,
-            emirate: newUser.emirate
+            country: newUser.country
         }));
-        localStorage.setItem('ghoharyTempPassword', tempPassword);
+        // temp password not stored client-side for security
     }
 
     function saveAddressIfRequested(customer) {
@@ -434,7 +503,7 @@
         const email = (customer.email || '').trim().toLowerCase();
         if (!email) return;
 
-        const users = JSON.parse(localStorage.getItem('ghoharyUsers') || '[]');
+        const users = safeParseArray('ghoharyUsers');
         const userIndex = users.findIndex(u => u.email.toLowerCase() === email);
         if (userIndex === -1) return;
 
@@ -443,10 +512,8 @@
             address: customer.address || '',
             addressLine2: customer.addressLine2 || '',
             city: customer.city || '',
-            state: customer.state || '',
             zip: customer.zip || '',
             country: customer.country || 'uae',
-            emirate: customer.emirate || ''
         };
 
         localStorage.setItem('ghoharyUsers', JSON.stringify(users));
@@ -458,13 +525,12 @@
             address: users[userIndex].address || '',
             addressLine2: users[userIndex].addressLine2 || '',
             city: users[userIndex].city || '',
-            state: users[userIndex].state || '',
             zip: users[userIndex].zip || '',
-            country: users[userIndex].country || 'uae',
-            emirate: users[userIndex].emirate || ''
+            country: users[userIndex].country || 'uae'
         }));
     }
 
+    const checkoutLoginBtn = document.getElementById('checkoutLoginBtn');
     if (checkoutLoginBtn) {
         checkoutLoginBtn.addEventListener('click', () => {
             const formSnapshot = {
@@ -475,7 +541,6 @@
                 address: document.getElementById('address')?.value || '',
                 addressLine2: document.getElementById('addressLine2')?.value || '',
                 city: document.getElementById('city')?.value || '',
-                state: document.getElementById('state')?.value || '',
                 zip: document.getElementById('zip')?.value || '',
                 country: document.getElementById('country')?.value || 'uae'
             };
@@ -485,10 +550,26 @@
     }
 
     (async function initCheckout() {
-        await loadShippingRegions();
-        loadSavedCheckoutData();
-        updateShippingNotice();
-        renderOrderSummary();
+        try {
+            await loadShippingRegions();
+        } catch (e) {
+            console.error('[Checkout] loadShippingRegions failed:', e);
+        }
+        try {
+            loadSavedCheckoutData();
+        } catch (e) {
+            console.error('[Checkout] loadSavedCheckoutData failed:', e);
+        }
+        try {
+            updateShippingNotice();
+        } catch (e) {
+            // non-critical
+        }
+        try {
+            renderOrderSummary();
+        } catch (e) {
+            console.error('[Checkout] renderOrderSummary failed:', e);
+            if (orderSummary) orderSummary.innerHTML = '<p style="color:red;font-size:13px;padding:12px;">Error: ' + e.message + '</p>';
+        }
     })();
-    console.log('💳 Stripe Checkout (hosted) page loaded');
 })();

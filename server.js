@@ -1,5 +1,5 @@
 // GHOHARY Backend Server
-// Handles products, users, appointments, and orders
+// Handles products, users, and orders
 
 require('dotenv').config();
 
@@ -40,7 +40,6 @@ function initializeDB() {
         const initialData = {
             products: [],
             users: [],
-            appointments: [],
             orders: [],
             lastUpdated: new Date().toISOString()
         };
@@ -56,7 +55,7 @@ function readDB() {
         return JSON.parse(data);
     } catch (err) {
         console.error('[DB] Error reading:', err);
-        return { products: [], users: [], appointments: [], orders: [], lastUpdated: new Date().toISOString() };
+        return { products: [], users: [], orders: [], lastUpdated: new Date().toISOString() };
     }
 }
 

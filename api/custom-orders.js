@@ -3,6 +3,7 @@ const require = createRequire(import.meta.url);
 const { requireAdmin } = require('./_utils/admin-auth');
 const { readCollection, writeCollection, isRedisConfigured } = require('./_utils/json-store');
 const CUSTOM_ORDERS_STORE_KEY = 'ghohary:custom-orders';
+const BLOBSOURCE_URL_PATTERN = /(?:^|[./-])(vercel-storage\.com|public\.blob\.vercel-storage\.com|blob\.vercel-storage)(?:[/?#]|$)/i;
 
 function parseBody(req) {
     if (!req.body) return {};
@@ -44,6 +45,12 @@ function sanitizeOrder(order, index) {
     const productImage = typeof order?.product?.image === 'string'
         ? String(order.product.image)
         : '';
+    const resolvedProductImage = (() => {
+        const image = String(productImage || '').trim();
+        if (!image) return '';
+        if (BLOBSOURCE_URL_PATTERN.test(image)) return '';
+        return image;
+    })();
 
     return {
         id,
@@ -59,7 +66,7 @@ function sanitizeOrder(order, index) {
             colorNumber: String(order?.product?.colorNumber || '').trim(),
             imageKey: String(order?.product?.imageKey || '').trim(),
             imageName: String(order?.product?.imageName || '').trim(),
-            ...(productImage ? { image: productImage } : {})
+            ...(resolvedProductImage ? { image: resolvedProductImage } : {})
         },
         measurements: {
             height: String(order?.measurements?.height || '').trim(),

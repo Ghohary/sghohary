@@ -159,19 +159,19 @@
                             `).join('')}
                         </div>
                         
-                        <div class="order-summary">
-                            <div class="order-summary-row">
-                                <span>Subtotal</span>
-                                <span>${formatMoney(order.subtotal)}</span>
-                            </div>
-                            <div class="order-summary-row">
-                                <span>Shipping</span>
-                                <span>${shippingTotal ? formatMoney(shippingTotal) : 'Complimentary'}</span>
-                            </div>
-                            <div class="order-summary-row total">
-                                <span>Total</span>
-                                <span>${formatMoney(orderTotal)}</span>
-                            </div>
+                <div class="order-summary">
+                    <div class="order-summary-row">
+                        <span>Subtotal</span>
+                        <span>${formatMoney(order.subtotal)}</span>
+                    </div>
+                    <div class="order-summary-row">
+                        <span>Shipping</span>
+                        <span>${formatMoney(shippingTotal || 0)}</span>
+                    </div>
+                    <div class="order-summary-row total">
+                        <span>Total</span>
+                        <span>${formatMoney(orderTotal)}</span>
+                    </div>
                         </div>
                         
                         <div class="order-actions">
@@ -293,7 +293,7 @@
                                 </div>
                                 <div class="totals-row">
                                     <span>Shipping</span>
-                                    <span>${shippingTotal ? `AED ${shippingTotal.toLocaleString()}` : 'Complimentary'}</span>
+                                    <span>AED ${Number(shippingTotal || 0).toLocaleString()}</span>
                                 </div>
                                 <div class="totals-row total">
                                     <span>Total ${isReceipt ? 'Paid' : 'Due'}</span>

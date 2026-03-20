@@ -2,13 +2,15 @@
   {
     "id": "uae",
     "name": "United Arab Emirates",
+    "continent": "gcc",
     "enabled": true,
-    "price": 0,
+    "price": 120,
     "eta": "1-2 business days"
   },
   {
     "id": "saudi-arabia",
     "name": "Saudi Arabia",
+    "continent": "gcc",
     "enabled": true,
     "price": 180,
     "eta": "2-4 business days"
@@ -16,6 +18,7 @@
   {
     "id": "qatar",
     "name": "Qatar",
+    "continent": "gcc",
     "enabled": true,
     "price": 160,
     "eta": "2-4 business days"
@@ -23,6 +26,7 @@
   {
     "id": "kuwait",
     "name": "Kuwait",
+    "continent": "gcc",
     "enabled": true,
     "price": 170,
     "eta": "2-4 business days"
@@ -30,6 +34,7 @@
   {
     "id": "bahrain",
     "name": "Bahrain",
+    "continent": "gcc",
     "enabled": true,
     "price": 160,
     "eta": "2-4 business days"
@@ -37,6 +42,7 @@
   {
     "id": "oman",
     "name": "Oman",
+    "continent": "gcc",
     "enabled": true,
     "price": 170,
     "eta": "2-4 business days"
@@ -44,20 +50,15 @@
   {
     "id": "united-kingdom",
     "name": "United Kingdom",
+    "continent": "europe",
     "enabled": true,
     "price": 240,
     "eta": "4-7 business days"
   },
   {
-    "id": "united-states",
-    "name": "United States",
-    "enabled": true,
-    "price": 260,
-    "eta": "5-8 business days"
-  },
-  {
     "id": "france",
     "name": "France",
+    "continent": "europe",
     "enabled": true,
     "price": 240,
     "eta": "4-7 business days"
@@ -65,6 +66,7 @@
   {
     "id": "italy",
     "name": "Italy",
+    "continent": "europe",
     "enabled": true,
     "price": 240,
     "eta": "4-7 business days"
@@ -72,8 +74,17 @@
   {
     "id": "germany",
     "name": "Germany",
+    "continent": "europe",
     "enabled": false,
     "price": 240,
     "eta": "4-7 business days"
+  },
+  {
+    "id": "united-states",
+    "name": "United States",
+    "continent": "america",
+    "enabled": true,
+    "price": 260,
+    "eta": "5-8 business days"
   }
 ]

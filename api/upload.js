@@ -1,5 +1,6 @@
-import crypto from 'node:crypto';
+import { createRequire } from 'node:module';
 const { requireAdmin } = require('./_utils/admin-auth');
+const { S3Client, PutObjectCommand } = createRequire(import.meta.url)('@aws-sdk/client-s3');
 
 export const config = {
   api: {
@@ -7,25 +8,28 @@ export const config = {
   }
 };
 
-function resolveCloudinaryConfig() {
-  const cloudName = String(
-    process.env.CLOUDINARY_NAME
-    || process.env.CLOUDINARY_CLOUD_NAME
-    || process.env.CLOUDINARY_CLOUD
-    || ''
-  ).trim();
-  const apiKey = String(process.env.CLOUDINARY_API_KEY || '').trim();
-  const apiSecret = String(process.env.CLOUDINARY_API_SECRET || '').trim();
+const DEFAULT_UPLOAD_PREFIX = 'ghohary/products';
 
-  if (!cloudName || !apiKey || !apiSecret) {
+function resolveR2Config() {
+  const accountId = String(process.env.R2_ACCOUNT_ID || '').trim();
+  const accessKeyId = String(process.env.R2_ACCESS_KEY_ID || '').trim();
+  const secretAccessKey = String(process.env.R2_SECRET_ACCESS_KEY || '').trim();
+  const bucketName = String(process.env.R2_BUCKET_NAME || 'ghohary-media').trim();
+  const publicUrl = String(process.env.R2_PUBLIC_URL || '').trim();
+  const region = String(process.env.R2_REGION || 'auto').trim() || 'auto';
+
+  if (!accountId || !accessKeyId || !secretAccessKey || !bucketName || !publicUrl) {
     return null;
   }
 
   return {
-    cloudName,
-    apiKey,
-    apiSecret,
-    uploadFolder: String(process.env.CLOUDINARY_UPLOAD_FOLDER || 'ghohary/products').trim() || 'ghohary/products'
+    accountId,
+    accessKeyId,
+    secretAccessKey,
+    bucketName,
+    publicUrl: publicUrl.replace(/\/+$/, ''),
+    region,
+    uploadPrefix: String(process.env.R2_UPLOAD_PREFIX || DEFAULT_UPLOAD_PREFIX).trim() || DEFAULT_UPLOAD_PREFIX
   };
 }
 
@@ -42,55 +46,69 @@ function sanitizeBaseName(filename) {
     .slice(0, 96) || `upload-${Date.now()}`;
 }
 
-function cloudinarySignature(params, apiSecret) {
-  const signBase = Object.keys(params)
-    .filter((key) => params[key] !== undefined && params[key] !== null)
-    .sort()
-    .map((key) => `${key}=${params[key]}`)
-    .join('&');
-  return crypto.createHash('sha1').update(signBase + apiSecret).digest('hex');
+function normalizeExtFromType(contentType = '') {
+  const normalized = String(contentType).toLowerCase();
+  if (normalized.includes('jpeg') || normalized.includes('jpg')) return '.jpg';
+  if (normalized.includes('png')) return '.png';
+  if (normalized.includes('webp')) return '.webp';
+  if (normalized.includes('avif')) return '.avif';
+  if (normalized.includes('heic')) return '.heic';
+  if (normalized.includes('heif')) return '.heif';
+  if (normalized.includes('gif')) return '.gif';
+  if (normalized.includes('mp4')) return '.mp4';
+  if (normalized.includes('webm')) return '.webm';
+  if (normalized.includes('quicktime')) return '.mov';
+  return '.bin';
 }
 
-async function uploadBufferToCloudinary({
-  cloudConfig,
+function nowStamp() {
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+function buildObjectKey(baseName, suffix, ext) {
+  const safeName = String(baseName || `upload-${nowStamp()}`).replace(/[^a-zA-Z0-9._-]+/g, '-').replace(/-+/g, '-').replace(/^\.+/, '');
+  const extension = ext && ext.startsWith('.') ? ext : `.bin`;
+  const suffixPart = suffix ? `-${suffix}` : '';
+  return `${safeName}${suffixPart}${extension}`;
+}
+
+async function uploadBufferToR2({
+  r2Config,
   buffer,
   contentType,
   publicId,
   filename
 }) {
-  const endpoint = `https://api.cloudinary.com/v1_1/${cloudConfig.cloudName}/auto/upload`;
-  const timestamp = Math.floor(Date.now() / 1000);
-  const publicIdWithoutExt = String(publicId || '').trim() || 'ghohary-upload';
+  const key = buildObjectKey(publicId || sanitizeBaseName(filename), undefined, normalizeExtFromType(contentType));
+  const objectKey = `${r2Config.uploadPrefix.replace(/\/+$/, '')}/${key}`;
+  const endpoint = `https://${r2Config.accountId}.r2.cloudflarestorage.com`;
 
-  const uploadParams = {
-    folder: cloudConfig.uploadFolder,
-    public_id: publicIdWithoutExt,
-    timestamp
-  };
-  const signature = cloudinarySignature(uploadParams, cloudConfig.apiSecret);
-
-  const form = new FormData();
-  form.append('file', new Blob([buffer], { type: contentType }), filename);
-  form.append('api_key', cloudConfig.apiKey);
-  form.append('timestamp', String(timestamp));
-  form.append('signature', signature);
-  form.append('folder', cloudConfig.uploadFolder);
-  form.append('public_id', publicIdWithoutExt);
-
-  const response = await fetch(endpoint, {
-    method: 'POST',
-    body: form
+  const client = new S3Client({
+    region: r2Config.region,
+    endpoint,
+    forcePathStyle: true,
+    credentials: {
+      accessKeyId: r2Config.accessKeyId,
+      secretAccessKey: r2Config.secretAccessKey
+    }
   });
 
-  const data = await response.json().catch(() => ({}));
-  if (!response.ok) {
-    const reason = data?.error?.message || `Cloudinary upload failed (${response.status})`;
-    throw new Error(reason);
+  const command = new PutObjectCommand({
+    Bucket: r2Config.bucketName,
+    Key: objectKey,
+    Body: buffer,
+    ContentType: contentType || 'application/octet-stream'
+  });
+
+  try {
+    await client.send(command);
+  } catch (error) {
+    throw new Error(error?.message || 'R2 upload failed');
   }
 
   return {
-    url: data.secure_url || data.url,
-    contentType: data.format ? `image/${data.format}` : contentType
+    url: `${r2Config.publicUrl}/${objectKey}`,
+    contentType
   };
 }
 
@@ -104,10 +122,10 @@ export default async function handler(req, res) {
   }
 
   try {
-    const cloudConfig = resolveCloudinaryConfig();
-    if (!cloudConfig) {
+    const r2Config = resolveR2Config();
+    if (!r2Config) {
       res.status(500).json({
-        error: 'Missing Cloudinary credentials. Configure CLOUDINARY_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET.'
+        error: 'Missing R2 credentials. Configure R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET_NAME, and R2_PUBLIC_URL.'
       });
       return;
     }
@@ -145,18 +163,18 @@ export default async function handler(req, res) {
           .toBuffer();
 
         const [mainUpload, thumbUpload] = await Promise.all([
-          uploadBufferToCloudinary({
-            cloudConfig,
+          uploadBufferToR2({
+            r2Config,
             buffer: optimizedBuffer,
             contentType: 'image/webp',
-            publicId: `${baseName}-main`,
+            publicId: `${baseName}-main-${nowStamp()}`,
             filename: `${baseName}-main.webp`
           }),
-          uploadBufferToCloudinary({
-            cloudConfig,
+          uploadBufferToR2({
+            r2Config,
             buffer: thumbnailBuffer,
             contentType: 'image/webp',
-            publicId: `${baseName}-thumb`,
+            publicId: `${baseName}-thumb-${nowStamp()}`,
             filename: `${baseName}-thumb.webp`
           })
         ]);
@@ -179,8 +197,8 @@ export default async function handler(req, res) {
       }
     }
 
-    const upload = await uploadBufferToCloudinary({
-      cloudConfig,
+    const upload = await uploadBufferToR2({
+      r2Config,
       buffer,
       contentType,
       publicId: baseName,

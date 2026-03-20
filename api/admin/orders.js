@@ -2,6 +2,7 @@ const { requireAdmin } = require('../_utils/admin-auth');
 const { readCollection } = require('../_utils/json-store');
 
 const ORDERS_STORE_KEY = 'ghohary:orders';
+const BLOBSOURCE_URL_PATTERN = /(?:^|[./-])(vercel-storage\.com|public\.blob\.vercel-storage\.com|blob\.vercel-storage)(?:[/?#]|$)/i;
 const {
     GOLD_FRINGES_SKU,
     isGoldenFringesAlias
@@ -83,6 +84,13 @@ function normalizeTrackingNumber(order = {}) {
     return normalizeText(order?.trackingNumber || order?.tracking || order?.tracking_number);
 }
 
+function sanitizeOrderImageValue(value) {
+    const url = String(value || '').trim();
+    if (!url) return '';
+    if (BLOBSOURCE_URL_PATTERN.test(url)) return '';
+    return url;
+}
+
 function normalizeOrderItem(item = {}) {
     const name = normalizeText(item.name || item.productName || item.title);
     const rawName = normalizeText(item.name || name || 'GHOHARY Item');
@@ -98,6 +106,9 @@ function normalizeOrderItem(item = {}) {
 
     return {
         ...item,
+        image: sanitizeOrderImageValue(item.image),
+        imageUrl: sanitizeOrderImageValue(item.imageUrl),
+        thumbnail: sanitizeOrderImageValue(item.thumbnail),
         name: rawName || cleanName
     };
 }

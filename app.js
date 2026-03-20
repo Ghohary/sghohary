@@ -13,10 +13,41 @@
         document.body.appendChild(transitionOverlay);
     }
 
+    const resetTransitionState = () => {
+        const transition = document.querySelector('.page-transition');
+        if (transition) {
+            transition.style.opacity = '0';
+            transition.style.pointerEvents = 'none';
+        }
+        document.body.style.animation = '';
+    };
+
+    resetTransitionState();
+    window.addEventListener('pageshow', resetTransitionState);
+    window.addEventListener('load', resetTransitionState);
+
     // Handle page transitions on link clicks
     document.addEventListener('click', function(e) {
         const link = e.target.closest('a');
         if (link && link.href && !link.target && !link.href.includes('#')) {
+            const skipTransition = link.getAttribute('data-no-transition') === 'true' || link.dataset.noTransition === 'true';
+            if (skipTransition) return;
+
+            try {
+                const linkPath = new URL(link.href).pathname;
+                const checkoutPath = /(^|\/)checkout\.html$/i;
+                const adminPath = /(^|\/)admin\.html$/i;
+                if (checkoutPath.test(linkPath) || adminPath.test(linkPath)) {
+                    return;
+                }
+            } catch (error) {
+                // Fallback to default behavior when URL parsing fails
+            }
+
+            if (window.matchMedia('(max-width: 768px)').matches) {
+                return;
+            }
+
             const isExternal = link.hostname !== window.location.hostname;
             const isDownload = link.download;
             
@@ -35,6 +66,12 @@
                 setTimeout(() => {
                     window.location.href = link.href;
                 }, 400);
+
+                setTimeout(() => {
+                    if (document.body.style.animation) {
+                        resetTransitionState();
+                    }
+                }, 1200);
             }
         }
     }, true);
@@ -723,77 +760,10 @@
         }
     }
 
-    // ===== APPOINTMENT PAGE =====
-    const dateInput = document.getElementById('apptDate');
-    if (dateInput) {
-        const today = new Date().toISOString().split('T')[0];
-        dateInput.setAttribute('min', today);
-    }
-
-    const timeSlots = document.querySelectorAll('.time-slot');
-    let selectedTime = null;
-
-    timeSlots.forEach(slot => {
-        slot.addEventListener('click', function() {
-            timeSlots.forEach(s => s.classList.remove('selected'));
-            this.classList.add('selected');
-            selectedTime = this.dataset.time;
-        });
-    });
-
-    const appointmentForm = document.getElementById('appointmentForm');
-    
-    if (appointmentForm) {
-        appointmentForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            if (!selectedTime) {
-                alert('Please select a preferred time slot');
-                return;
-            }
-
-            const apptFirstName = document.getElementById('apptFirstName');
-            const apptEmail = document.getElementById('apptEmail');
-            const consultationType = document.querySelector('input[name="consultationType"]:checked');
-            
-            if (!apptFirstName || !apptEmail || !consultationType) {
-                alert('Please fill in all required fields');
-                return;
-            }
-
-            const formData = {
-                firstName: apptFirstName.value,
-                lastName: document.getElementById('apptLastName')?.value || '',
-                email: apptEmail.value,
-                phone: document.getElementById('apptPhone')?.value || '',
-                type: consultationType.value,
-                date: dateInput?.value || '',
-                time: selectedTime,
-                eventDate: document.getElementById('eventDate')?.value || '',
-                budget: document.getElementById('budget')?.value || '',
-                message: document.getElementById('message')?.value || '',
-                timestamp: new Date().toISOString()
-            };
-
-            const appointments = JSON.parse(localStorage.getItem('ghoharyAppointments') || '[]');
-            appointments.push(formData);
-            localStorage.setItem('ghoharyAppointments', JSON.stringify(appointments));
-
-            const appointmentModal = document.getElementById('appointmentModal');
-            if (appointmentModal) {
-                appointmentModal.style.display = 'flex';
-            }
-
-            appointmentForm.reset();
-            timeSlots.forEach(s => s.classList.remove('selected'));
-            selectedTime = null;
-        });
-    }
-
     // ===== MODAL HANDLERS =====
     // Close modals on outside click
     window.addEventListener('click', function(e) {
-        const modals = ['successModal', 'appointmentModal'];
+        const modals = ['successModal'];
         modals.forEach(modalId => {
             const modal = document.getElementById(modalId);
             if (modal && e.target === modal) {

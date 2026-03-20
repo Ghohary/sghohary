@@ -108,11 +108,6 @@
                     <span>AED ${subtotal.toLocaleString()}</span>
                 </div>
                 
-                <div class="summary-row">
-                    <span>Shipping</span>
-                    <span class="free-shipping">Complimentary</span>
-                </div>
-                
                 <div class="summary-divider"></div>
                 
                 <div class="summary-row summary-total">
@@ -120,9 +115,9 @@
                     <span>AED ${total.toLocaleString()}</span>
                 </div>
                 
-                <button class="btn btn-primary btn-full" onclick="window.location.href='checkout.html'">
+                <a href="checkout.html" class="btn btn-primary btn-full go-checkout-btn" role="button" aria-label="Proceed to checkout" data-no-transition="true">
                     <span>Proceed to Checkout</span>
-                </button>
+                </a>
                 
                 <a href="collections.html" class="continue-shopping">
                     Continue Shopping

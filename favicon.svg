@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" fill="#000000"/>
+  <g transform="translate(16,15) scale(0.38)" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Outer diamond shape -->
+    <polygon points="0,-20 22,0 0,24 -22,0"/>
+    <!-- Top horizontal line -->
+    <line x1="-22" y1="0" x2="22" y2="0"/>
+    <!-- Inner V lines from top corners to bottom point -->
+    <line x1="-12" y1="-20" x2="-8" y2="0"/>
+    <line x1="12" y1="-20" x2="8" y2="0"/>
+    <!-- Center lines from top to bottom -->
+    <line x1="0" y1="-20" x2="-8" y2="0"/>
+    <line x1="0" y1="-20" x2="8" y2="0"/>
+    <!-- Lines from horizontal to bottom point -->
+    <line x1="-8" y1="0" x2="0" y2="24"/>
+    <line x1="8" y1="0" x2="0" y2="24"/>
+    <!-- Top facet diagonals -->
+    <line x1="-12" y1="-20" x2="0" y2="-10"/>
+    <line x1="12" y1="-20" x2="0" y2="-10"/>
+  </g>
+</svg>

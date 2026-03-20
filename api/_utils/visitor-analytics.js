@@ -72,7 +72,7 @@ function getCachedAnalyticsState() {
     };
 }
 
-function blobConfigured() {
+function analyticsStoreConfigured() {
     return isRedisConfigured();
 }
 
@@ -630,7 +630,7 @@ function pruneSessions(inputSessions, nowMs = Date.now()) {
 
 async function readAnalyticsState() {
     const cachedState = getCachedAnalyticsState();
-    if (!blobConfigured()) return cachedState;
+    if (!analyticsStoreConfigured()) return cachedState;
     if ((Date.now() - cachedState.fetchedAt) < ANALYTICS_STATE_READ_TTL_MS) return cachedState;
 
     try {
@@ -658,7 +658,7 @@ async function writeAnalyticsState(state) {
         sessions,
         updatedAt: new Date().toISOString()
     };
-    if (!blobConfigured()) {
+    if (!analyticsStoreConfigured()) {
         setCachedAnalyticsState(payload);
         return true;
     }
@@ -667,14 +667,14 @@ async function writeAnalyticsState(state) {
     return true;
 }
 
-function liveSessionBlobKey(sessionId) {
+function liveSessionCacheKey(sessionId) {
     const normalizedSessionId = normalizeSessionId(sessionId);
     if (!normalizedSessionId) return '';
     return `${LIVE_SESSION_PREFIX}${normalizedSessionId}.json`;
 }
 
 async function writeLiveSession(session) {
-    if (!blobConfigured()) return false;
+    if (!analyticsStoreConfigured()) return false;
     const sessionId = normalizeSessionId(session?.sessionId);
     if (!sessionId) return false;
     const normalized = normalizeSessions({ [sessionId]: session || {} });
@@ -693,18 +693,18 @@ async function writeLiveSession(session) {
 }
 
 async function readLiveOverlaySessions(nowMs = Date.now()) {
-    if (!blobConfigured()) return [];
+    if (!analyticsStoreConfigured()) return [];
     const cachedOverlay = globalThis.__ghoharyLiveOverlayCache || { sessions: [], fetchedAt: 0 };
     if ((nowMs - Number(cachedOverlay.fetchedAt || 0)) < LIVE_OVERLAY_READ_TTL_MS) {
         return Array.isArray(cachedOverlay.sessions) ? cachedOverlay.sessions : [];
     }
     try {
         const liveSessions = await readStore(VISITOR_LIVE_SESSIONS_KEY, { fallback: {} });
-        const blobs = normalizeSessions(liveSessions || {});
-        const blobEntries = Object.values(blobs);
-        if (!blobEntries.length) return [];
+        const activeSessions = normalizeSessions(liveSessions || {});
+        const sessionEntries = Object.values(activeSessions);
+        if (!sessionEntries.length) return [];
         const overlayCutoff = nowMs - Math.max(LIVE_WINDOW_MS * 8, 2 * 60 * 1000);
-        const recentBlobs = blobEntries
+        const recentSessions = sessionEntries
             .filter((entry) => {
                 const heartbeatAt = parseTimestamp(entry?.lastSeenAt || entry?.uploadedAt || entry?.uploaded || '');
                 return heartbeatAt >= overlayCutoff;
@@ -715,14 +715,14 @@ async function readLiveOverlaySessions(nowMs = Date.now()) {
                 return bUploaded - aUploaded;
             })
             .slice(0, 60);
-        const liveSessions = recentBlobs
+        const filteredLiveSessions = recentSessions
             .map((session) => normalizeSessions({ [normalizeSessionId(session?.sessionId)]: session })[normalizeSessionId(session?.sessionId)])
             .filter(Boolean);
         globalThis.__ghoharyLiveOverlayCache = {
-            sessions: liveSessions,
+            sessions: filteredLiveSessions,
             fetchedAt: nowMs
         };
-        return liveSessions;
+        return filteredLiveSessions;
     } catch (error) {
         return [];
     }
@@ -1231,7 +1231,7 @@ async function recordVisitorHeartbeat(req, payload = {}) {
 }
 
 module.exports = {
-    blobConfigured,
+    analyticsStoreConfigured,
     parseBody,
     readAnalyticsState,
     writeAnalyticsState,

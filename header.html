@@ -1,29 +1,25 @@
 <!-- Navigation -->
-<div class="nav-container">
+<div class="nav-container" id="mainNav">
     <nav class="container">
+        <!-- Left: hamburger + search (like Dior mobile) -->
         <div class="nav-left">
-            <button class="mobile-menu-btn" aria-label="Toggle menu">
+            <button class="mobile-menu-btn" aria-label="Toggle menu" id="mobileMenuBtn">
                 <span></span>
                 <span></span>
             </button>
-            <div class="nav-icons nav-icons-left">
-            <a href="#search" aria-label="Search" class="search-link">
+            <a href="#" aria-label="Search" class="search-link" id="openSearchBtn">
                 <svg class="nav-icon" viewBox="0 0 24 24">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <path d="m21 21-4.35-4.35"></path>
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <path d="m20 20-3.5-3.5"></path>
                 </svg>
             </a>
-            </div>
         </div>
-        
+
+        <!-- Center: logo -->
         <a href="index.html" class="logo">GHOHARY</a>
-        
+
+        <!-- Right: account + cart -->
         <div class="nav-icons nav-icons-right">
-            <a href="wishlist.html" aria-label="Wishlist" class="wishlist-link">
-                <svg class="nav-icon" viewBox="0 0 24 24">
-                    <path d="M20.8 8.4c0 5.4-8.8 11.2-8.8 11.2S3.2 13.8 3.2 8.4a4.4 4.4 0 0 1 8.8 0a4.4 4.4 0 0 1 8.8 0z"></path>
-                </svg>
-            </a>
             <a href="account.html" aria-label="Account" class="account-link">
                 <svg class="nav-icon" viewBox="0 0 24 24">
                     <circle cx="12" cy="8" r="4"></circle>
@@ -38,58 +34,41 @@
                 <span class="cart-count">0</span>
             </a>
         </div>
-        
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="collections.html">Collections</a></li>
-            <li><a href="index.html#about">About</a></li>
-            <li><a href="appointment.html">Book Appointment</a></li>
-            <li><a href="account.html">Account</a></li>
-            <li><a href="index.html#contact">Contact</a></li>
-        </ul>
     </nav>
 </div>
 
-<script>
-    // Mobile menu toggle
-    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    const navLinks = document.querySelector('.nav-links');
+<!-- Full-screen menu overlay -->
+<div class="mobile-nav-overlay" id="mobileNavOverlay">
+    <div class="mobile-nav-panel">
+        <div class="mobile-nav-header">
+            <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close menu">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            </button>
+        </div>
+        <ul class="mobile-nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="collections.html">Collections</a></li>
+            <li><a href="index.html#about">About</a></li>
+            <li><a href="account.html">Account</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+    </div>
+</div>
 
-    if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenuBtn.classList.toggle('active');
-            navLinks.classList.toggle('active');
-        });
-
-        // Close menu when a link is clicked
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenuBtn.classList.remove('active');
-                navLinks.classList.remove('active');
-            });
-        });
-    }
-
-    // Update cart count - expose globally if not already defined
-    if (!window.updateCartCount) {
-        window.updateCartCount = function() {
-            const cart = JSON.parse(localStorage.getItem('ghoharyCart') || '[]');
-            const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-            const cartCountBadge = document.querySelector('.cart-count');
-            if (cartCountBadge) {
-                if (totalItems > 0) {
-                    cartCountBadge.textContent = totalItems;
-                    cartCountBadge.style.display = 'flex';
-                } else {
-                    cartCountBadge.style.display = 'none';
-                }
-            }
-        };
-    }
-
-    // Update cart count on page load
-    window.updateCartCount();
-
-    // Listen for cart changes
-    window.addEventListener('cartUpdated', window.updateCartCount);
-</script>
+<div class="site-search-overlay" id="siteSearchOverlay" aria-hidden="true">
+    <div class="site-search-overlay__backdrop" data-site-search-close></div>
+    <div class="site-search-overlay__panel" role="dialog" aria-modal="true" aria-label="Search products">
+        <div class="site-search-overlay__header">
+            <button class="site-search-overlay__close" type="button" data-site-search-close aria-label="Close search">&times;</button>
+        </div>
+        <form class="site-search-form" id="siteSearchForm" autocomplete="off">
+            <label class="site-search-label" for="siteSearchInput">Search keyword</label>
+            <input id="siteSearchInput" type="text" class="site-search-input" placeholder="Try: pearl, ivory, bridal, evening..." />
+            <div class="site-search-actions">
+                <button class="btn btn-primary" type="submit">Search Collection</button>
+                <button class="btn btn-secondary" type="button" id="siteSearchClear">Clear</button>
+            </div>
+            <p class="site-search-hint">Tip: Search works best with name or keyword.</p>
+        </form>
+    </div>
+</div>
