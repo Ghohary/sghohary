@@ -290,12 +290,16 @@
                     throw new Error(`Invalid price for ${item.name}`);
                 }
 
+                // Only send valid http(s) image URLs ≤2048 chars (Stripe limit)
+                const img = (item.image || '').trim();
+                const validImage = img && img.length <= 2048 && /^https?:\/\//.test(img) ? img : '';
+
                 return {
                     name: item.name || 'GHOHARY Item',
                     amount: Math.round(price * 100), // Convert AED to cents
                     quantity: Number(item.quantity || 1),
                     size: item.size,
-                    image: item.image || ''
+                    image: validImage
                 };
             }).filter(item => item.amount > 0);
 

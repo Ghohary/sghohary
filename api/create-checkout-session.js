@@ -27,17 +27,23 @@ export default async function handler(req, res) {
         }
 
         const origin = req.headers.origin || 'https://mohsenghohary.net';
-        const formattedItems = lineItems.map(item => ({
-            price_data: {
-                currency: 'aed',
-                product_data: {
-                    name: item.name || 'GHOHARY Item',
-                    images: item.image ? [item.image] : []
+        const formattedItems = lineItems.map(item => {
+            // Stripe requires image URLs to be ≤2048 chars and valid http(s) URLs
+            const img = typeof item.image === 'string' ? item.image.trim() : '';
+            const validImage = img && img.length <= 2048 && /^https?:\/\//.test(img);
+
+            return {
+                price_data: {
+                    currency: 'aed',
+                    product_data: {
+                        name: item.name || 'GHOHARY Item',
+                        ...(validImage ? { images: [img] } : {})
+                    },
+                    unit_amount: Math.max(1, Number(item.amount || 0))
                 },
-                unit_amount: Math.max(1, Number(item.amount || 0))
-            },
-            quantity: Math.max(1, Number(item.quantity || 1))
-        }));
+                quantity: Math.max(1, Number(item.quantity || 1))
+            };
+        });
 
         const session = await stripe.checkout.sessions.create({
             mode: 'payment',
