@@ -17,6 +17,17 @@
         .ct * { box-sizing: border-box; }
         .ct-wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
 
+        /* Progress steps */
+        .ct-progress { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 32px; }
+        .ct-step { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 500; color: #b0b0b0; letter-spacing: 0.04em; text-transform: uppercase; }
+        .ct-step.active { color: #000; }
+        .ct-step.done { color: #737373; }
+        .ct-step-num { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; border: 1.5px solid #d0d0d0; color: #b0b0b0; background: #fff; }
+        .ct-step.active .ct-step-num { background: #000; color: #fff; border-color: #000; }
+        .ct-step.done .ct-step-num { background: #fff; color: #737373; border-color: #999; }
+        .ct-step-line { width: 48px; height: 1px; background: #d0d0d0; margin: 0 12px; }
+        @media (max-width: 480px) { .ct-step span:not(.ct-step-num) { display: none; } .ct-step-line { width: 32px; margin: 0 8px; } }
+
         /* Back link */
         .ct-back { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #737373; text-decoration: none; margin-bottom: 20px; transition: color 0.2s; }
         .ct-back:hover { color: #000; }
@@ -109,6 +120,24 @@
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                 Continue shopping
             </a>
+
+            <!-- Progress indicator -->
+            <nav class="ct-progress" aria-label="Checkout progress">
+                <div class="ct-step active">
+                    <span class="ct-step-num">1</span>
+                    <span>Cart</span>
+                </div>
+                <div class="ct-step-line"></div>
+                <div class="ct-step">
+                    <span class="ct-step-num">2</span>
+                    <span>Details</span>
+                </div>
+                <div class="ct-step-line"></div>
+                <div class="ct-step">
+                    <span class="ct-step-num">3</span>
+                    <span>Payment</span>
+                </div>
+            </nav>
 
             <div class="ct-header">
                 <h1 class="ct-heading">Your Bag</h1>
